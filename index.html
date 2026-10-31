@@ -36,7 +36,7 @@
   .hrow .hn { grid-area:n; font-weight:600; font-size:15px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; } .hrow .hd { grid-area:d; font-size:12px; color:var(--dim); } .hrow .hs { grid-area:s; font-size:13px; color:var(--fg); font-variant-numeric:tabular-nums; }
   .hrow .hc { grid-area:c; align-self:center; font-size:22px; color:var(--dim); }
   .hscreen { display:none; position:fixed; inset:0; z-index:45; background:var(--bg); overflow-y:auto; -webkit-overflow-scrolling:touch; }
-  .hscreen.show { display:block; } #rideSheet { z-index:46; }
+  .hscreen.show { display:block; } #rideSheet { z-index:46; } #dayScr { z-index:47; }
   #settingsScr details.card { margin:0 0 10px; }
   .hbar { position:sticky; top:0; z-index:2; display:flex; align-items:center; gap:12px; padding:calc(8px + env(safe-area-inset-top)) 12px 8px; background:var(--bg); border-bottom:1px solid #222831; }
   .hbar span { font-weight:700; font-size:16px; } .hbar button { padding:8px 12px; }
@@ -123,6 +123,10 @@
   .seg { display:flex; gap:0; margin:6px 0; background:var(--card); border-radius:10px; padding:3px; }
   .seg button { flex:1; background:none; border-radius:8px; padding:8px; font-size:15px; color:var(--dim); }
   .seg button.on { background:var(--acc); color:#000; }
+  #tabBar { gap:6px; background:none; padding:0; }
+  #tabBar button { background:var(--card); border:1px solid #2a303a; border-radius:10px; }
+  #tabBar button.on { background:var(--acc); border-color:var(--acc); }
+  .seg button.tabicon { flex:0 0 72px; display:flex; align-items:center; justify-content:center; padding:6px; }
   .mini { padding:3px 9px; font-size:12px; border-radius:8px; }
   #btnEdit { padding:calc(var(--u)*0.8) calc(var(--u)*2); font-size:calc(var(--u)*2.2); font-weight:700; border-radius:10px; background:#2f3742; }
   #run .top .status:not(.ok) { text-decoration:underline dotted; }
@@ -169,6 +173,9 @@
   .wkday.today .wkplus { color:var(--acc); }
   .wkbox .wkdone { position:absolute; top:2px; left:3px; font-size:11px; line-height:1; font-weight:800; color:#3ddc84; }
   .wkday .tl { font-size:11px; color:#7b8291; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .dreq { display:flex; gap:10px; margin:10px 0 4px; } .dreq label { flex:1; min-width:0; align-items:stretch; text-align:left; font-size:13px; color:var(--dim); display:flex; flex-direction:column; gap:4px; }
+  .dreq input { width:100%; margin:0; } .dreq input:read-only { color:var(--dim); background:#11151a; }
+  .dsteps { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--dim); margin:8px 0 4px; } .dsteps .mini { margin:0; }
   .schedbtn { flex:none; width:44px; margin:4px 0; padding:0; font-size:24px; font-weight:700; line-height:1; background:var(--acc); color:#000; }
   .havedel { flex:none; width:36px; height:32px; padding:0; margin:0; border-radius:8px; font-size:13px; background:#2a2f37; color:#a7b0bd; align-self:center; }
   .wobtns { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:10px; }   /* Save to Library, Launch Workout, Schedule on one row */
@@ -181,6 +188,9 @@
   #btnFree span { color:#3ddc84; margin-right:9px; }
   .tdrow { display:flex; gap:8px; align-items:stretch; margin:6px 0; }
   .tdrow .tdmain { flex:1; min-width:0; text-align:left; margin:0; }
+  .addday { display:flex; align-items:center; justify-content:center; width:100%; height:48px; margin:12px 0 0; background:#161a20; color:var(--acc); border:1px dashed #3a4250; border-radius:12px; font-size:16px; font-weight:600; }
+  .addday b { font-size:24px; line-height:1; font-weight:700; }
+  .addday[hidden] { display:none; }
   .tdsec { font-size:12px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:#7b8291; margin:14px 0 4px; }
   .zrows { display:grid; grid-template-columns:auto 1fr auto; gap:6px 10px; align-items:center; font-variant-numeric:tabular-nums; }
   .zrows .zl { font-size:13px; font-weight:700; color:#c3cad6; }
@@ -188,10 +198,26 @@
   .zrows .zt i { display:block; height:100%; border-radius:4px; }
   .zrows .zv { font-size:13px; color:#c3cad6; text-align:right; white-space:nowrap; }
   #target.freelbl { display:inline-block; font-size:.62em; line-height:.92; }
-  .daygrp { display:block; width:100%; text-align:left; background:none; border:0; margin:0; padding:2px 8px 6px; border-radius:10px; color:inherit; font:inherit; cursor:pointer; }
+  .daygrp { display:block; width:100%; text-align:left; background:none; border:0; margin:0; padding:4px 8px 8px; border-radius:0; color:inherit; font:inherit; cursor:pointer; }
+  .daygrp + .daygrp { border-top:1px solid #2a303a; }
   .daygrp:active { background:rgba(255,255,255,.05); }
   .daygrp:focus-visible { outline:2px solid var(--acc); }
   .daygrp .dh { display:flex; justify-content:space-between; align-items:baseline; font-weight:600; margin:8px 0 2px; font-size:13px; color:#7b8291; }
+  .daygrp.today .dh { color:var(--acc); font-weight:700; }
+  .mchead { display:flex; justify-content:space-between; align-items:center; }
+  .mcnav { display:flex; gap:6px; } .mcnav button { width:36px; height:30px; padding:0; margin:0; font-size:20px; line-height:1; }
+  .mchd { display:grid; grid-template-columns:repeat(7,1fr); font-size:11px; color:#7b8291; text-align:center; margin:2px 0 4px; }
+  .mcwk { border-top:1px solid #2a303a; }
+  .mcgrid { display:grid; grid-template-columns:repeat(7,1fr); }
+  .mcd { min-width:0; padding:3px 2px 4px; margin:0; text-align:center; border:0; border-left:1px solid #2a303a; border-radius:0; background:none; color:inherit; font:inherit; cursor:pointer; display:flex; flex-direction:column; align-items:stretch; }
+  .mcd:first-child { border-left:0; } .mcd:active { background:rgba(255,255,255,.05); } .mcd:focus-visible { outline:2px solid var(--acc); outline-offset:-2px; }
+  .mcd .dn { font-size:12px; font-weight:600; color:#c9d2de; margin-bottom:2px; }
+  .mcd.out .dn { color:#4a515c; } .mcd.past .dn { color:#6b7381; }
+  .mcd.today .dn { color:var(--acc); font-weight:800; } .mcd.today .wkbox { box-shadow:inset 0 0 0 2px var(--acc); } .mcd.today .wkplus { color:var(--acc); }
+  .mcd .wkbox { height:36px; } .mcd.out .wkbox { background:#15181d; }
+  .mcd .tl { font-size:10px; color:#7b8291; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .mcsum { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:2px 10px; font-size:11px; color:#8b94a3; padding:2px 4px 6px; font-variant-numeric:tabular-nums; }
+  .mcsum b { font-weight:600; color:#c9d2de; } .mcsum .pl b { color:#8fb8ff; }
   .daygrp .dh b { font-weight:700; color:#5d6574; font-size:15px; }
   body:not(.arcade) #btnChange, body:not(.arcade) #btnEnd { display:none !important; }   /* the pause pop-up has these; arcade keeps its own */
   #pauseOv { position:fixed; inset:0; z-index:40; background:rgba(0,0,0,.6); display:flex; align-items:center; justify-content:center; padding:24px; }
@@ -458,7 +484,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.13</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.14</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -470,14 +496,10 @@
   </div>
   </div>
 
-  <div class="seg" id="tabBar"><button id="tabPlan" class="on">Plan</button><button id="tabData">Data</button></div>
+  <div class="seg" id="tabBar"><button id="tabPlan" class="on">Plan</button><button id="tabData">Data</button><button id="tabLib" class="tabicon" aria-label="Workout library" title="Workout library"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg></button></div>
   </div>
 
   <div id="planTab">
-  <div id="switchBanner" style="display:none;background:#2a2f38;border-radius:10px;padding:10px 12px;margin:0 0 8px;font-size:14px">
-    Changing workout. Pick one below, then tap <b>Switch to this workout</b>. The ride carries on from where you are.
-    <div class="row" style="margin:8px 0 0"><button id="btnSwitchCancel" style="flex:1">Cancel</button></div>
-  </div>
   <div class="card" id="todayCard">
     <h2>Today</h2>
     <div id="todayList" class="hint" style="font-size:14px">Connect intervals.icu in Settings to see today's planned workout.</div>
@@ -492,6 +514,21 @@
     <div id="planWeekOut" class="hint" style="margin-top:6px;font-size:13px"></div>
   </div>
 
+  <div class="card" id="monthCard">
+    <h2 class="mchead"><span id="monthTitle">Calendar</span><span class="mcnav"><button type="button" id="monthPrev" aria-label="Previous month">&#8249;</button><button type="button" id="monthNext" aria-label="Next month">&#8250;</button></span></h2>
+    <div class="mchd"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div></div>
+    <div id="monthGrid"></div>
+    <div id="monthOut" class="hint" style="margin-top:6px;font-size:13px"></div>
+  </div>
+
+  <button id="btnSettings2" type="button" style="width:100%;height:44px;font-size:16px;margin:12px 0 4px">Settings</button>
+  </div>
+
+  <div id="libTab" style="display:none">
+  <div id="switchBanner" style="display:none;background:#2a2f38;border-radius:10px;padding:10px 12px;margin:0 0 8px;font-size:14px">
+    Changing workout. Pick one below, then tap <b>Switch to this workout</b>. The ride carries on from where you are.
+    <div class="row" style="margin:8px 0 0"><button id="btnSwitchCancel" style="flex:1">Cancel</button></div>
+  </div>
   <div class="card">
     <h2>Workout library</h2>
     <div id="library"></div>
@@ -522,7 +559,6 @@ Cooldown
     <div class="wobtns"><button id="btnSaveLib" class="primary">Save to Library</button><button id="btnLaunch" class="primary big">Launch Workout</button><button id="btnSchedule" class="primary" title="Add to intervals.icu calendar" disabled><span aria-hidden="true" style="font-size:15px;line-height:1;margin-right:4px;vertical-align:-1px">📅</span>Schedule</button></div>
   </div>
 
-  <button id="btnSettings2" type="button" style="width:100%;height:44px;font-size:16px;margin:12px 0 4px">Settings</button>
   </div>
 
   <div id="dataTab" style="display:none">
@@ -576,17 +612,16 @@ Cooldown
 <div id="dayScr" class="hscreen" role="dialog" aria-labelledby="dayTitle">
   <div class="hbar"><button id="dayBack" type="button">‹ Back</button><span id="dayTitle">Schedule</span></div>
   <div class="hin">
-    <div class="card" id="dayHave" hidden><h2>Already planned</h2><div id="dayHaveList" style="font-size:14px"></div></div>
     <div class="card"><h2>Workout library</h2><div id="dayLib"></div></div>
     <div class="card">
       <h2>Workout builder</h2>
-      <input id="dName" type="text" value="Custom Workout" placeholder="Workout name" maxlength="60" style="width:100%;margin-top:0">
-      <textarea id="dWo" spellcheck="false">-5m ramp 50%-65%
--3m 65%
--2m 88%
--3m 65%
--2m 50%
-</textarea>
+      <input id="dName" type="text" value="Custom Workout" placeholder="Name (required)" maxlength="60" style="width:100%;margin-top:0" aria-label="Name">
+      <div class="dreq">
+        <label>Duration<input id="dDur" type="text" inputmode="numeric" placeholder="h:mm" autocomplete="off"></label>
+        <label>Load (TSS)<input id="dLoad" type="number" inputmode="numeric" min="0" max="999" placeholder="TSS"></label>
+      </div>
+      <div class="dsteps"><span>Workout steps (optional; they set Duration and Load)</span></div>
+      <textarea id="dWo" spellcheck="false" placeholder="-10m ramp 50%-65%&#10;&#10;3x&#10;-8m 95%&#10;-4m 55%&#10;&#10;-10m 50%"></textarea>
       <div id="dWoInfo" class="status" style="margin-top:6px;font-size:14px">Type the workout steps above.</div>
       <canvas id="dWoGraph" style="width:100%;height:64px;display:block;margin-top:8px;border-radius:8px;background:#11151a"></canvas>
       <button id="dSched" class="primary" type="button" style="width:100%;height:44px;font-size:16px;margin:12px 0 0" disabled>Schedule</button>
@@ -595,8 +630,8 @@ Cooldown
 </div>
 
 <div id="todayScr" class="hscreen" role="dialog" aria-labelledby="todayTitle">
-  <div class="hbar"><button id="todayBack" type="button">‹ Back</button><span id="todayTitle">Today</span></div>
-  <div class="hin"><div id="todayBody"></div></div>
+  <div class="hbar"><button id="todayBack" type="button">‹ Back</button><span id="todayTitle" style="flex:1;min-width:0">Today</span></div>
+  <div class="hin"><div id="todayBody"></div><button id="todayAdd" type="button" class="addday" aria-label="Add a workout to this day"><b>+</b>&ensp;Add Calendar Entry</button></div>
 </div>
 
 <div id="settingsScr" class="hscreen" role="dialog" aria-label="Settings">
@@ -683,7 +718,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">v1.0.13</span>
+  <span class="ver">v1.0.14</span>
 </div>
 
 <div class="ctrl">
@@ -3909,7 +3944,7 @@ let switching = false;                                       // true while picki
 let arcSwitch = false;                                       // the change came from the arcade stage select: resume the ride afterwards
 function changeWorkout() {
   if (arcadeOn) { openArcLib(); return; }
-  switching = true; showTab("plan");
+  switching = true; showTab("lib");
   $("switchBanner").style.display = ""; $("btnLaunch").textContent = "Switch to this workout";
   showScreen("landing");
 }
@@ -4141,16 +4176,16 @@ function renderFit() {
 }
 function setFitRange(k, v) { FIT[k] = v; try { localStorage.setItem("kickrFitRange", JSON.stringify(FIT)); } catch (e) {} renderFit(); }
 function showTab(name) { arcadeOn = false; applyArcade();
-  const data = name === "data";
-  $("planTab").style.display = data ? "none" : ""; $("dataTab").style.display = data ? "" : "none";
-  $("tabPlan").classList.toggle("on", !data); $("tabData").classList.toggle("on", data);
+  const data = name === "data", lib = name === "lib";
+  $("planTab").style.display = data || lib ? "none" : ""; $("dataTab").style.display = data ? "" : "none"; $("libTab").style.display = lib ? "" : "none";
+  $("tabPlan").classList.toggle("on", !data && !lib); $("tabData").classList.toggle("on", data); $("tabLib").classList.toggle("on", lib);
   if (data) {
     fitSel = null; renderFit(); loadFitData().then(renderFit); FIT_FUT_END = ""; loadFitFuture();
     if (ACT && actSource !== "error") renderSummary();
     else { $("vYearNote").textContent = "Loading from intervals.icu…"; loadActivities().then(renderSummary); }
   }
 }
-$("tabPlan").onclick = () => showTab("plan"); $("tabData").onclick = () => showTab("data");
+$("tabPlan").onclick = () => showTab("plan"); $("tabData").onclick = () => showTab("data"); $("tabLib").onclick = () => showTab("lib");
 $("btnBackMinus").onclick = () => setFitRange("back", Math.max(14, FIT.back - 7)); $("btnBackPlus").onclick = () => setFitRange("back", Math.min(90, FIT.back + 7));
 $("btnAheadMinus").onclick = () => setFitRange("ahead", Math.max(0, FIT.ahead - 1)); $("btnAheadPlus").onclick = () => setFitRange("ahead", Math.min(14, FIT.ahead + 1));
 window.addEventListener("resize", () => { renderFit(); renderSummary(); });
@@ -4569,7 +4604,7 @@ async function loadToday() {
     box.textContent = e.message === "no API key saved" ? "Connect intervals.icu in Settings to see today's planned workout." : "Couldn't load today's workout (" + e.message + ").";
     return;
   }
-  box.textContent = ""; box.style.fontSize = "";
+  box.textContent = ""; box.style.fontSize = ""; box.style.cursor = ""; box.onclick = null;
   let acts = [];
   try { acts = await icuRange(day, day, "activities"); const doneNames = acts.map(a => normName(a.name)); ev = ev.filter(x => !doneNames.includes(normName(x.name)) && !acts.some(a => a.id && a.id === x.paired_activity_id)); } catch (e) {}
   acts.forEach(a => {                                     // what's already ridden today shows as completed, above anything still to do
@@ -4582,8 +4617,7 @@ async function loadToday() {
     row.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openToday(); } }; box.appendChild(row);
   });
   TODAY = { day, ev, acts };
-  TODAY = { day, ev, acts };
-  if (!ev.length) { if (!acts.length) { box.className = "hint"; box.textContent = "Nothing planned for today (" + day + ")."; } return; }
+  if (!ev.length) { if (!acts.length) { box.className = "hint"; box.textContent = "Nothing planned for today. Tap to add a workout."; box.style.cursor = "pointer"; box.onclick = openToday; } return; }
   ev.forEach(x => {
     const text = (x.description || (x.workout_doc && x.workout_doc.description) || "").trim();
     const row = document.createElement("div"); row.style.cssText = "display:flex;gap:6px;align-items:stretch;margin:4px 0";
@@ -4610,45 +4644,78 @@ async function loadToday() {
     row.append(b, go); box.appendChild(row);
   });
 }
-/* ---------------- Today window: today's completed rides (tap for the summary) and planned workouts (Load / Delete) ---------------- */
-let TODAY = null;
-function openToday() { renderToday(); $("todayScr").classList.add("show"); $("todayScr").scrollTop = 0; document.body.style.overflow = "hidden"; }
-function closeToday() { $("todayScr").classList.remove("show"); document.body.style.overflow = ""; }
+/* ---------------- Day view: one day's completed rides (tap for the summary) and planned items (Load / Delete), with + to add.
+   The Today tile, the This Week strip and the Next 7 Days list all open this same view. ---------------- */
+let TODAY = null, DV = null;                                   // DV: the day on screen { ds, d, ev, acts }
+const dvOpen = () => $("todayScr").classList.contains("show");
+async function openDayView(ds) {
+  const [y, m, dd] = ds.split("-").map(Number), d = new Date(y, m - 1, dd);
+  DV = { ds, d, ev: null, acts: null, err: "" }; renderDayView();
+  $("todayScr").classList.add("show"); $("todayScr").scrollTop = 0; document.body.style.overflow = "hidden";
+  await refreshDayView();
+}
+const openToday = () => openDayView(localDay());
+async function refreshDayView() {
+  if (!DV) return; const want = DV.ds;
+  let ev = [], acts = [], err = "";
+  if (!icuAuth()) err = "Connect intervals.icu in Settings to see your calendar.";
+  else {
+    try { [ev, acts] = await Promise.all([icuRange(want, want, "events"), icuRange(want, want, "activities")]); }
+    catch (e) { err = "Couldn't load this day (" + e.message + ")."; }
+  }
+  if (!DV || DV.ds !== want) return;                           // another day was opened meanwhile
+  const done = acts.map(a => normName(a.name));
+  ev = ev.filter(x => !done.includes(normName(x.name)) && !acts.some(a => a.id && a.id === x.paired_activity_id));   // a ridden plan shows once, as the ride
+  DV.ev = ev; DV.acts = acts; DV.err = err; renderDayView();
+}
+function closeToday() { $("todayScr").classList.remove("show"); DV = null; if (!$("histAll").classList.contains("show")) document.body.style.overflow = ""; }
 $("todayBack").onclick = closeToday;
-function renderToday() {
-  const body = $("todayBody"); body.textContent = ""; if (!TODAY) return;
-  const d = new Date(); $("todayTitle").textContent = "Today \u00b7 " + d.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
+$("todayAdd").onclick = () => { if (DV) openDay(DV.ds, DV.d); };
+function renderDayView() {
+  const body = $("todayBody"); body.textContent = ""; if (!DV) return;
+  const todayS = localDay(), isToday = DV.ds === todayS, past = DV.ds < todayS;
+  $("todayTitle").textContent = (isToday ? "Today · " : "") + DV.d.toLocaleDateString([], { weekday: isToday ? "short" : "long", month: "short", day: "numeric" });
+  $("todayAdd").hidden = past;                                  // no adding workouts to a day that's gone
+  const dayLbl = isToday ? "today" : DV.d.toLocaleDateString([], { weekday: "long", month: "short", day: "numeric" });
+  const msg = t => { const e = document.createElement("div"); e.className = "hint"; e.style.cssText = "font-size:14px;margin-top:10px"; e.textContent = t; body.appendChild(e); };
+  if (DV.acts == null) { $("todayAdd").hidden = true; msg("Checking intervals.icu…"); return; }
+  if (DV.err) { $("todayAdd").hidden = true; msg(DV.err); return; }
   const sec = t => { const h = document.createElement("div"); h.className = "tdsec"; h.textContent = t; body.appendChild(h); };
-  if (TODAY.acts.length) sec("Completed");
-  TODAY.acts.forEach(a => {
+  if (DV.acts.length) sec("Completed");
+  DV.acts.forEach(a => {
     const r = document.createElement("div"); r.className = "tdrow";
     const b = document.createElement("button"); b.type = "button"; b.className = "libitem done tdmain"; b.setAttribute("aria-label", "Open the summary of " + (a.name || "this ride"));
     const n = document.createElement("span"); n.textContent = a.name || a.type || "Ride"; n.style.cssText = "overflow-wrap:anywhere;font-weight:600;color:var(--fg)";
-    const ch = document.createElement("span"); ch.className = "donetag"; ch.textContent = "\u2713 \u203a";
+    const ch = document.createElement("span"); ch.className = "donetag"; ch.textContent = "✓ ›";
     const m = document.createElement("span"); m.className = "r"; m.style.cssText = "grid-column:1 / -1;font-size:13px";
-    m.textContent = [a.moving_time ? fmtHM(a.moving_time) : "", a.icu_training_load != null ? "TSS " + Math.round(a.icu_training_load) : "", a.icu_average_watts || a.average_watts ? Math.round(a.icu_average_watts || a.average_watts) + " W avg" : ""].filter(Boolean).join("  \u00b7  ");
+    m.textContent = [a.moving_time ? fmtHM(a.moving_time) : "", a.icu_training_load != null ? "TSS " + Math.round(a.icu_training_load) : "", a.icu_average_watts || a.average_watts ? Math.round(a.icu_average_watts || a.average_watts) + " W avg" : ""].filter(Boolean).join("  ·  ");
     b.append(n, ch, m); b.onclick = () => openRide(actFrom(a)); r.appendChild(b); body.appendChild(r);
   });
-  if (TODAY.ev.length) sec("Planned");
-  TODAY.ev.forEach(x => {
+  if (DV.ev.length) sec("Planned");
+  DV.ev.forEach(x => {
+    const cat = x.category || "WORKOUT", isWo = cat === "WORKOUT";
     const text = (x.description || (x.workout_doc && x.workout_doc.description) || "").trim(); let steps = null;
-    if (text) { try { steps = parseText(text, +$("ftp").value || 270); } catch (e) {} }
+    if (isWo && text) { try { steps = parseText(text, +$("ftp").value || 270); } catch (e) {} }
     const dur = steps ? steps.reduce((a, q) => a + q.dur, 0) : x.moving_time || 0, tss = x.icu_training_load != null ? x.icu_training_load : steps ? planStats(steps).tss : null;
+    const name = x.name || (isWo ? "Planned workout" : cat.charAt(0) + cat.slice(1).toLowerCase());
     const card = document.createElement("div"); card.className = "libitem"; card.style.cssText = "display:block;margin:6px 0;cursor:default";
     const top = document.createElement("div"); top.style.cssText = "display:flex;justify-content:space-between;gap:8px;align-items:baseline";
-    const n = document.createElement("span"); n.textContent = x.name || "Planned workout"; n.style.cssText = "font-weight:600;overflow-wrap:anywhere;min-width:0;color:var(--fg)";
+    const n = document.createElement("span"); n.textContent = name; n.style.cssText = "font-weight:600;overflow-wrap:anywhere;min-width:0;color:var(--fg)";
     const m = document.createElement("span"); m.className = "r"; m.style.cssText = "flex:none;font-size:13px"; m.textContent = [dur ? (steps ? fmt(dur) : fmtHM(dur)) : "", tss != null ? "TSS " + Math.round(tss) : ""].filter(Boolean).join("  ");
     top.append(n, m); card.appendChild(top);
     if (steps && steps.length) { const g = document.createElement("canvas"); g.style.cssText = "width:100%;height:34px;display:block;margin-top:6px"; card.appendChild(g); drawMini(g, steps, { h: 52 }); }
-    else { const no = document.createElement("div"); no.className = "hint"; no.style.cssText = "font-size:13px;margin-top:4px"; no.textContent = "No workout steps entered, so it can't be loaded."; card.appendChild(no); }
+    else if (isWo) { const no = document.createElement("div"); no.className = "hint"; no.style.cssText = "font-size:13px;margin-top:4px"; no.textContent = "Planned ride (no workout steps)"; card.appendChild(no); }
     const bt = document.createElement("div"); bt.style.cssText = "display:flex;gap:8px;margin-top:10px";
-    const ld = document.createElement("button"); ld.type = "button"; ld.className = "primary"; ld.style.cssText = "flex:1;height:44px;margin:0;font-weight:700"; ld.innerHTML = "&#9654;&ensp;Load"; ld.disabled = !steps;
-    ld.onclick = () => { const item = { name: x.name || "Planned workout", text }; closeToday(); askLaunch(item, fmt(dur), tss != null ? "TSS " + Math.round(tss) : ""); };
+    if (isWo && steps) {
+      const ld = document.createElement("button"); ld.type = "button"; ld.className = "primary"; ld.style.cssText = "flex:1;height:44px;margin:0;font-weight:700"; ld.innerHTML = "&#9654;&ensp;Load"; ld.disabled = !steps;
+      ld.onclick = () => { const item = { name, text }; closeToday(); askLaunch(item, fmt(dur), tss != null ? "TSS " + Math.round(tss) : ""); };
+      bt.appendChild(ld);
+    } else { const sp = document.createElement("span"); sp.style.flex = "1"; bt.appendChild(sp); }
     const dl = document.createElement("button"); dl.type = "button"; dl.style.cssText = "flex:none;width:96px;height:44px;margin:0;background:#7a2a30;color:#fff;font-weight:600"; dl.textContent = "Delete";
-    dl.onclick = () => askCalDelete({ ...x, id: x.id, cat: x.category, name: x.name || "Planned workout" }, "today");
-    bt.append(ld, dl); card.appendChild(bt); body.appendChild(card);
+    dl.onclick = () => askCalDelete({ ...x, id: x.id, cat, name }, dayLbl);
+    bt.appendChild(dl); card.appendChild(bt); body.appendChild(card);
   });
-  if (!TODAY.acts.length && !TODAY.ev.length) { const e = document.createElement("div"); e.className = "hint"; e.style.cssText = "font-size:14px;margin-top:10px"; e.textContent = "Nothing planned or ridden today."; body.appendChild(e); }
+  if (!DV.acts.length && !DV.ev.length) msg(past ? "Nothing ridden this day." : "Nothing planned yet.");
 }
 
 /* ---------------- Plan tab: next 7 days from the intervals.icu calendar (read-only) ---------------- */
@@ -4691,6 +4758,7 @@ function drawDay(cv, pieces) {
 const stepsPiece = st => { const dur = st.reduce((a, q) => a + q.dur, 0); return { dur, at: t => { for (const q of st) { if (t < q.dur) return q.a + (q.b - q.a) * (t / q.dur); t -= q.dur; } return 0; } }; };
 const wattsPiece = (w, ftp) => ({ dur: w.length * 10, at: t => (w[Math.floor(t / 10)] || 0) / ftp });
 async function loadNext7() {
+  loadMonth();                                                   // the month calendar below refreshes with it
   const out = $("planWeekOut"), grid = $("planWeekGrid"), list = $("planWeekList");
   const auth = icuAuth();
   if (!auth) { grid.innerHTML = ""; list.textContent = ""; $("weekTot").textContent = ""; out.textContent = "Connect intervals.icu in Settings to see this week and the next 7 days."; return; }
@@ -4736,8 +4804,7 @@ async function loadNext7() {
     const its = items.filter(x => x.date === ds), plan = its.filter(x => !x.done), done = its.filter(x => x.done);
     const b = document.createElement("button"); b.type = "button"; b.className = "wkday" + (past ? " past" : "") + (isToday ? " today" : "");
     const long = d.toLocaleDateString([], { weekday: "long", month: "short", day: "numeric" });
-    if (past) { b.disabled = true; b.setAttribute("aria-label", long + (done.length ? ", ridden" : "")); }
-    else b.setAttribute("aria-label", (isToday ? "Today, " : "") + long + ": add a workout");
+    b.setAttribute("aria-label", (isToday ? "Today, " : "") + long + (done.length ? ", ridden" : "") + ": open this day");
     const wd = document.createElement("div"); wd.className = "wd"; wd.textContent = isToday ? "Today" : d.toLocaleDateString([], { weekday: "short" });
     const dn = document.createElement("div"); dn.className = "dn"; dn.textContent = d.getDate();
     const box = document.createElement("div"); box.className = "wkbox";
@@ -4750,7 +4817,7 @@ async function loadNext7() {
     if (!past) { const pl = document.createElement("span"); pl.className = "wkplus"; pl.textContent = "+"; pl.setAttribute("aria-hidden", "true"); box.appendChild(pl); }
     const sum = its.reduce((t, i) => t + (i.tss || 0), 0);
     const lb = document.createElement("div"); lb.className = "tl"; lb.textContent = sum ? Math.round(sum) + " TSS" : its.length ? its.length + (its.length > 1 ? " items" : " item") : "–";
-    b.append(wd, dn, box, lb); if (!past) b.onclick = () => openDay(ds, d, its); grid.appendChild(b);
+    b.append(wd, dn, box, lb); b.onclick = () => openDayView(ds); grid.appendChild(b);
   });
   const paint = async () => {                                    // planned shapes now; ridden ones once their power data arrives
     for (const g of draws) {
@@ -4772,8 +4839,9 @@ async function loadNext7() {
     if (!its.length) return;
     any = true;
     const g = document.createElement("button"); g.type = "button"; g.className = "daygrp";
-    const label = i === 0 ? "Today" : d.toLocaleDateString([], { weekday: "long", month: "short", day: "numeric" });
-    g.setAttribute("aria-label", label + ": open the scheduler for this day");
+    const label = (i === 0 ? "Today \u00b7 " : "") + d.toLocaleDateString([], { weekday: "long", month: "short", day: "numeric" });
+    if (i === 0) g.classList.add("today");
+    g.setAttribute("aria-label", label + ": open this day");
     const head = document.createElement("div"); head.className = "dh"; const ht = document.createElement("span"); ht.textContent = label;
     const chev = document.createElement("b"); chev.textContent = "\u203a"; chev.setAttribute("aria-hidden", "true"); head.append(ht, chev); g.appendChild(head);
     its.forEach(x => {
@@ -4783,11 +4851,88 @@ async function loadNext7() {
       m.textContent = [x.dur ? fmtHM(x.dur) : "", x.tss != null ? "TSS " + Math.round(x.tss) : ""].filter(Boolean).join("  ");
       row.append(n, m); g.appendChild(row);
     });
-    g.onclick = () => openDay(ymd(d), d, its); list.appendChild(g);
+    g.onclick = () => openDayView(ymd(d)); list.appendChild(g);
   });
   if (!any) list.textContent = "Nothing planned or completed in the next 7 days.";
   out.textContent = "";
 }
+/* ---------------- Plan tab: month calendar (Mon-Sun weeks). Each day like This Week; each week its completed / planned totals. ---------------- */
+let MONTH = null;                                                // first day of the month on screen
+let monthSeq = 0;
+async function loadMonth() {
+  const out = $("monthOut"), grid = $("monthGrid"), now = new Date();
+  if (!MONTH) MONTH = new Date(now.getFullYear(), now.getMonth(), 1);
+  const y = MONTH.getFullYear(), m = MONTH.getMonth(), seq = ++monthSeq;
+  $("monthTitle").textContent = MONTH.toLocaleDateString([], { month: "long", year: "numeric" });
+  if (!icuAuth()) { grid.textContent = ""; out.textContent = "Connect intervals.icu in Settings to see your calendar."; return; }
+  const start = new Date(y, m, 1 - ((new Date(y, m, 1).getDay() + 6) % 7));
+  const last = new Date(y, m + 1, 0), nW = Math.ceil((((new Date(y, m, 1).getDay() + 6) % 7) + last.getDate()) / 7);
+  const end = new Date(start); end.setDate(start.getDate() + nW * 7 - 1);
+  const todayS = ymd(new Date(now.getFullYear(), now.getMonth(), now.getDate())), ftp = +$("ftp").value || 270;
+  if (!grid.childElementCount) out.textContent = "Checking intervals.icu…";
+  let ev, acts;
+  try { [ev, acts] = await Promise.all([icuRange(ymd(start), ymd(end), "events"), icuRange(ymd(start), ymd(end), "activities")]); }
+  catch (e) { if (seq === monthSeq) out.textContent = "Couldn't load the calendar (" + e.message + ")."; return; }
+  if (seq !== monthSeq) return;                                  // the month was changed while this one loaded
+  let items = [];
+  ev.forEach(x => {
+    const date = String(x.start_date_local || "").slice(0, 10); if (date.length !== 10) return;
+    const cat = x.category || "", text = (x.description || (x.workout_doc && x.workout_doc.description) || "").trim();
+    let dur = x.moving_time || 0, tss = x.icu_training_load != null ? x.icu_training_load : null, steps = null;
+    if (cat === "WORKOUT" && text) { try { const st = parseText(text, ftp); dur = st.reduce((a, q) => a + q.dur, 0); if (tss == null) tss = planStats(st).tss; steps = st; } catch (e) {} }
+    items.push({ date, name: x.name || cat || "Event", dur, tss, done: false, steps, pid: x.paired_activity_id });
+  });
+  acts.forEach(a => {
+    const date = String(a.start_date_local || "").slice(0, 10); if (date.length !== 10) return;
+    items.push({ date, name: a.name || a.type || "Activity", dur: a.moving_time || 0, tss: a.icu_training_load != null ? a.icu_training_load : null, done: true, aid: a.id });
+  });
+  const doneKeys = new Set(items.filter(x => x.done).map(x => x.date + "|" + normName(x.name))), doneIds = new Set(acts.map(a => a.id));
+  items = items.filter(x => x.done || (!doneKeys.has(x.date + "|" + normName(x.name)) && !(x.pid && doneIds.has(x.pid)) && x.date >= todayS));   // ridden or passed plans drop out
+  grid.textContent = ""; out.textContent = ""; const draws = [];
+  for (let w = 0; w < nW; w++) {
+    const row = document.createElement("div"); row.className = "mcwk"; const g = document.createElement("div"); g.className = "mcgrid";
+    let cT = 0, cS = 0, pT = 0, pS = 0, hasPlan = false, wkFirst = "", wkLast = "";
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(start); d.setDate(start.getDate() + w * 7 + i); const ds = ymd(d), its = items.filter(x => x.date === ds);
+      if (!i) wkFirst = ds; wkLast = ds;
+      const past = ds < todayS, isToday = ds === todayS, done = its.filter(x => x.done), plan = its.filter(x => !x.done);
+      const b = document.createElement("button"); b.type = "button"; b.className = "mcd" + (d.getMonth() !== m ? " out" : "") + (past ? " past" : "") + (isToday ? " today" : "");
+      b.setAttribute("aria-label", (isToday ? "Today, " : "") + d.toLocaleDateString([], { weekday: "long", month: "long", day: "numeric" }) + (done.length ? ", ridden" : "") + ": open this day");
+      const dn = document.createElement("div"); dn.className = "dn"; dn.textContent = d.getDate();
+      const box = document.createElement("div"); box.className = "wkbox";
+      const noSteps = plan.filter(x => !x.steps);
+      if (noSteps.length && !done.length && !plan.some(x => x.steps)) { const t = document.createElement("div"); t.className = "wktxt"; const s2 = noSteps.reduce((a, x) => a + (x.dur || 0), 0); t.textContent = s2 ? fmtHM(s2) : "Note"; box.appendChild(t); }
+      if (done.length || plan.some(x => x.steps)) { const cv = document.createElement("canvas"); box.appendChild(cv); draws.push({ cv, done, plan }); }
+      if (done.length) { const ck = document.createElement("span"); ck.className = "wkdone"; ck.textContent = "✓"; box.appendChild(ck); }
+      if (!past) { const pl = document.createElement("span"); pl.className = "wkplus"; pl.textContent = "+"; pl.setAttribute("aria-hidden", "true"); box.appendChild(pl); }
+      const sum = its.reduce((t, x) => t + (x.tss || 0), 0);
+      const tl = document.createElement("div"); tl.className = "tl"; tl.textContent = sum ? Math.round(sum) + " TSS" : its.length ? its.length + (its.length > 1 ? " items" : " item") : "–";
+      done.forEach(x => { cT += x.dur || 0; cS += x.tss || 0; }); plan.forEach(x => { pT += x.dur || 0; pS += x.tss || 0; hasPlan = true; });
+      b.append(dn, box, tl); b.onclick = () => openDayView(ds); g.appendChild(b);
+    }
+    const sm = document.createElement("div"); sm.className = "mcsum";
+    const thisWeek = todayS >= wkFirst && todayS <= wkLast, parts = [];
+    if (cT || cS) parts.push('<span>Completed <b>' + fmtHM(cT) + ' · ' + Math.round(cS) + ' TSS</b></span>');
+    if (hasPlan || (thisWeek && (cT || cS))) {                    // this week: Planned is the whole week, ridden plus still to ride
+      const t = thisWeek ? cT + pT : pT, s3 = thisWeek ? cS + pS : pS;
+      parts.push('<span class="pl">Planned <b>' + fmtHM(t) + ' · ' + Math.round(s3) + ' TSS</b></span>');
+    }
+    sm.innerHTML = parts.join("");
+    row.append(g, sm); grid.appendChild(row);
+  }
+  const paint = () => draws.forEach(g => {
+    const pieces = [];
+    for (const a of g.done) { const wv = a.aid != null ? STREAMS.get(a.aid) : null; if (wv && wv.length) pieces.push(wattsPiece(wv, ftp)); }
+    g.plan.forEach(x => { if (x.steps) pieces.push(stepsPiece(x.steps)); });
+    if (!pieces.length && g.done.length) pieces.push({ dur: 1, at: () => 0.55 });
+    drawDay(g.cv, pieces);
+  });
+  requestAnimationFrame(paint);
+  const need = draws.flatMap(g => g.done).filter(a => a.aid != null && !STREAMS.has(a.aid));
+  if (need.length) Promise.all(need.map(a => actWatts(a.aid))).then(() => { if (seq === monthSeq) requestAnimationFrame(paint); });
+}
+$("monthPrev").onclick = () => { MONTH = new Date(MONTH.getFullYear(), MONTH.getMonth() - 1, 1); loadMonth(); };
+$("monthNext").onclick = () => { MONTH = new Date(MONTH.getFullYear(), MONTH.getMonth() + 1, 1); loadMonth(); };
 $("btnToday").onclick = () => { loadToday(); loadNext7(); };
 /* Free Ride: the ride screen with no plan. The trainer rides a flat road; + and - (or a Zwift Click) tilt it. */
 function startFreeRide() {
@@ -4809,8 +4954,7 @@ $("btnCalDelYes").onclick = async () => {
   try {
     const r = await fetch("https://intervals.icu/api/v1/athlete/" + encodeURIComponent(icuId()) + "/events/" + encodeURIComponent(x.id), { method: "DELETE", headers: { Authorization: auth, Accept: "application/json" } });
     if (!r.ok) throw new Error(r.status === 403 ? "intervals.icu refused (403): reconnect intervals.icu in Settings so the app can edit your calendar" : "intervals.icu replied " + r.status);
-    $("calDelModal").style.display = "none"; calDel = null; toast("Deleted \u201c" + x.name + "\u201d from your calendar."); loadToday().then(() => { if ($("todayScr").classList.contains("show")) renderToday(); }); loadNext7();
-    if (dayDate) { dayHave = dayHave.filter(h => h.eid !== x.id); renderDayHave(); }
+    $("calDelModal").style.display = "none"; calDel = null; toast("Deleted \u201c" + x.name + "\u201d from your calendar."); loadToday(); loadNext7(); if (dvOpen()) refreshDayView();
   } catch (e) { $("btnCalDelYes").disabled = false; $("btnCalDelYes").textContent = "Try again"; $("calDelText").textContent = "Couldn't delete it: " + e.message + "."; }
 };
 $("btnRenameNo").onclick = () => { $("renameModal").style.display = "none"; renameFrom = null; };
@@ -4861,7 +5005,7 @@ function askYes(title, text, yes) {
   });
 }
 // Put one workout on the intervals.icu calendar for a day. Asks first if that day already has something planned. Resolves true when added.
-async function scheduleOn(date, name, text) {
+async function scheduleOn(date, name, text, plain) {          // plain: { dur, load } for a ride with no steps
   if (!icuAuth()) { toast("Connect intervals.icu first (Settings).", true); return false; }
   let existing = [];
   try { existing = await icuEvents(date); } catch (e) { toast("Couldn't check the calendar (" + e.message + ").", true); return false; }
@@ -4873,7 +5017,8 @@ async function scheduleOn(date, name, text) {
     const r = await fetch("https://intervals.icu/api/v1/athlete/" + encodeURIComponent(icuId()) + "/events/bulk?upsert=true", {
       method: "POST",
       headers: { Authorization: icuAuth(), "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify([{ category: "WORKOUT", start_date_local: date + "T00:00:00", type: "Ride", name, description: text, external_id: "kickr-" + date + "-" + Date.now() }]),
+      body: JSON.stringify([Object.assign({ category: "WORKOUT", start_date_local: date + "T00:00:00", type: "Ride", name, description: text, external_id: "kickr-" + date + "-" + Date.now() },
+        plain ? { moving_time: plain.dur, icu_training_load: plain.load } : {})]),
     });
     if (!r.ok) throw new Error("intervals.icu replied " + r.status);
     toast("Added \u201c" + name + "\u201d to " + date + "."); return true;
@@ -4882,31 +5027,18 @@ async function scheduleOn(date, name, text) {
 /* ---------------- Schedule a day: tap a day in Next 7 days ----------------
    A page of its own with the workout library and a builder; the only action is Schedule, for the day that was tapped. */
 let dayDate = null, dayFold = {};
-function openDay(date, d, its) {
-  dayDate = date; $("dayTitle").textContent = "Schedule for " + d.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
-  dayHave = (its || []).filter(x => !x.done); dayLabel = d.toLocaleDateString([], { weekday: "long", month: "short", day: "numeric" }); renderDayHave();
+function openDay(date, d) {
+  dayDate = date; $("dayTitle").textContent = "Add to " + d.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
   renderDayLib(); dayInfo();
   $("dayScr").classList.add("show"); $("dayScr").scrollTop = 0; document.body.style.overflow = "hidden";
 }
-let dayHave = [], dayLabel = "";
-function renderDayHave() {                                     // what's already on the calendar that day, each with a delete
-  $("dayHave").hidden = !dayHave.length; $("dayHaveList").textContent = "";
-  dayHave.forEach(x => { const r = document.createElement("div"); r.style.cssText = "display:flex;gap:8px;align-items:center;margin:4px 0";
-    const n = document.createElement("span"); n.style.cssText = "flex:1;min-width:0;overflow-wrap:anywhere"; n.textContent = x.name;
-    const m = document.createElement("span"); m.className = "r"; m.style.cssText = "flex:none;font-size:13px"; m.textContent = [x.dur ? fmtHM(x.dur) : "", x.tss != null ? "TSS " + Math.round(x.tss) : ""].filter(Boolean).join("  ");
-    r.append(n, m);
-    if (x.eid != null) { const del = document.createElement("button"); del.type = "button"; del.className = "havedel"; del.textContent = "\u2715";
-      del.title = "Delete from calendar"; del.setAttribute("aria-label", "Delete " + x.name + " from the intervals.icu calendar");
-      del.onclick = () => askCalDelete({ ...x, id: x.eid }, dayLabel); r.appendChild(del); }
-    $("dayHaveList").appendChild(r); });
-}
-function closeDay() { $("dayScr").classList.remove("show"); document.body.style.overflow = ""; dayDate = null; }
+function closeDay() { $("dayScr").classList.remove("show"); if (!dvOpen()) document.body.style.overflow = ""; dayDate = null; }
 $("dayBack").onclick = closeDay;
-async function daySchedule(name, text, btn) {
+async function daySchedule(name, text, btn, plain) {
   if (!dayDate) return; const was = btn.textContent; btn.disabled = true; btn.textContent = btn.classList.contains("schedbtn") ? "\u2026" : "Scheduling\u2026";
-  const ok = await scheduleOn(dayDate, name, text);
+  const ok = await scheduleOn(dayDate, name, text, plain);
   btn.disabled = false; btn.textContent = was;
-  if (ok) { closeDay(); loadToday(); loadNext7(); }
+  if (ok) { closeDay(); loadToday(); loadNext7(); if (dvOpen()) refreshDayView(); }
   return ok;
 }
 function renderDayLib() {                                      // same folders and rows as the home library; each row's only button is Schedule
@@ -4941,19 +5073,44 @@ function renderDayLib() {                                      // same folders a
     });
   });
 }
-function dayInfo() {                                            // live duration and TSS as the workout is typed, like the home builder
-  const txt = $("dWo").value, cv = $("dWoGraph"); let st = null;
-  if (txt.trim()) { try { st = parseText(txt, +$("ftp").value || 270); } catch (e) { $("dWoInfo").textContent = e.message; $("dWoInfo").className = "status bad"; } }
-  else { $("dWoInfo").textContent = "Type the workout steps above."; $("dWoInfo").className = "status"; }
-  if (st && st.length) { const total = st.reduce((a, q) => a + q.dur, 0); $("dWoInfo").textContent = "Total " + fmt(total) + "  \u00b7  " + st.length + " steps  \u00b7  TSS " + Math.round(planStats(st).tss); $("dWoInfo").className = "status ok"; drawMini(cv, st, { h: 128, ftpLine: true }); }
-  else cv.getContext("2d").clearRect(0, 0, cv.width, cv.height);
-  $("dSched").disabled = !(st && st.length);
+// Duration as typed: "1:30", "90" (minutes), "1h30", "1h", "45m". Seconds, or null.
+function parseDurIn(v) {
+  v = String(v || "").trim().toLowerCase(); let m;
+  if (!v) return null;
+  if ((m = v.match(/^(\d+):([0-5]?\d)$/))) return (+m[1] * 60 + +m[2]) * 60;
+  if ((m = v.match(/^(\d+(?:\.\d+)?)\s*(?:m|min)?$/))) return Math.round(+m[1] * 60);
+  if ((m = v.match(/^(\d+(?:\.\d+)?)\s*h(?:\s*(\d+)\s*m?)?$/))) return Math.round(+m[1] * 3600 + (m[2] ? +m[2] * 60 : 0));
+  return null;
 }
-$("dWo").addEventListener("input", dayInfo);
+const hmIn = sec => Math.floor(sec / 3600) + ":" + String(Math.round(sec % 3600 / 60)).padStart(2, "0");
+let dayPlan = null, dayAuto = false, dayMine = { dur: "", load: "" };   // dayMine: what was typed by hand, back when the steps are removed
+function dayInfo() {                                            // steps typed: duration and load come from them; no steps: type them in
+  const txt = $("dWo").value, cv = $("dWoGraph"), info = $("dWoInfo"); let st = null, bad = false;
+  if (txt.trim()) { try { st = parseText(txt, +$("ftp").value || 270); } catch (e) { info.textContent = e.message; info.className = "status bad"; bad = true; } }
+  const auto = !!(st && st.length);
+  if (auto && !dayAuto) dayMine = { dur: $("dDur").value, load: $("dLoad").value };
+  if (!auto && dayAuto) { $("dDur").value = dayMine.dur; $("dLoad").value = dayMine.load; }
+  dayAuto = auto; $("dDur").readOnly = $("dLoad").readOnly = auto;
+  if (auto) {
+    const total = st.reduce((a, q) => a + q.dur, 0), tss = Math.round(planStats(st).tss);
+    $("dDur").value = hmIn(total); $("dLoad").value = tss;
+    info.textContent = "Total " + fmt(total) + "  ·  " + st.length + " steps  ·  TSS " + tss; info.className = "status ok"; drawMini(cv, st, { h: 128, ftpLine: true });
+  } else {
+    cv.getContext("2d").clearRect(0, 0, cv.width, cv.height);
+    if (!bad) { info.textContent = "No steps: the ride goes on the calendar with the duration and load above."; info.className = "status"; }
+  }
+  const name = ($("dName").value || "").trim(), dur = parseDurIn($("dDur").value), ld = $("dLoad").value.trim(), load = ld === "" ? NaN : +ld;
+  const ok = !bad && !!name && dur > 0 && isFinite(load) && load >= 0;
+  $("dSched").disabled = !ok;
+  $("dSched").title = ok ? "" : !name ? "Enter a name" : !(dur > 0) ? "Enter a duration, e.g. 1:30" : "Enter the load (TSS)";
+  dayPlan = ok ? { name, text: auto ? txt : "", dur, load: Math.round(load) } : null;
+}
+["dWo", "dName", "dDur", "dLoad"].forEach(id => $(id).addEventListener("input", dayInfo));
 const D_WARMUP = "-5m ramp 50%-65%\n-3m 65%\n-2m 88%\n-3m 65%\n-2m 50%\n";
 $("dSched").onclick = async () => {
-  const ok = await daySchedule(($("dName").value || "").trim() || "Custom Workout", $("dWo").value, $("dSched"));
-  if (ok) { $("dName").value = "Custom Workout"; $("dWo").value = D_WARMUP; dayInfo(); }   // scheduled: the builder starts fresh next time
+  if (!dayPlan) return; const p = dayPlan;
+  const ok = await daySchedule(p.name, p.text, $("dSched"), p.text ? null : { dur: p.dur, load: p.load });
+  if (ok) { $("dName").value = "Custom Workout"; $("dWo").value = ""; $("dDur").value = ""; $("dLoad").value = ""; dayInfo(); }   // scheduled: the builder starts fresh next time
 };
 /* ---------------- Hard intervals: choose a power target before launching ---------------- */
 let hardMode = "pct", pendingHard = null;
