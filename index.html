@@ -69,7 +69,8 @@
   .bandbar .ptr { position:absolute; top:0; width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:9px solid #8b94a3; transform:translateX(-6px); transition:left .25s linear, border-top-color .25s; }
   #tgtPct.adjg { font-size:14px; font-weight:600; color:var(--ok); }
   #adjLbl { position:absolute; right:0; bottom:0; font-size:14px; font-weight:600; color:var(--ok); display:none; font-variant-numeric:tabular-nums; }
-  #btnErg.on { background:var(--ok); color:#000; }
+  #btnErg { color:#7b8291; }                                 /* grey button; the word turns green while ERG holds the power */
+  #btnErg.on { color:var(--ok); }
   .slim { display:flex; align-items:baseline; gap:10px; }
   .slim .l { font-size:13px; }
   .slim .s { margin-left:auto; text-align:right; font-size:calc(var(--u)*4.2); font-weight:400; color:#c3cad6; line-height:1.1; }
@@ -165,6 +166,11 @@
   #pauseOv[hidden] { display:none; }
   #pauseOv .pbox { background:#161a20; border-radius:18px; padding:20px; width:100%; max-width:320px; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,.6); }
   #pauseOv .pbig { width:100%; height:64px; margin:0 0 10px; font-size:19px; font-weight:700; border-radius:14px; }
+  .ctrl .p1wrap { flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:4px; }   /* +1 min, with Undo under it for 10 s */
+  .ctrl .p1wrap button { flex:none; width:100%; }
+  .ctrl .p1wrap.undo button { height:calc(var(--u)*3.025 - 2px) !important; font-size:14px !important; border-radius:10px; }
+  #btnUndo1 { background:#2a2f37; color:#3ddc84; font-weight:700; }
+  #btnUndo1[hidden] { display:none !important; }
   .devrows { display:flex; flex-direction:column; gap:10px; }
   .devrow { display:grid; grid-template-columns:1fr auto; grid-template-rows:auto auto; column-gap:10px; align-items:center; text-align:left; width:100%; margin:0; padding:12px 14px; border-radius:12px; background:#222833; border:2px solid #d93b3b; }
   .devrow .dn { font-size:16px; font-weight:700; color:#e8ebef; }
@@ -420,7 +426,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.10</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.11</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -631,7 +637,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">v1.0.10</span>
+  <span class="ver">v1.0.11</span>
 </div>
 
 <div class="ctrl">
@@ -644,7 +650,7 @@ Cooldown
   <button id="btnErg" disabled>ERG</button>
   <button id="btnDn" disabled>−</button>
   <button id="btnUp" disabled>+</button>
-  <button id="btnPlus1" disabled style="font-size:16px;padding:0 2px">+1 min</button>
+  <div class="p1wrap" id="p1wrap"><button id="btnPlus1" disabled style="font-size:16px;padding:0 2px">+1 min</button><button id="btnUndo1" type="button" hidden>Undo</button></div>
   <button id="btnSkip" disabled aria-label="Skip to next interval"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true"><path d="M5 5l10 7-10 7z"/><rect x="17" y="5" width="3" height="14" rx="1.2"/></svg></button>
 </div>
 
@@ -1215,7 +1221,7 @@ function updateWoInfo() {                                // live duration under 
   try {
     const p = readPlan(), total = p.steps.reduce((a, st) => a + st.dur, 0), ps = planStats(p.steps);
     $("woInfo").textContent = "Total " + fmt(total) + "  \u00b7  " + p.steps.length + " steps  \u00b7  TSS " + Math.round(ps.tss);
-    drawMini($("woGraph"), p.steps, { h: 128, ftpLine: true }); woSteps = p.steps; $("woInfo").className = "status ok"; $("btnLaunch").disabled = false; $("btnSchedule").disabled = false;
+    drawMini($("woGraph"), p.steps, { h: 128, ftpLine: true }); woSteps = p.steps; $("woName").placeholder = "Name (blank: \u201c" + autoName(p.steps) + "\u201d)"; $("woInfo").className = "status ok"; $("btnLaunch").disabled = false; $("btnSchedule").disabled = false;
     return p;
   } catch (e) { woSteps = null; $("woPick").textContent = ""; $("woGraph").getContext("2d").clearRect(0, 0, $("woGraph").width, $("woGraph").height); $("woInfo").textContent = e.message; $("woInfo").className = "status bad"; $("btnLaunch").disabled = true; $("btnSchedule").disabled = true; return null; }
 }
@@ -1296,7 +1302,7 @@ function sentTarget() { const t = commandedTarget(); return t == null ? null : M
 async function startWorkout() {
   ensureAudio();
   if (!cp) return;
-  resetWorkout(); cueIdx = -1; W.running = true; W.startMs = Date.now(); W.name = W.freeRide ? "Free Ride" : $("woName").value.trim();
+  resetWorkout(); cueIdx = -1; W.running = true; W.startMs = Date.now(); W.name = W.freeRide ? "Free Ride" : $("woName").value.trim() || autoName(W.steps);
   await cpWrite([0x07]);                           // start / resume
   await pushTarget(true);
   W.timer = setInterval(tick, 1000);
@@ -1431,7 +1437,7 @@ function tick() {
     const A = commandedTarget(), D = rampLen(W.idx, W.idx + 1); if (A != null) W.ramp = { A, t0: Date.now(), to: W.idx + 1, D };
   }
   if (W.stepT >= W.steps[W.idx].dur) {
-    W.idx++; W.stepT = 0; W.iSum = 0; W.iN = 0;
+    W.idx++; W.stepT = 0; W.iSum = 0; W.iN = 0; if (plus1) hideUndo1();
     if (W.idx >= W.steps.length) { finishWorkout(); return; }
   }
   cues();
@@ -1450,7 +1456,7 @@ function finishWorkout(reason, quiet) {
 function skipStep() {
   if (!W.running) return;
   const A = commandedTarget();                         // what the trainer is being held at right now
-  W.idx++; W.stepT = 0; W.iSum = 0; W.iN = 0; W.ramp = null;
+  W.idx++; W.stepT = 0; W.iSum = 0; W.iN = 0; W.ramp = null; if (typeof plus1 !== "undefined" && plus1) hideUndo1();
   if (W.idx >= W.steps.length) return finishWorkout();
   if (A != null && rampOK(W.idx - 1, W.idx)) W.ramp = { A, t0: Date.now() - 1000, to: W.idx, D: rampLen(W.idx - 1, W.idx) };
   cues();
@@ -1762,7 +1768,7 @@ async function uploadRide() {
   if (!auth) { box.textContent = "Not uploaded: not connected to intervals.icu."; return; }
   if (!fitBlob) { box.textContent = "Not uploaded: no .fit file was made."; box.style.color = "var(--bad, #ff6b6b)"; return; }
   box.textContent = "Uploading to intervals.icu\u2026";
-  const name = fitName.replace(/\.fit$/, "");
+  const name = W.name || autoName(W.steps);              // the workout's name (the file keeps its date-stamped name)
   const url = "https://intervals.icu/api/v1/athlete/" + encodeURIComponent(id) + "/activities?name=" + encodeURIComponent(name) + "&external_id=" + encodeURIComponent("kickr-" + W.startMs);
   const form = new FormData(); form.append("file", new File([fitBlob], fitName, { type: "application/octet-stream" }));
   try {
@@ -1794,7 +1800,7 @@ async function stravaUpload() {
   if (!token) return;                                        // not connected: say nothing
   if (!fitBlob) return;
   box.textContent = "Uploading to Strava\u2026";
-  const name = "Intervals - " + (W.name || "Ride"), ext = "kickr-" + W.startMs;
+  const name = "Intervals - " + (W.name || autoName(W.steps)), ext = "kickr-" + W.startMs;
   try {
     const form = new FormData(); form.append("file", new File([fitBlob], fitName, { type: "application/octet-stream" }));
     const r = await fetch(STRAVA_HELPER + "/upload?name=" + encodeURIComponent(name) + "&external_id=" + encodeURIComponent(ext), { method: "POST", headers: { "X-Strava-Token": token }, body: form });
@@ -2122,6 +2128,38 @@ function render() {
     const np = (W.sum4 / W.n4) ** 0.25, IF = np / W.ftp, tss = (W.t * np * IF) / (W.ftp * 3600) * 100;
     $("np").textContent = Math.round(np); $("tss").textContent = Math.round(tss); $("ifv").textContent = IF.toFixed(2);
   }
+}
+/* A name for an unnamed workout, from its structure: the main zone, how the work is split, and the total time.
+   Work = runs of steady steps at 76%+ FTP, 30 s or longer (back-to-back hard steps count as one interval; ramps are
+   warm-up/cool-down). Zones: Tempo 76-83%, Sweet Spot 84-94%, Threshold 95-105%, VO2 Max 106-120%. The zone with the most work
+   time names it; its most common interval length gives "N x length". No work: Endurance or Recovery by average.
+   e.g. "Sweet Spot 3x15 \u00b7 1h15", "VO2 Max 8x30s \u00b7 50'", "Endurance \u00b7 2h". */
+function autoName(steps) {
+  if (!steps || !steps.length) return "Ride";
+  const ZN = [[1.21, "Anaerobic"], [1.06, "VO2 Max"], [0.95, "Threshold"], [0.84, "Sweet Spot"], [0.76, "Tempo"], [0.56, "Endurance"], [0, "Recovery"]];
+  const zone = f => ZN.find(z => f >= z[0] - 1e-9)[1];
+  const lvl = st => st.free ? null : st.sim && st.lo != null && !st.conv ? (st.lo + st.hi) / 2 : st.a === st.b || Math.min(st.a, st.b) >= 0.76 ? (st.a + st.b) / 2 : null;   // a ramp between two hard levels is hard too
+  const total = steps.reduce((a, q) => a + q.dur, 0), mins = Math.round(total / 60);
+  const tStr = mins < 90 ? mins + "'" : Math.floor(mins / 60) + "h" + (mins % 60 ? String(mins % 60).padStart(2, "0") : "");
+  const work = []; let cur = null;                              // back-to-back hard steps (over-unders, hard starts) are one interval
+  steps.forEach(st => { const f = lvl(st);
+    if (f != null && f >= 0.76) { if (!cur) { cur = { dur: 0, w: 0, parts: [] }; work.push(cur); } cur.dur += st.dur; cur.w += f * st.dur; cur.parts.push([f, st.dur]); } else cur = null; });
+  work.forEach(x => {                                             // zone: its hardest part if that is 40%+ of the time (30/30s at 115%+), else the average
+    x.f = x.w / x.dur; x.st = { dur: x.dur };
+    const top = Math.max(...x.parts.map(p => p[0])), topT = x.parts.filter(p => p[0] >= top - 0.02).reduce((a, p) => a + p[1], 0);
+    if (top >= 1.15 && topT >= 0.4 * x.dur) x.f = Math.max(x.f, top);   // true VO2 efforts, not over-unders
+  });
+  for (let i = work.length - 1; i >= 0; i--) if (work[i].dur < 30) work.splice(i, 1);
+  if (!work.length) {
+    const avg = steps.reduce((a, q) => a + (q.free ? 0.6 : (lvl(q) ?? (q.a + q.b) / 2)) * q.dur, 0) / Math.max(1, total);
+    return (steps.every(q => q.free) ? "Free Ride" : avg >= 0.56 ? "Endurance" : "Recovery") + " \u00b7 " + tStr;
+  }
+  const byZone = {}; work.forEach(x => { const z = zone(x.f); (byZone[z] = byZone[z] || []).push(x.st.dur); });
+  const main = Object.keys(byZone).sort((a, b) => byZone[b].reduce((p, q) => p + q, 0) - byZone[a].reduce((p, q) => p + q, 0))[0];
+  const durs = byZone[main], cnt = {}; durs.forEach(d => { cnt[d] = (cnt[d] || 0) + 1; });
+  const d = +Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a] || b - a)[0], n = cnt[d];
+  const dStr = d % 60 === 0 ? String(d / 60) : d < 60 ? d + "s" : (d / 60).toFixed(1).replace(/\.0$/, "");
+  return main + " " + n + "x" + dStr + " \u00b7 " + tStr;
 }
 function zoneColor(f) {
   return f < 0.56 ? "#7a8594" : f < 0.76 ? "#3b9cff" : f < 0.91 ? "#3ddc84" : f < 1.06 ? "#ffd23f" : f < 1.21 ? "#ff8a3d" : "#ff4d5e";
@@ -3832,7 +3870,7 @@ function changeWorkout() {
 function endSwitch() { switching = false; $("switchBanner").style.display = "none"; $("btnLaunch").textContent = "Launch Workout"; }
 function applySwitch() {                                     // the new workout replaces the rest of the plan; the ride clock and what was already ridden carry on
   const p = updateWoInfo(); if (!p) return false;
-  W.steps = W.steps.some(s => s.conv) ? simConvert(p.steps) : p.steps; W.ftp = p.ftp; W.idx = 0; W.stepT = 0; W.iSum = 0; W.iN = 0; W.ramp = null; W.name = $("woName").value.trim();
+  W.steps = W.steps.some(s => s.conv) ? simConvert(p.steps) : p.steps; W.ftp = p.ftp; W.idx = 0; W.stepT = 0; W.iSum = 0; W.iN = 0; W.ramp = null; W.name = $("woName").value.trim() || autoName(W.steps);
   endSwitch(); showScreen("run"); render();
   if (arcSwitch) { arcSwitch = false; if (W.paused) togglePause(); }           // arcade: the new workout starts playing straight away
   return true;
@@ -3910,8 +3948,8 @@ async function loadPlanAhead() {                             // calendar load fo
     ev.forEach(x => {
       const date = String(x.start_date_local || "").slice(0, 10); if (date.length !== 10 || date < start || date > end) return;
       const cat = x.category || "", text = (x.description || (x.workout_doc && x.workout_doc.description) || "").trim();
-      let tss = x.icu_training_load != null ? x.icu_training_load : null;
-      if (cat === "WORKOUT" && text) { try { tss = planStats(parseText(text, +$("ftp").value || 270)).tss; } catch (e) {} }
+      let tss = x.icu_training_load != null ? x.icu_training_load : null;   // intervals.icu's own planned load, as its projection uses
+      if (tss == null && cat === "WORKOUT" && text) { try { tss = planStats(parseText(text, +$("ftp").value || 270)).tss; } catch (e) {} }
       if (tss != null) PLAN_TSS[date] = (PLAN_TSS[date] || 0) + tss;
     });
     renderFit();
@@ -3965,7 +4003,7 @@ function drawFormBottom(cv, S) {
 }
 let fitSel = null, fitLast = null;          // fitSel = the day the user tapped (null = today)
 /* Training load: intervals.icu's own CTL/ATL/form when available; otherwise calculated from your rides; otherwise demo data. */
-let FIT_SRC = "demo", FIT_DAYS = null, FIT_ERR = "";
+let FIT_SRC = "demo", FIT_DAYS = null, FIT_ERR = "", FIT_AHEAD_SRC = "calc";
 const dayOffset = n => { const t = new Date(); return ymd(new Date(t.getFullYear(), t.getMonth(), t.getDate() + n)); };
 async function loadFitData() {
   const auth = icuAuth(), id = icuId();
@@ -3993,24 +4031,49 @@ async function loadFitData() {
     if (actSource === "icu") {                                 // fall back: calculate from your real ride loads
       const byDate = {}; ACT.forEach(a => { byDate[a.date] = (byDate[a.date] || 0) + a.load; });
       let ctl = 0, atl = 0; FIT_DAYS = [];
-      for (let n = -260; n <= 0; n++) { const d = dayOffset(n), L = byDate[d] || 0, pc = ctl, pa = atl; ctl = pc + (L - pc) / 42; atl = pa + (L - pa) / 7; FIT_DAYS.push({ date: d, ctl, atl, tsb: pc - pa }); }
+      for (let n = -260; n <= 0; n++) { const d = dayOffset(n), L = byDate[d] || 0, pc = ctl, pa = atl; ctl = pc + (L - pc) * K42; atl = pa + (L - pa) * K7; FIT_DAYS.push({ date: d, ctl, atl, tsb: pc - pa }); }
       FIT_SRC = "calc";
     } else { FIT_SRC = "demo"; FIT_DAYS = null; }
   }
 }
+/* Look-ahead. intervals.icu is asked for its own projected Fitness/Fatigue on the coming days (FIT_FUT); when it has
+   them they are shown as-is, so the app matches its chart. Otherwise the app projects: intervals.icu's exponential
+   averages (42 and 7 days) fed with each day's planned load, intervals.icu's stored planned load first, and today's
+   still-to-do load counted on top of today's ridden value. */
+let FIT_FUT = new Map(), FIT_FUT_END = "";
+async function loadFitFuture() {
+  const auth = icuAuth(); if (!auth || FIT.ahead < 1) return;
+  const a = dayOffset(1), b = dayOffset(14); if (FIT_FUT_END === b) return; FIT_FUT_END = b;
+  try {
+    const r = await fetch("https://intervals.icu/api/v1/athlete/" + encodeURIComponent(icuId()) + "/wellness?oldest=" + a + "&newest=" + b, { headers: { Authorization: auth, Accept: "application/json" } });
+    if (!r.ok) return;
+    const arr = await r.json(), m = new Map();
+    (Array.isArray(arr) ? arr : []).forEach(x => { const d = String(x.id || x.start_date_local || "").slice(0, 10), c = +x.ctl, t = +x.atl;
+      if (d.length === 10 && d > dayOffset(0) && isFinite(c) && isFinite(t) && x.ctl != null && x.atl != null) m.set(d, { ctl: c, atl: t }); });
+    FIT_FUT = m; if (m.size) renderFit();
+  } catch (e) {}
+}
+const K42 = 1 - Math.exp(-1 / 42), K7 = 1 - Math.exp(-1 / 7);   // intervals.icu's exponential weighting
 function fitWindow() {                                         // back days + today + ahead days, one entry per calendar day
   if (!FIT_DAYS) return fitSeries(demoLoads(FIT.back + FIT.ahead + 120), FIT.back, FIT.ahead);
   const byDate = new Map(FIT_DAYS.map(d => [d.date, d]));
   const before = FIT_DAYS.filter(x => x.date < dayOffset(-FIT.back)).pop();
   let ctl = before ? before.ctl : 0, atl = before ? before.atl : 0;
   const days = [];
-  const step = (d, L) => { const pc = ctl, pa = atl; ctl = pc + (L - pc) / 42; atl = pa + (L - pa) / 7; return { ctl, atl, tsb: pc - pa }; };
+  const step = (d, L) => { const pc = ctl, pa = atl; ctl = pc + (L - pc) * K42; atl = pa + (L - pa) * K7; return { ctl, atl, tsb: pc - pa }; };
   for (let n = -FIT.back; n <= 0; n++) {
     const row = byDate.get(dayOffset(n));
     if (row) { const pc = ctl, pa = atl; ctl = row.ctl; atl = row.atl; days.push({ ctl, atl, tsb: row.tsb != null ? row.tsb : pc - pa }); }
     else days.push(step(dayOffset(n), 0));                    // no record that day: assume no load
   }
-  for (let n = 1; n <= FIT.ahead; n++) days.push(step(dayOffset(n), PLAN_TSS[dayOffset(n)] || 0));   // scheduled load for each future day
+  if (FIT.ahead > 0) { const Lt = PLAN_TSS[dayOffset(0)] || 0; ctl += Lt * K42; atl += Lt * K7; }   // what's still planned today, on top of today's ridden load
+  let fromIcu = 0;
+  for (let n = 1; n <= FIT.ahead; n++) {
+    const d = dayOffset(n), fut = FIT_FUT.get(d);
+    if (fut) { const pc = ctl, pa = atl; ctl = fut.ctl; atl = fut.atl; days.push({ ctl, atl, tsb: pc - pa }); fromIcu++; }   // intervals.icu's own projection
+    else days.push(step(d, PLAN_TSS[d] || 0));               // scheduled load for each future day
+  }
+  FIT_AHEAD_SRC = fromIcu ? "icu" : "calc";
   return { days, todayIdx: FIT.back };
 }
 function renderFit() {
@@ -4026,7 +4089,7 @@ function renderFit() {
   $("vDay").textContent = fitSel == null ? label : label + "  \u2715";
   $("vBack").textContent = FIT.back; $("vAhead").textContent = FIT.ahead;
   renderDayList(dayOffset(S.cur - S.todayIdx));
-  $("fitNote").textContent = FIT_SRC === "icu" ? "From intervals.icu. Look-ahead includes scheduled workouts."
+  $("fitNote").textContent = FIT_SRC === "icu" ? (FIT_AHEAD_SRC === "icu" ? "From intervals.icu, look-ahead included." : "From intervals.icu. Look-ahead projected from your scheduled workouts.")
     : FIT_SRC === "calc" ? "Calculated from your intervals.icu rides (" + FIT_ERR + "). Look-ahead includes scheduled workouts."
     : "Demo data. Connect intervals.icu to see your real training load.";
 }
@@ -4036,7 +4099,7 @@ function showTab(name) { arcadeOn = false; applyArcade();
   $("planTab").style.display = data ? "none" : ""; $("dataTab").style.display = data ? "" : "none";
   $("tabPlan").classList.toggle("on", !data); $("tabData").classList.toggle("on", data);
   if (data) {
-    fitSel = null; renderFit(); loadFitData().then(renderFit);
+    fitSel = null; renderFit(); loadFitData().then(renderFit); FIT_FUT_END = ""; loadFitFuture();
     if (ACT && actSource !== "error") renderSummary();
     else { $("vYearNote").textContent = "Loading from intervals.icu…"; loadActivities().then(renderSummary); }
   }
@@ -4449,7 +4512,7 @@ async function loadNext7() {
     const cat = x.category || "", text = (x.description || (x.workout_doc && x.workout_doc.description) || "").trim();
     let dur = x.moving_time || 0, tss = x.icu_training_load != null ? x.icu_training_load : null;
     let steps = null;
-    if (cat === "WORKOUT" && text) { try { const st = parseText(text, ftp); dur = st.reduce((a, q) => a + q.dur, 0); tss = planStats(st).tss; steps = st; } catch (e) {} }
+    if (cat === "WORKOUT" && text) { try { const st = parseText(text, ftp); dur = st.reduce((a, q) => a + q.dur, 0); if (tss == null) tss = planStats(st).tss; steps = st; } catch (e) {} }   // intervals.icu's stored load first
     items.push({ date, name: x.name || (cat === "WORKOUT" ? "Planned workout" : cat || "Event"), dur, tss, done: false, id: cat === "WORKOUT" ? x.id : null, eid: x.id, cat, steps });
   });
   acts.forEach(a => {
@@ -4581,7 +4644,7 @@ function askSchedule(name, text) {                          // from a library ro
   $("schedName").textContent = pendingSched.name; $("schedDate").value = localDay();
   $("schedModal").style.display = "flex";
 }
-$("btnSchedule").onclick = () => askSchedule(($("woName").value || "").trim() || "Workout", $("wo").value);
+$("btnSchedule").onclick = () => { let st = null; try { st = readPlan().steps; } catch (e) {} askSchedule(($("woName").value || "").trim() || autoName(st), $("wo").value); };
 $("btnSchedNo").onclick = () => { $("schedModal").style.display = "none"; pendingSched = null; };
 $("btnSchedYes").onclick = async () => {
   const it = pendingSched, date = $("schedDate").value;
@@ -4912,9 +4975,20 @@ $("pvEnd").onclick = () => { $("endModal").style.display = "flex"; };          /
 $("pvDevices").onclick = () => { openDevices(); syncPauseOv(); }; $("btnEnd").onclick = () => { $("endModal").style.display = "flex"; };
 $("btnEndNo").onclick = () => { $("endModal").style.display = "none"; };
 $("btnEndYes").onclick = () => { $("endModal").style.display = "none"; finishWorkout("Workout ended by user."); }; $("btnSkip").onclick = skipStep;
-$("btnPlus1").onclick = () => {                             // add a minute to the current interval
+/* +1 min adds a minute to the current interval. For 10 s an Undo sits under it (the two share the button's space);
+   Undo takes back every minute added in that window, as long as the interval is still running. */
+let plus1 = null;                                               // { idx, n, timer }
+function hideUndo1() { if (plus1) clearTimeout(plus1.timer); plus1 = null; $("btnUndo1").hidden = true; $("p1wrap").classList.remove("undo"); }
+$("btnPlus1").onclick = () => {
   if (!W.running || W.idx >= W.steps.length) return;
-  W.steps[W.idx].dur += 60; render();
+  W.steps[W.idx].dur += 60;
+  const n = plus1 && plus1.idx === W.idx ? plus1.n + 1 : 1; if (plus1) clearTimeout(plus1.timer);
+  plus1 = { idx: W.idx, n, timer: setTimeout(hideUndo1, 10000) };
+  $("btnUndo1").textContent = n > 1 ? "Undo +" + n : "Undo"; $("btnUndo1").hidden = false; $("p1wrap").classList.add("undo"); render();
+};
+$("btnUndo1").onclick = () => {
+  if (plus1 && W.running && W.idx === plus1.idx) { const st = W.steps[W.idx]; st.dur = Math.max(W.stepT + 1, st.dur - 60 * plus1.n); }
+  hideUndo1(); render();
 };
 $("btnUp").onclick = () => adjust(1); $("btnDn").onclick = () => adjust(-1); $("btnErg").onclick = toggleErg;
 try { const g = JSON.parse(localStorage.getItem("kickrGov2") || "null"); if (g) { $("govOn").checked = !!g.on; if (g.rpm) $("govCad").value = g.rpm; } } catch (e) {}
