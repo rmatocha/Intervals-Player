@@ -47,7 +47,27 @@
   .hgrp { display:flex; justify-content:space-between; align-items:baseline; gap:8px; width:100%; text-align:left; background:none; border-radius:0; border-bottom:1px solid #222831; padding:12px 4px; }
   .hgrp .ht { font-size:16px; font-weight:700; white-space:nowrap; } .hgrp .hm { font-size:12px; color:var(--dim); font-weight:400; font-variant-numeric:tabular-nums; text-align:right; }
   .hgrp.yr .ht { font-size:18px; } .hyear { padding-left:12px; } .hrides { padding:8px 0 4px; }
-  .rsgrid { display:grid; grid-template-columns:1fr 1fr; gap:6px; } .tile.rs { grid-column:auto; padding:8px 10px; } .tile.rs .v { font-size:22px; }
+  /* ride summary: metrics as two columns of "label value" text, then stacked power / 30 s power / HR / cadence graphs */
+  .rsm { display:grid; grid-template-columns:1fr 1fr; column-gap:12px; background:var(--card); border-radius:12px; padding:10px 8px 12px; font-variant-numeric:tabular-nums; }
+  .rsm .col { display:grid; grid-template-columns:auto 1fr; column-gap:7px; row-gap:3px; align-content:start; min-width:0; }
+  .rsm .k { text-align:right; color:#8b94a3; font-size:14px; white-space:nowrap; }
+  .rsm .v { font-weight:700; font-size:14px; color:var(--fg); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .rsm .v small { font-weight:500; color:#8b94a3; margin-left:5px; }
+  .rsm .gap { grid-column:1 / -1; height:7px; }
+  .rsmap { position:relative; margin-top:10px; border-radius:12px; overflow:hidden; background:#151a21; }
+  #rsMap { height:230px; background:#151a21; }
+  #rsMapCv { width:100%; height:230px; display:block; }
+  #rsMapCv[hidden], #rsMap[hidden] { display:none; }
+  #rsMapTag { position:absolute; left:8px; top:8px; z-index:500; font-size:11px; font-weight:600; color:#e8ebef; background:rgba(0,0,0,.55); padding:3px 7px; border-radius:6px; pointer-events:none; }
+  #rsMapTag:empty { display:none; }
+  #rsMapBox .leaflet-control-attribution { background:rgba(0,0,0,.55); color:#c3cad6; font-size:10px; }
+  #rsMapBox .leaflet-control-attribution a { color:#c3cad6; }
+  .rssrc { font-size:11px; color:#8b94a3; margin:6px 0 0; }
+  .rschart { background:var(--card); border-radius:12px; padding:6px 10px 8px; margin-top:10px; }
+  .rschart .gr { display:grid; grid-template-columns:30px 1fr; column-gap:6px; align-items:stretch; margin-top:4px; }
+  .rschart .gl { display:flex; flex-direction:column; justify-content:space-between; font-size:10px; color:#8b94a3; text-align:right; font-variant-numeric:tabular-nums; }
+  .rschart .gn { font-size:11px; font-weight:600; color:#c3cad6; margin:6px 0 0 36px; }
+  .rschart canvas { width:100%; height:62px; display:block; background:#151a21; border-radius:4px; }
   @media (max-width:360px) { .hsums { grid-template-columns:1fr; } }
   .split { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1.15fr) minmax(0,1fr); gap:8px; position:relative; }
   .split > div { min-width:0; }
@@ -154,7 +174,19 @@
   .wobtns { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:10px; }   /* Save to Library, Launch Workout, Schedule on one row */
   .wobtns #btnSchedule { white-space:nowrap; padding:0 3px; }
   .wobtns button { width:auto; min-width:0; height:52px; margin:0; padding:0 6px; font-size:15px; line-height:1.15; border-radius:12px; white-space:normal; }
-  .freebtn { width:100%; height:48px; margin:10px 0 0; font-size:17px; font-weight:700; background:#3ddc84; color:#001018; border-radius:12px; }
+  .todaybtns { display:flex; gap:8px; margin:10px 0 0; }   /* a small refresh icon and a grey Free Ride with a green play mark, same height */
+  .todaybtns button { height:48px; margin:0; border-radius:12px; }
+  #btnToday { flex:none; width:56px; padding:0; font-size:24px; line-height:1; }
+  #btnFree { flex:1; min-width:0; font-size:17px; font-weight:600; color:#fff; }
+  #btnFree span { color:#3ddc84; margin-right:9px; }
+  .tdrow { display:flex; gap:8px; align-items:stretch; margin:6px 0; }
+  .tdrow .tdmain { flex:1; min-width:0; text-align:left; margin:0; }
+  .tdsec { font-size:12px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:#7b8291; margin:14px 0 4px; }
+  .zrows { display:grid; grid-template-columns:auto 1fr auto; gap:6px 10px; align-items:center; font-variant-numeric:tabular-nums; }
+  .zrows .zl { font-size:13px; font-weight:700; color:#c3cad6; }
+  .zrows .zt { height:12px; background:#1f2227; border-radius:4px; overflow:hidden; }
+  .zrows .zt i { display:block; height:100%; border-radius:4px; }
+  .zrows .zv { font-size:13px; color:#c3cad6; text-align:right; white-space:nowrap; }
   #target.freelbl { display:inline-block; font-size:.62em; line-height:.92; }
   .daygrp { display:block; width:100%; text-align:left; background:none; border:0; margin:0; padding:2px 8px 6px; border-radius:10px; color:inherit; font:inherit; cursor:pointer; }
   .daygrp:active { background:rgba(255,255,255,.05); }
@@ -426,7 +458,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.11</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.12</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -449,8 +481,7 @@
   <div class="card" id="todayCard">
     <h2>Today</h2>
     <div id="todayList" class="hint" style="font-size:14px">Connect intervals.icu in Settings to see today's planned workout.</div>
-    <div class="row" style="margin:8px 0 0"><button id="btnToday" style="flex:1">Refresh</button></div>
-    <button id="btnFree" type="button" class="freebtn">&#9654;&ensp;Free Ride</button>
+    <div class="todaybtns"><button id="btnToday" type="button" aria-label="Refresh" title="Refresh">&#8635;</button><button id="btnFree" type="button"><span aria-hidden="true">&#9654;</span>Free Ride</button></div>
   </div>
 
   <div class="card" id="weekCard">
@@ -563,6 +594,11 @@ Cooldown
   </div>
 </div>
 
+<div id="todayScr" class="hscreen" role="dialog" aria-labelledby="todayTitle">
+  <div class="hbar"><button id="todayBack" type="button">‹ Back</button><span id="todayTitle">Today</span></div>
+  <div class="hin"><div id="todayBody"></div></div>
+</div>
+
 <div id="settingsScr" class="hscreen" role="dialog" aria-label="Settings">
   <div class="hbar"><button id="setBack" type="button">‹ Back</button><span>Settings</span></div>
   <div class="hin">
@@ -622,11 +658,15 @@ Cooldown
   <div class="hbar"><button id="rsBack" type="button">‹ Back</button><span>Ride summary</span></div>
   <div class="hin">
     <div id="rsName" style="font-size:20px;font-weight:700;line-height:1.25;overflow-wrap:anywhere"></div>
-    <div id="rsWhen" class="status" style="margin:4px 0 12px;font-size:13px"></div>
-    <div id="rsChart" hidden style="background:var(--card);border-radius:12px;padding:8px 10px;margin-bottom:10px"><canvas id="rsCv" style="width:100%;height:110px;display:block"></canvas><div id="rsKey" class="status" style="margin-top:4px"></div></div>
-    <div id="rsGrid" class="rsgrid"></div>
+    <div id="rsWhen" class="status" style="margin:4px 0 0;font-size:13px"></div>
+    <div id="rsSrc" hidden style="margin:3px 0 0;font-size:13px;font-weight:600;color:#c3cad6"></div>
+    <div style="height:12px"></div>
+    <div id="rsStats" class="rsm"></div>
+    <div id="rsChart" hidden class="rschart"></div>
+    <div id="rsZones" hidden style="background:var(--card);border-radius:12px;padding:10px 12px;margin-top:10px"><div class="status" style="text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Time in zones</div><div id="rsZoneRows" class="zrows"></div></div>
     <div id="rsWo" hidden style="background:var(--card);border-radius:12px;padding:10px;margin-top:10px"><div class="status" style="text-transform:uppercase;letter-spacing:.05em">Workout</div><div id="rsWoName" style="font-weight:600;margin:2px 0 6px"></div><canvas id="rsWoGraph" style="width:100%;height:60px;display:block;border-radius:6px"></canvas><div id="rsWoInfo" class="status" style="margin-top:4px"></div></div>
     <div id="rsDesc" hidden class="status" style="margin-top:10px;font-size:14px;white-space:pre-wrap"></div>
+    <div id="rsMapBox" hidden class="rsmap"><div id="rsMap"></div><canvas id="rsMapCv" hidden></canvas><div id="rsMapTag"></div></div>
     <a id="rsLink" hidden target="_blank" rel="noopener" style="display:block;margin-top:14px;text-align:center;color:var(--acc);font-weight:600;text-decoration:none;padding:12px;background:var(--card);border-radius:10px">Open in intervals.icu ↗</a>
   </div>
 </div>
@@ -637,7 +677,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">v1.0.11</span>
+  <span class="ver">v1.0.12</span>
 </div>
 
 <div class="ctrl">
@@ -4149,7 +4189,11 @@ async function renderDayList(date) {
     if (text) { try { steps = parseText(text, ftp); dur = steps.reduce((a, q) => a + q.dur, 0); tss = planStats(steps).tss; } catch (e) { steps = null; } }
     box.appendChild(dayRowEl("plan", x.name || (x.category === "WORKOUT" ? "Planned workout" : x.category || "Event"), dur, tss, steps));
   });
-  done.forEach(a => box.appendChild(dayRowEl("done", a.name || a.type || "Activity", a.moving_time || a.elapsed_time || 0, a.icu_training_load != null ? a.icu_training_load : null, null)));
+  done.forEach(a => { const r = dayRowEl("done", a.name || a.type || "Activity", a.moving_time || a.elapsed_time || 0, a.icu_training_load != null ? a.icu_training_load : null, null);
+    r.setAttribute("role", "button"); r.tabIndex = 0; r.style.cursor = "pointer"; r.setAttribute("aria-label", "Open the summary of " + (a.name || "this ride"));
+    const ch = document.createElement("span"); ch.textContent = "\u203a"; ch.setAttribute("aria-hidden", "true"); ch.style.cssText = "align-self:flex-end;margin-top:-22px;color:#5d6574;font-weight:700;font-size:16px"; r.appendChild(ch);
+    r.onclick = () => openRide(actFrom(a)); r.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openRide(actFrom(a)); } };
+    box.appendChild(r); });
 }
 // Tap or drag across a chart to read that day's CTL / ATL / TSB. Tap the date to return to today.
 function fitPick(cv, e) {
@@ -4274,7 +4318,10 @@ function actFrom(a) {                                          // the fields we 
     sec: a.moving_time || a.elapsed_time || 0, el: a.elapsed_time || null, dist: a.distance || 0, elev: a.total_elevation_gain || 0, load: a.icu_training_load || 0,
     avgW: num(a.icu_average_watts) ?? num(a.average_watts), np: num(a.icu_weighted_avg_watts), ifx: ifx == null ? null : ifx > 3 ? ifx / 100 : ifx,
     hr: num(a.average_heartrate), hrMax: num(a.max_heartrate), cad: num(a.average_cadence), kj: num(a.icu_joules) != null ? a.icu_joules / 1000 : null, cal: num(a.calories),
-    spd: num(a.average_speed), spdMax: num(a.max_speed), ftp: num(a.icu_ftp), vi: num(a.icu_variability_index), ef: num(a.icu_efficiency_factor), desc: a.description || "" };
+    spd: num(a.average_speed), spdMax: num(a.max_speed), ftp: num(a.icu_ftp), vi: num(a.icu_variability_index), ef: num(a.icu_efficiency_factor), desc: a.description || "",
+    rpe: num(a.icu_rpe) ?? num(a.perceived_exertion), feel: num(a.feel), ctl: num(a.icu_ctl), atl: num(a.icu_atl), phr: num(a.icu_power_hr), maxHrAth: num(a.athlete_max_hr),
+    kjFtp: num(a.icu_joules_above_ftp) != null ? a.icu_joules_above_ftp / 1000 : null, comp: num(a.compliance),
+    dev: String(a.device_name || ""), ext: String(a.external_id || "") };
 }
 const newestFirst = list => list.slice().sort((a, b) => (b.start || b.date).localeCompare(a.start || a.date));
 async function loadHistory() {                                 // every ride on the account, fetched once when the history screen opens
@@ -4349,17 +4396,23 @@ function openRide(a) {
   const S = $("rideSheet"); S.classList.add("show"); document.body.style.overflow = "hidden"; S.scrollTop = 0;
   $("rsName").textContent = a.name || "Ride"; $("rsWhen").textContent = rideWhen(a, true) + "  ·  " + (a.trainer || /virtual/i.test(a.type) ? "Indoor" : "Outdoor") + " " + (a.type || "Ride").replace(/([a-z])([A-Z])/g, "$1 $2").toLowerCase();
   const f0 = v => Math.round(v).toLocaleString(), mph = v => (v * 2.23694).toFixed(1);
-  const rows = [
-    ["Moving time", a.sec ? fmtHM(a.sec) + " h" : null], ["Elapsed time", a.el ? fmtHM(a.el) + " h" : null],
-    ["Distance", a.dist ? toMi(a.dist).toFixed(1) + " mi" : null], ["Climbing", a.elev ? f0(toFt(a.elev)) + " ft" : null],
-    ["Avg speed", a.spd ? mph(a.spd) + " mph" : a.dist && a.sec ? mph(a.dist / a.sec) + " mph" : null], ["Max speed", a.spdMax ? mph(a.spdMax) + " mph" : null],
-    ["Avg power", a.avgW ? f0(a.avgW) + " W" : null], ["Normalized power", a.np ? f0(a.np) + " W" : null],
-    ["Intensity factor", a.ifx ? a.ifx.toFixed(2) : null], ["TSS", a.load ? f0(a.load) : null],
-    ["Work", a.kj ? f0(a.kj) + " kJ" : null], ["Calories", a.cal ? f0(a.cal) : null],
-    ["Avg heart rate", a.hr ? f0(a.hr) + " bpm" : null], ["Max heart rate", a.hrMax ? f0(a.hrMax) + " bpm" : null],
-    ["Avg cadence", a.cad ? f0(a.cad) + " rpm" : null], ["Variability index", a.vi ? a.vi.toFixed(2) : null],
-    ["Efficiency factor", a.ef ? a.ef.toFixed(2) : null], ["FTP that day", a.ftp ? f0(a.ftp) + " W" : null]].filter(r => r[1]);
-  $("rsGrid").innerHTML = rows.map(([k, v]) => '<div class="tile rs"><div class="l">' + hEsc(k) + '</div><div class="v">' + hEsc(v) + "</div></div>").join("");
+  const hp = v => a.maxHrAth ? '<small>' + Math.round(v / a.maxHrAth * 100) + "%</small>" : "";
+  const speed = a.spd || (a.dist && a.sec ? a.dist / a.sec : null);
+  $("rsWhen").textContent += [a.dist ? "  \u00b7  " + toMi(a.dist).toFixed(1) + " mi" : "", a.el || a.sec ? "  \u00b7  " + fmt(a.el || a.sec) : ""].join("");
+  const L = [                                                     // left column, in groups like intervals.icu's activity page
+    ["Intensity", a.ifx ? Math.round(a.ifx * 100) + "%" : null], ["Load", a.load ? f0(a.load) : null], ["RPE", a.rpe], ["Feel", a.feel], ["Compliance", a.comp != null ? Math.round(a.comp) + "%" : null], null,
+    ["Fitness", a.ctl != null ? f0(a.ctl) : null], ["Fatigue", a.atl != null ? f0(a.atl) : null], ["Form", a.ctl != null && a.atl != null ? f0(a.ctl - a.atl) : null], null,
+    ["Avg Speed", speed ? mph(speed) + " mph" : null], ["Climbing", a.elev ? f0(toFt(a.elev)) + " ft" : null], ["Cadence", a.cad ? f0(a.cad) + " rpm" : null]];
+  const Rt = [
+    ["Norm Power", a.np ? f0(a.np) + " W" : null], ["Avg Power", a.avgW ? f0(a.avgW) + " W" : null], ["Variability", a.vi ? a.vi.toFixed(2) : null], ["Power/HR", a.phr ? a.phr.toFixed(2) : null], ["Efficiency", a.ef ? a.ef.toFixed(2) : null], null,
+    ["Avg HR", a.hr ? f0(a.hr) + hp(a.hr) : null], ["Max HR", a.hrMax ? f0(a.hrMax) + hp(a.hrMax) : null], null,
+    ["FTP", a.ftp ? f0(a.ftp) + " W" : null], ["Work", a.kj ? f0(a.kj) + " kJ" : null], ["Work >FTP", a.kjFtp != null ? f0(a.kjFtp) + " kJ" : null]];
+  const col = list => { let h = "", gap = false; list.forEach(r => { if (!r) { gap = true; return; } if (r[1] == null || r[1] === "") return;
+      if (gap && h) h += '<div class="gap"></div>'; gap = false;
+      h += '<div class="k">' + hEsc(r[0]) + '</div><div class="v">' + (String(r[1]).includes("<small>") ? String(r[1]).replace(/^([^<]*)/, m => hEsc(m)) : hEsc(String(r[1]))) + "</div>"; });
+    return '<div class="col">' + h + "</div>"; };
+  $("rsStats").innerHTML = col(L) + col(Rt);
+  const gar = garminName(a); $("rsSrc").hidden = !gar; $("rsSrc").textContent = gar || "";   // Garmin's rule: the device credit sits right under the title
   // if the ride carries the name of one of your workouts, show its plan too
   const all = LIBRARY.concat(userLib), nm = (a.name || "").toLowerCase(), wo = all.find(x => x.name && nm && (nm === x.name.toLowerCase() || nm.includes(x.name.toLowerCase())));
   $("rsWo").hidden = !wo;
@@ -4368,26 +4421,119 @@ function openRide(a) {
   const link = $("rsLink"); link.hidden = !a.id || histSrc === "demo" && !icuAuth(); if (a.id) link.href = "https://intervals.icu/activities/" + encodeURIComponent(a.id);
   rideStreams(a);
 }
+/* Where a ride came from. Garmin requires "Garmin [device model]" next to anything shown from its devices (title,
+   charts, maps, derived numbers); intervals.icu marks those rides with "Garmin" in device_name. Zwift rides get a
+   Zwift-credited route trace. Rides this app uploaded (external id kickr-...) and indoor rides have no route. */
+const garminName = a => /garmin/i.test(a.dev || "") ? (/^garmin/i.test(a.dev.trim()) ? a.dev.trim() : "Garmin " + a.dev.trim()) : null;
+const isZwift = a => /zwift/i.test(a.dev || "") || /zwift/i.test(a.ext || "");
+const isOurs = a => /^kickr-/.test(a.ext || "");
+let LEAF = null, rsLeaf = null;
+function loadLeaflet() {                                         // the map library, fetched only the first time a map is shown
+  if (window.L && window.L.map) return Promise.resolve();
+  if (LEAF) return LEAF;
+  LEAF = new Promise((res, rej) => {
+    const l = document.createElement("link"); l.rel = "stylesheet"; l.href = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css"; document.head.appendChild(l);
+    const sc = document.createElement("script"); sc.src = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"; sc.onload = () => res(); sc.onerror = () => { LEAF = null; rej(new Error("map library didn't load")); };
+    document.head.appendChild(sc);
+  });
+  return LEAF;
+}
+const ZWORLDS = [["Watopia", -11.8, -11.55, 166.8, 167.1], ["Makuri Islands", -10.85, -10.65, 165.7, 165.95], ["France", -21.8, -21.6, 166.05, 166.3], ["Richmond", 37.5, 37.6, -77.5, -77.38],
+  ["London", 51.42, 51.56, -0.2, 0.02], ["New York", 40.73, 40.83, -74.02, -73.9], ["Innsbruck", 47.18, 47.32, 11.3, 11.48], ["Yorkshire", 53.9, 54.05, -1.65, -1.45], ["Paris", 48.82, 48.9, 2.24, 2.4], ["Scotland", 55.55, 55.75, -5.35, -5.1]];
+function routePts(st) {                                          // intervals.icu sends latlng as two lists (data = lat, data2 = lng) or as pairs
+  if (!st || !Array.isArray(st.data)) return null; const out = [];
+  if (Array.isArray(st.data2)) st.data.forEach((la, i) => { const ln = st.data2[i]; if (la != null && ln != null && (la || ln)) out.push([la, ln]); });
+  else st.data.forEach(p => { if (Array.isArray(p) && p[0] != null && p[1] != null && (p[0] || p[1])) out.push([p[0], p[1]]); });
+  return out.length > 1 ? out : null;
+}
+async function rideMap(a, pts) {
+  const box = $("rsMapBox"); if (rsLeaf) { try { rsLeaf.remove(); } catch (e) {} rsLeaf = null; }
+  box.hidden = true; $("rsMap").hidden = false; $("rsMapCv").hidden = true; $("rsMapTag").textContent = "";
+  if (!pts) return;
+  const step = Math.max(1, Math.floor(pts.length / 1500)), P = pts.filter((_, i) => i % step === 0 || i === pts.length - 1);
+  if (isZwift(a)) {                                              // Zwift: its route on a dark panel, credited to Zwift (its world maps aren't open to other apps)
+    box.hidden = false; $("rsMap").hidden = true; const cv = $("rsMapCv"); cv.hidden = false;
+    const lat = P.map(p => p[0]), lng = P.map(p => p[1]), la0 = Math.min(...lat), la1 = Math.max(...lat), lo0 = Math.min(...lng), lo1 = Math.max(...lng);
+    const world = ZWORLDS.find(z => la0 >= z[1] && la1 <= z[2] && lo0 >= z[3] && lo1 <= z[4]);
+    $("rsMapTag").textContent = "Zwift" + (world ? " \u00b7 " + world[0] : "");
+    const dpr = devicePixelRatio || 1, W2 = cv.clientWidth, H2 = cv.clientHeight; cv.width = Math.round(W2 * dpr); cv.height = Math.round(H2 * dpr);
+    const c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.fillStyle = "#151a21"; c.fillRect(0, 0, W2, H2);
+    const kx = Math.cos((la0 + la1) / 2 * Math.PI / 180), sx = (lo1 - lo0) * kx || 1e-6, sy = (la1 - la0) || 1e-6, sc = Math.min((W2 - 40) / sx, (H2 - 50) / sy);
+    const X = p => W2 / 2 + ((p[1] - (lo0 + lo1) / 2) * kx) * sc, Y = p => H2 / 2 + 6 - (p[0] - (la0 + la1) / 2) * sc;
+    c.lineJoin = "round"; c.lineCap = "round";
+    c.strokeStyle = "rgba(252,103,25,.35)"; c.lineWidth = 7; c.beginPath(); P.forEach((p, i) => i ? c.lineTo(X(p), Y(p)) : c.moveTo(X(p), Y(p))); c.stroke();
+    c.strokeStyle = "#fc6719"; c.lineWidth = 2.5; c.stroke();
+    const dot = (p, col) => { c.fillStyle = col; c.beginPath(); c.arc(X(p), Y(p), 5, 0, 7); c.fill(); c.strokeStyle = "#fff"; c.lineWidth = 1.5; c.stroke(); };
+    dot(P[0], "#3ddc84"); dot(P[P.length - 1], "#ff4d5e");
+    c.font = "10px -apple-system,system-ui,sans-serif"; c.fillStyle = "#8b94a3"; c.textAlign = "right"; c.fillText("Route: Zwift", W2 - 8, H2 - 8);
+    return;
+  }
+  try { await loadLeaflet(); } catch (e) { return; }                 // offline: no map rather than an error
+  if ($("rsMap").dataset.id !== String(a.id)) return;
+  box.hidden = false;
+  const gar = garminName(a);
+  rsLeaf = L.map("rsMap", { zoomControl: false, attributionControl: true });
+  rsLeaf.attributionControl.setPrefix(false);
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", { subdomains: "abcd", maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>' }).addTo(rsLeaf);
+  const line = L.polyline(P, { color: "#ffb020", weight: 3.5, opacity: .95 }).addTo(rsLeaf);
+  L.circleMarker(P[0], { radius: 6, color: "#fff", weight: 2, fillColor: "#3ddc84", fillOpacity: 1 }).addTo(rsLeaf);
+  L.circleMarker(P[P.length - 1], { radius: 6, color: "#fff", weight: 2, fillColor: "#ff4d5e", fillOpacity: 1 }).addTo(rsLeaf);
+  rsLeaf.fitBounds(line.getBounds(), { padding: [18, 18] });
+  $("rsMapTag").textContent = gar || "";                         // Garmin's credit on the map image itself
+  setTimeout(() => { try { rsLeaf && rsLeaf.invalidateSize(); } catch (e) {} }, 60);
+}
+/* Time in each of the six zones (Z1 <=55%, Z2 <=75%, Z3 <=90%, Z4 <=105%, Z5 <=120%, Z6+ above, i.e. beyond VO2 Max), one bar per zone */
+const ZONE6 = ["#7a8594", "#1F77B4", "#2CA02C", "#FFCB0E", "#FF2A0E", "#9467BD"], ZLIM = [0.55, 0.75, 0.90, 1.05, 1.20, Infinity];
+function zoneRows(w, ftp) {
+  const cnt = [0, 0, 0, 0, 0, 0]; let n = 0;
+  w.forEach(v => { if (v == null) return; n++; cnt[ZLIM.findIndex(l => v / ftp <= l)]++; });
+  if (!n) return; const top = Math.max(...cnt);
+  $("rsZoneRows").innerHTML = cnt.map((c, i) => '<span class="zl">Z' + (i + 1) + (i === 5 ? "+" : "") + '</span><span class="zt"><i style="width:' + (c / top * 100).toFixed(1) + "%;background:" + ZONE6[i] + '"></i></span><span class="zv">' + fmt(c) + "  \u00b7  " + Math.round(c / n * 100) + "%</span>").join("");
+  $("rsZones").hidden = false;
+}
 async function rideStreams(a) {                                // power and heart rate over the ride, when intervals.icu has the streams
-  const box = $("rsChart"); box.hidden = true; const auth = icuAuth(); if (!a.id || !auth) return;
+  const box = $("rsChart"); box.hidden = true; $("rsZones").hidden = true; const oldSrc = $("rsZones").querySelector(".rssrc"); if (oldSrc) oldSrc.remove();
+  $("rsMapBox").hidden = true; if (rsLeaf) { try { rsLeaf.remove(); } catch (e) {} rsLeaf = null; } const auth = icuAuth(); if (!a.id || !auth) return;
   const want = a.id; box.dataset.id = want;
   try {
-    const r = await fetch("https://intervals.icu/api/v1/activity/" + encodeURIComponent(a.id) + "/streams.json?types=watts,heartrate", { headers: { Authorization: auth, Accept: "application/json" } });
+    const wantMap = !isOurs(a); $("rsMap").dataset.id = String(a.id);
+    const r = await fetch("https://intervals.icu/api/v1/activity/" + encodeURIComponent(a.id) + "/streams.json?types=watts,heartrate,cadence" + (wantMap ? ",latlng" : ""), { headers: { Authorization: auth, Accept: "application/json" } });
     if (!r.ok) throw new Error(r.status); const js = await r.json(); if (box.dataset.id !== want) return;
-    const get = t => { const s = (Array.isArray(js) ? js : []).find(x => x.type === t); return s && Array.isArray(s.data) ? s.data : null; };
-    const w = get("watts"), h = get("heartrate"); if (!w && !h) return;
-    box.hidden = false; const cv = $("rsCv"), dpr = devicePixelRatio || 1, W2 = cv.clientWidth, H2 = cv.clientHeight; cv.width = W2 * dpr; cv.height = H2 * dpr;
-    const c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, W2, H2);
-    const line = (d, col, max, fill) => { if (!d || !d.length) return; const n = d.length, step = Math.max(1, Math.floor(n / W2)), pts = [];
-      for (let x = 0; x < W2; x++) { const i0 = Math.floor(x / W2 * n), i1 = Math.min(n, i0 + step); let s = 0, k = 0; for (let i = i0; i < i1; i++) if (d[i] != null) { s += d[i]; k++; } pts.push(k ? s / k : null); }
-      c.beginPath(); let on = false; pts.forEach((v, x) => { if (v == null) return; const y = H2 - 2 - (v / max) * (H2 - 6); if (!on) { c.moveTo(x, y); on = true; } else c.lineTo(x, y); });
-      if (fill) { c.lineTo(W2, H2); c.lineTo(0, H2); c.closePath(); c.fillStyle = fill; c.fill(); } else { c.strokeStyle = col; c.lineWidth = 1.5; c.stroke(); } };
-    const wMax = w ? Math.max(...w.filter(v => v != null)) * 1.05 : 1, hMax = h ? Math.max(...h.filter(v => v != null)) * 1.1 : 1;
-    if (w) line(w, null, wMax, "rgba(255,176,32,.55)"); if (h) line(h, "#ff5a5f", hMax);
-    $("rsKey").textContent = [w ? "Power (peak " + Math.round(Math.max(...w.filter(v => v != null))) + " W)" : null, h ? "Heart rate" : null].filter(Boolean).join("  ·  ");
+    const get = t => { const s = (Array.isArray(js) ? js : []).find(x => x.type === t); return s && Array.isArray(s.data) && s.data.some(v => v != null) ? s.data : null; };
+    const w = get("watts"), h = get("heartrate"), cd = get("cadence");
+    if (wantMap) rideMap(a, routePts((Array.isArray(js) ? js : []).find(x => x.type === "latlng")));
+    if (!w && !h && !cd) return;
+    const ftp = a.ftp || +$("ftp").value || 270;
+    if (w) zoneRows(w, ftp);
+    let w30 = null; if (w) { w30 = []; let run = 0; for (let i = 0; i < w.length; i++) { run += w[i] || 0; if (i >= 30) run -= w[i - 30] || 0; w30.push(run / Math.min(30, i + 1)); } }
+    box.innerHTML = ""; box.hidden = false;
+    const graph = (name, d, col, fill, zoneCol) => {
+      if (!d) return; const max = Math.max(...d.filter(v => v != null)); if (!(max > 0)) return;
+      const n = document.createElement("div"); n.className = "gn"; n.textContent = name; box.appendChild(n);
+      const row = document.createElement("div"); row.className = "gr"; const lab = document.createElement("div"); lab.className = "gl";
+      lab.innerHTML = "<span>" + Math.round(max) + "</span><span>0</span>"; const cv = document.createElement("canvas"); row.append(lab, cv); box.appendChild(row);
+      const dpr = devicePixelRatio || 1, W2 = cv.clientWidth, H2 = cv.clientHeight; cv.width = Math.round(W2 * dpr); cv.height = Math.round(H2 * dpr);
+      const c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const N = d.length, pts = []; for (let x = 0; x < W2; x++) { const i0 = Math.floor(x / W2 * N), i1 = Math.max(i0 + 1, Math.floor((x + 1) / W2 * N)); let s = 0, k = 0, mx = 0;
+        for (let i = i0; i < i1 && i < N; i++) if (d[i] != null) { s += d[i]; k++; mx = Math.max(mx, d[i]); } pts.push(k ? (zoneCol ? mx : s / k) : null); }
+      const Y = v => H2 - 1 - v / max * (H2 - 3);
+      if (zoneCol) { pts.forEach((v, x) => { if (v == null) return; c.fillStyle = ZONE6[ZLIM.findIndex(l => v / ftp <= l)]; c.fillRect(x, Y(v), 1, H2 - Y(v)); }); return; }   // 30 s power: each column in its zone colour
+      c.beginPath(); let on = false; pts.forEach((v, x) => { if (v == null) { on = false; return; } if (!on) { c.moveTo(x, Y(v)); on = true; } else c.lineTo(x, Y(v)); });
+      c.strokeStyle = col; c.lineWidth = 1; c.stroke();
+      c.lineTo(W2, H2); c.lineTo(0, H2); c.closePath(); c.fillStyle = fill; c.fill();
+    };
+    graph("Power", w, "#9b8cff", "rgba(155,140,255,.18)");
+    graph("30s Power", w30, null, null, true);
+    graph("Heart rate", h, "#ff5a6e", "rgba(255,90,110,.18)");
+    graph("Cadence", cd, "#ff6bd6", "rgba(255,107,214,.15)");
+    if (!box.children.length) box.hidden = true;
+    const gar = garminName(a);
+    if (gar && box.children.length) { const t = document.createElement("div"); t.className = "rssrc"; t.textContent = "Charts from " + gar; box.appendChild(t); }
+    if (gar && !$("rsZones").hidden && !$("rsZones").querySelector(".rssrc")) { const t = document.createElement("div"); t.className = "rssrc"; t.textContent = "Derived in part from " + gar + " device-sourced data"; $("rsZones").appendChild(t); }
   } catch (e) { box.hidden = true; }
 }
-function closeRide() { $("rideSheet").classList.remove("show"); if (!$("histAll").classList.contains("show")) document.body.style.overflow = ""; }
+function closeRide() { $("rideSheet").classList.remove("show"); if (!$("histAll").classList.contains("show") && !$("todayScr").classList.contains("show")) document.body.style.overflow = ""; }
 function openSettings() { $("settingsScr").classList.add("show"); $("settingsScr").scrollTop = 0; document.body.style.overflow = "hidden"; }
 function closeSettings() { $("settingsScr").classList.remove("show"); document.body.style.overflow = ""; }
 $("btnSettings").onclick = openSettings; $("btnSettings2").onclick = openSettings; $("setBack").onclick = closeSettings;
@@ -4424,8 +4570,11 @@ async function loadToday() {
     const ck = document.createElement("span"); ck.className = "donetag"; ck.textContent = "\u2713 Completed";
     const m = document.createElement("span"); m.className = "r"; m.style.cssText = "grid-column:1 / -1;font-size:13px";
     m.textContent = [a.moving_time ? fmtHM(a.moving_time) : "", a.icu_training_load != null ? "TSS " + Math.round(a.icu_training_load) : "", a.icu_average_watts || a.average_watts ? Math.round(a.icu_average_watts || a.average_watts) + " W avg" : ""].filter(Boolean).join("  \u00b7  ");
-    row.append(n, ck, m); box.appendChild(row);
+    row.append(n, ck, m); row.setAttribute("role", "button"); row.tabIndex = 0; row.style.cursor = "pointer"; row.onclick = openToday;
+    row.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openToday(); } }; box.appendChild(row);
   });
+  TODAY = { day, ev, acts };
+  TODAY = { day, ev, acts };
   if (!ev.length) { if (!acts.length) { box.className = "hint"; box.textContent = "Nothing planned for today (" + day + ")."; } return; }
   ev.forEach(x => {
     const text = (x.description || (x.workout_doc && x.workout_doc.description) || "").trim();
@@ -4435,7 +4584,7 @@ async function loadToday() {
     const d = document.createElement("span"); d.className = "r"; d.style.fontSize = "15px";
     const t = document.createElement("span"); t.className = "r";
     let steps = null, note = null;
-    if (text) { try { steps = parseText(text, +$("ftp").value || 270); d.textContent = fmt(steps.reduce((a, st) => a + st.dur, 0)); t.textContent = "TSS " + Math.round(planStats(steps).tss); } catch (e) { t.textContent = "can't read"; t.style.color = "var(--dim)"; } }
+    if (text) { try { steps = parseText(text, +$("ftp").value || 270); d.textContent = fmt(steps.reduce((a, st) => a + st.dur, 0)); t.textContent = "TSS " + Math.round(x.icu_training_load != null ? x.icu_training_load : planStats(steps).tss); } catch (e) { t.textContent = "can't read"; t.style.color = "var(--dim)"; } }
     else {
       // Outdoor or no-text plan: show the calendar's duration and TSS, and a dim note that no workout text is set.
       if (x.moving_time) d.textContent = fmtHM(x.moving_time);
@@ -4448,11 +4597,52 @@ async function loadToday() {
     const go = document.createElement("button"); go.textContent = "\u25b6"; go.title = "Load and launch"; go.style.cssText = "width:48px;margin:0;font-size:16px;flex:none;background:var(--acc);color:#000";
     go.style.display = steps ? "" : "none"; b.disabled = !steps;
     const item = { name: x.name || "Planned workout", text };
-    b.onclick = () => { $("wo").value = text; $("woName").value = item.name; refreshFolderSelect(""); updateWoInfo(); $("woName").scrollIntoView({ behavior: "smooth", block: "start" }); };
+    b.disabled = false; b.onclick = openToday;                  // the Today window: everything for today, with Load / Delete
     go.onclick = () => askLaunch(item, d.textContent, t.textContent);
     row.append(b, go); box.appendChild(row);
   });
 }
+/* ---------------- Today window: today's completed rides (tap for the summary) and planned workouts (Load / Delete) ---------------- */
+let TODAY = null;
+function openToday() { renderToday(); $("todayScr").classList.add("show"); $("todayScr").scrollTop = 0; document.body.style.overflow = "hidden"; }
+function closeToday() { $("todayScr").classList.remove("show"); document.body.style.overflow = ""; }
+$("todayBack").onclick = closeToday;
+function renderToday() {
+  const body = $("todayBody"); body.textContent = ""; if (!TODAY) return;
+  const d = new Date(); $("todayTitle").textContent = "Today \u00b7 " + d.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
+  const sec = t => { const h = document.createElement("div"); h.className = "tdsec"; h.textContent = t; body.appendChild(h); };
+  if (TODAY.acts.length) sec("Completed");
+  TODAY.acts.forEach(a => {
+    const r = document.createElement("div"); r.className = "tdrow";
+    const b = document.createElement("button"); b.type = "button"; b.className = "libitem done tdmain"; b.setAttribute("aria-label", "Open the summary of " + (a.name || "this ride"));
+    const n = document.createElement("span"); n.textContent = a.name || a.type || "Ride"; n.style.cssText = "overflow-wrap:anywhere;font-weight:600;color:var(--fg)";
+    const ch = document.createElement("span"); ch.className = "donetag"; ch.textContent = "\u2713 \u203a";
+    const m = document.createElement("span"); m.className = "r"; m.style.cssText = "grid-column:1 / -1;font-size:13px";
+    m.textContent = [a.moving_time ? fmtHM(a.moving_time) : "", a.icu_training_load != null ? "TSS " + Math.round(a.icu_training_load) : "", a.icu_average_watts || a.average_watts ? Math.round(a.icu_average_watts || a.average_watts) + " W avg" : ""].filter(Boolean).join("  \u00b7  ");
+    b.append(n, ch, m); b.onclick = () => openRide(actFrom(a)); r.appendChild(b); body.appendChild(r);
+  });
+  if (TODAY.ev.length) sec("Planned");
+  TODAY.ev.forEach(x => {
+    const text = (x.description || (x.workout_doc && x.workout_doc.description) || "").trim(); let steps = null;
+    if (text) { try { steps = parseText(text, +$("ftp").value || 270); } catch (e) {} }
+    const dur = steps ? steps.reduce((a, q) => a + q.dur, 0) : x.moving_time || 0, tss = x.icu_training_load != null ? x.icu_training_load : steps ? planStats(steps).tss : null;
+    const card = document.createElement("div"); card.className = "libitem"; card.style.cssText = "display:block;margin:6px 0;cursor:default";
+    const top = document.createElement("div"); top.style.cssText = "display:flex;justify-content:space-between;gap:8px;align-items:baseline";
+    const n = document.createElement("span"); n.textContent = x.name || "Planned workout"; n.style.cssText = "font-weight:600;overflow-wrap:anywhere;min-width:0;color:var(--fg)";
+    const m = document.createElement("span"); m.className = "r"; m.style.cssText = "flex:none;font-size:13px"; m.textContent = [dur ? (steps ? fmt(dur) : fmtHM(dur)) : "", tss != null ? "TSS " + Math.round(tss) : ""].filter(Boolean).join("  ");
+    top.append(n, m); card.appendChild(top);
+    if (steps && steps.length) { const g = document.createElement("canvas"); g.style.cssText = "width:100%;height:34px;display:block;margin-top:6px"; card.appendChild(g); drawMini(g, steps, { h: 52 }); }
+    else { const no = document.createElement("div"); no.className = "hint"; no.style.cssText = "font-size:13px;margin-top:4px"; no.textContent = "No workout steps entered, so it can't be loaded."; card.appendChild(no); }
+    const bt = document.createElement("div"); bt.style.cssText = "display:flex;gap:8px;margin-top:10px";
+    const ld = document.createElement("button"); ld.type = "button"; ld.className = "primary"; ld.style.cssText = "flex:1;height:44px;margin:0;font-weight:700"; ld.innerHTML = "&#9654;&ensp;Load"; ld.disabled = !steps;
+    ld.onclick = () => { const item = { name: x.name || "Planned workout", text }; closeToday(); askLaunch(item, fmt(dur), tss != null ? "TSS " + Math.round(tss) : ""); };
+    const dl = document.createElement("button"); dl.type = "button"; dl.style.cssText = "flex:none;width:96px;height:44px;margin:0;background:#7a2a30;color:#fff;font-weight:600"; dl.textContent = "Delete";
+    dl.onclick = () => askCalDelete({ ...x, id: x.id, cat: x.category, name: x.name || "Planned workout" }, "today");
+    bt.append(ld, dl); card.appendChild(bt); body.appendChild(card);
+  });
+  if (!TODAY.acts.length && !TODAY.ev.length) { const e = document.createElement("div"); e.className = "hint"; e.style.cssText = "font-size:14px;margin-top:10px"; e.textContent = "Nothing planned or ridden today."; body.appendChild(e); }
+}
+
 /* ---------------- Plan tab: next 7 days from the intervals.icu calendar (read-only) ---------------- */
 async function icuRange(oldest, newest, path) {
   const auth = icuAuth(), id = icuId();
@@ -4611,7 +4801,7 @@ $("btnCalDelYes").onclick = async () => {
   try {
     const r = await fetch("https://intervals.icu/api/v1/athlete/" + encodeURIComponent(icuId()) + "/events/" + encodeURIComponent(x.id), { method: "DELETE", headers: { Authorization: auth, Accept: "application/json" } });
     if (!r.ok) throw new Error(r.status === 403 ? "intervals.icu refused (403): reconnect intervals.icu in Settings so the app can edit your calendar" : "intervals.icu replied " + r.status);
-    $("calDelModal").style.display = "none"; calDel = null; toast("Deleted \u201c" + x.name + "\u201d from your calendar."); loadToday(); loadNext7();
+    $("calDelModal").style.display = "none"; calDel = null; toast("Deleted \u201c" + x.name + "\u201d from your calendar."); loadToday().then(() => { if ($("todayScr").classList.contains("show")) renderToday(); }); loadNext7();
     if (dayDate) { dayHave = dayHave.filter(h => h.eid !== x.id); renderDayHave(); }
   } catch (e) { $("btnCalDelYes").disabled = false; $("btnCalDelYes").textContent = "Try again"; $("calDelText").textContent = "Couldn't delete it: " + e.message + "."; }
 };
