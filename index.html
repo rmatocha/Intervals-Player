@@ -484,7 +484,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.14</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.15</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -718,7 +718,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">v1.0.14</span>
+  <span class="ver">v1.0.15</span>
 </div>
 
 <div class="ctrl">
@@ -4727,15 +4727,33 @@ async function icuRange(oldest, newest, path) {
 }
 /* ---------------- Plan tab: This Week (Mon-Sun strip) and Next 7 Days (list from today) ---------------- */
 const STREAMS = new Map();                                       // activity id -> watts, one value per 10 s (for the done-ride graphs)
-async function actWatts(id) {
-  if (STREAMS.has(id)) return STREAMS.get(id);
-  let w = null;
-  try {
-    const r = await fetch("https://intervals.icu/api/v1/activity/" + encodeURIComponent(id) + "/streams.json?types=watts", { headers: { Authorization: icuAuth(), Accept: "application/json" } });
-    if (r.ok) { const j = await r.json(), st = (Array.isArray(j) ? j : []).find(x => x.type === "watts"), d = st && st.data;
-      if (d && d.length) { w = []; for (let i = 0; i < d.length; i += 10) { const sl = d.slice(i, i + 10).map(v => v || 0); w.push(sl.reduce((a, b) => a + b, 0) / sl.length); } } }
-  } catch (e) {}
-  STREAMS.set(id, w); return w;
+// Power for a ridden day's picture. intervals.icu limits how fast it answers, and a month can hold twenty rides, so requests
+// go out a few at a time, a "slow down" reply is retried after a pause, and only a real answer is remembered (a failure
+// is tried again next time instead of leaving a grey bar for good).
+const STREAM_WAIT = new Map(); let streamBusy = 0; const streamQ = [];
+function streamSlot() { return new Promise(res => { if (streamBusy < 3) { streamBusy++; res(); } else streamQ.push(res); }); }
+function streamFree() { const n = streamQ.shift(); if (n) n(); else streamBusy--; }
+function actWatts(id) {
+  if (STREAMS.has(id)) return Promise.resolve(STREAMS.get(id));
+  if (STREAM_WAIT.has(id)) return STREAM_WAIT.get(id);
+  const job = (async () => {
+    await streamSlot();
+    try {
+      for (let tryN = 0; tryN < 3; tryN++) {
+        let r;
+        try { r = await fetch("https://intervals.icu/api/v1/activity/" + encodeURIComponent(id) + "/streams.json?types=watts", { headers: { Authorization: icuAuth(), Accept: "application/json" } }); }
+        catch (e) { await new Promise(z => setTimeout(z, 1500 * (tryN + 1))); continue; }
+        if (r.status === 429 || r.status >= 500) { await new Promise(z => setTimeout(z, 1500 * (tryN + 1))); continue; }
+        if (!r.ok) return null;                                    // e.g. a Strava-only ride intervals.icu can't share: no graph, not remembered
+        const j = await r.json(), st = (Array.isArray(j) ? j : []).find(x => x.type === "watts"), d = st && st.data;
+        let w = null;
+        if (d && d.length) { w = []; for (let i = 0; i < d.length; i += 10) { const sl = d.slice(i, i + 10).map(v => v || 0); w.push(sl.reduce((a, b) => a + b, 0) / sl.length); } }
+        STREAMS.set(id, w); return w;                              // a real answer, with or without power: remembered
+      }
+      return null;
+    } finally { streamFree(); STREAM_WAIT.delete(id); }
+  })();
+  STREAM_WAIT.set(id, job); return job;
 }
 // One day's picture: pieces laid end to end in time (a ride done, then what's still planned), drawn column by column
 // at the canvas's real pixel size so the edges stay sharp. Heights share one scale (130% FTP fills the graph).
@@ -4756,6 +4774,7 @@ function drawDay(cv, pieces) {
   }
 }
 const stepsPiece = st => { const dur = st.reduce((a, q) => a + q.dur, 0); return { dur, at: t => { for (const q of st) { if (t < q.dur) return q.a + (q.b - q.a) * (t / q.dur); t -= q.dur; } return 0; } }; };
+const flatPiece = (a, ftp) => ({ dur: a.dur || 3600, at: () => a.avgW ? a.avgW / ftp : 0.55 });   // This Week, no power stream (yet): a bar at the ride's average power
 const wattsPiece = (w, ftp) => ({ dur: w.length * 10, at: t => (w[Math.floor(t / 10)] || 0) / ftp });
 async function loadNext7() {
   loadMonth();                                                   // the month calendar below refreshes with it
@@ -4783,7 +4802,7 @@ async function loadNext7() {
   });
   acts.forEach(a => {
     const date = String(a.start_date_local || "").slice(0, 10); if (date.length !== 10) return;
-    items.push({ date, name: a.name || a.type || "Activity", dur: a.moving_time || 0, tss: a.icu_training_load != null ? a.icu_training_load : null, done: true, aid: a.id });
+    items.push({ date, name: a.name || a.type || "Activity", dur: a.moving_time || 0, tss: a.icu_training_load != null ? a.icu_training_load : null, done: true, aid: a.id, avgW: a.icu_average_watts || a.average_watts || null });
   });
   const doneKeys = new Set(items.filter(x => x.done).map(x => x.date + "|" + normName(x.name)));
   items = items.filter(x => x.done || !doneKeys.has(x.date + "|" + normName(x.name)));   // completed ride replaces its planned entry
@@ -4822,9 +4841,8 @@ async function loadNext7() {
   const paint = async () => {                                    // planned shapes now; ridden ones once their power data arrives
     for (const g of draws) {
       const pieces = [];
-      for (const a of g.done) { const w = a.aid != null ? STREAMS.get(a.aid) : null; if (w && w.length) pieces.push(wattsPiece(w, ftp)); }
+      for (const a of g.done) { const w = a.aid != null ? STREAMS.get(a.aid) : null; pieces.push(w && w.length ? wattsPiece(w, ftp) : flatPiece(a, ftp)); }
       g.plan.forEach(x => { if (x.steps) pieces.push(stepsPiece(x.steps)); });
-      if (!pieces.length && g.done.length) pieces.push({ dur: 1, at: () => 0.55 });   // no power data: a plain endurance-height bar
       drawDay(g.cv, pieces);
     }
   };
@@ -4884,7 +4902,7 @@ async function loadMonth() {
   });
   acts.forEach(a => {
     const date = String(a.start_date_local || "").slice(0, 10); if (date.length !== 10) return;
-    items.push({ date, name: a.name || a.type || "Activity", dur: a.moving_time || 0, tss: a.icu_training_load != null ? a.icu_training_load : null, done: true, aid: a.id });
+    items.push({ date, name: a.name || a.type || "Activity", dur: a.moving_time || 0, tss: a.icu_training_load != null ? a.icu_training_load : null, done: true, aid: a.id, avgW: a.icu_average_watts || a.average_watts || null });
   });
   const doneKeys = new Set(items.filter(x => x.done).map(x => x.date + "|" + normName(x.name))), doneIds = new Set(acts.map(a => a.id));
   items = items.filter(x => x.done || (!doneKeys.has(x.date + "|" + normName(x.name)) && !(x.pid && doneIds.has(x.pid)) && x.date >= todayS));   // ridden or passed plans drop out
@@ -4902,7 +4920,7 @@ async function loadMonth() {
       const box = document.createElement("div"); box.className = "wkbox";
       const noSteps = plan.filter(x => !x.steps);
       if (noSteps.length && !done.length && !plan.some(x => x.steps)) { const t = document.createElement("div"); t.className = "wktxt"; const s2 = noSteps.reduce((a, x) => a + (x.dur || 0), 0); t.textContent = s2 ? fmtHM(s2) : "Note"; box.appendChild(t); }
-      if (done.length || plan.some(x => x.steps)) { const cv = document.createElement("canvas"); box.appendChild(cv); draws.push({ cv, done, plan }); }
+      if (plan.some(x => x.steps)) { const cv = document.createElement("canvas"); box.appendChild(cv); draws.push({ cv, plan }); }   // ridden days: just the ✓ and TSS (no power data fetched for a whole month)
       if (done.length) { const ck = document.createElement("span"); ck.className = "wkdone"; ck.textContent = "✓"; box.appendChild(ck); }
       if (!past) { const pl = document.createElement("span"); pl.className = "wkplus"; pl.textContent = "+"; pl.setAttribute("aria-hidden", "true"); box.appendChild(pl); }
       const sum = its.reduce((t, x) => t + (x.tss || 0), 0);
@@ -4920,16 +4938,7 @@ async function loadMonth() {
     sm.innerHTML = parts.join("");
     row.append(g, sm); grid.appendChild(row);
   }
-  const paint = () => draws.forEach(g => {
-    const pieces = [];
-    for (const a of g.done) { const wv = a.aid != null ? STREAMS.get(a.aid) : null; if (wv && wv.length) pieces.push(wattsPiece(wv, ftp)); }
-    g.plan.forEach(x => { if (x.steps) pieces.push(stepsPiece(x.steps)); });
-    if (!pieces.length && g.done.length) pieces.push({ dur: 1, at: () => 0.55 });
-    drawDay(g.cv, pieces);
-  });
-  requestAnimationFrame(paint);
-  const need = draws.flatMap(g => g.done).filter(a => a.aid != null && !STREAMS.has(a.aid));
-  if (need.length) Promise.all(need.map(a => actWatts(a.aid))).then(() => { if (seq === monthSeq) requestAnimationFrame(paint); });
+  requestAnimationFrame(() => draws.forEach(g => drawDay(g.cv, g.plan.filter(x => x.steps).map(x => stepsPiece(x.steps)))));
 }
 $("monthPrev").onclick = () => { MONTH = new Date(MONTH.getFullYear(), MONTH.getMonth() - 1, 1); loadMonth(); };
 $("monthNext").onclick = () => { MONTH = new Date(MONTH.getFullYear(), MONTH.getMonth() + 1, 1); loadMonth(); };
