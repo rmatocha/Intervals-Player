@@ -536,7 +536,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.23</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.24</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -769,7 +769,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">v1.0.23</span>
+  <span class="ver">v1.0.24</span>
 </div>
 
 <div class="ctrl">
@@ -906,7 +906,7 @@ Cooldown
     <div class="row" style="justify-content:center;flex-wrap:nowrap"><button id="btnSchedNo" style="flex:1;height:48px">Cancel</button><button id="btnSchedYes" class="primary" style="flex:1;height:48px">Add to calendar</button></div>
   </div>
 </div>
-<div id="toast" style="display:none;position:fixed;left:16px;right:16px;bottom:24px;z-index:60;background:#232830;border-radius:12px;padding:12px 16px;font-size:15px;text-align:center;box-shadow:0 6px 24px rgba(0,0,0,.5)"></div>
+<div id="toast" style="display:none;position:fixed;left:16px;right:16px;bottom:24px;z-index:1000;background:#232830;border-radius:12px;padding:12px 16px;font-size:15px;text-align:center;box-shadow:0 6px 24px rgba(0,0,0,.5)"></div>
 
 <div id="hardModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:50;align-items:center;justify-content:center;padding:24px">
   <div style="background:#161a20;border-radius:16px;padding:20px;max-width:340px;width:100%;text-align:center">
@@ -1777,7 +1777,7 @@ function togglePause() {
     if (!cp && !pmOn) { W.paused = true; $("btnPause").textContent = "Resume"; toast("Connect the trainer (or power meter) first, then tap Resume.", true); return; }
     W.recovered = false; ensureAudio(); cpWrite([0x07]);
   }
-  if (W.paused) { W.ramp = null; W.gov = 1; W.lastTarget = null; if (W.erg) setTargetPower(50); recSave(); } else pushTarget(true);
+  if (W.paused) { W.ramp = null; W.gov = 1; W.lastTarget = null; if (W.erg) setTargetPower(50); recSave(true); } else pushTarget(true);
   refreshButtons();
 }
 function collapseAllFolders() {                          // home page always starts with every folder closed
@@ -1838,17 +1838,28 @@ function summaryData() {
    only when the ride is saved or discarded, so if the app is closed mid-ride, the next launch offers Resume / Save / Discard. */
 const REC_KEY = "kickrRecover";
 const REC_F = ["freeRide", "steps", "ftp", "name", "startMs", "t", "idx", "stepT", "adj", "adjPct", "erg", "kj", "pw", "hrHist", "cadHist", "cadRaw", "tgtHist", "sum4", "n4", "iSum", "iN", "simMode", "simMem", "partial", "laps"];
-function recSave() {
+const REC_LOG = "kickrRecoverLog";
+function recSave(force) {
   if (!W.running || !W.t) return;
   const o = { v: 1, at: Date.now(), arcade: arcadeOn }; REC_F.forEach(k => o[k] = W[k]);
   try { localStorage.setItem(REC_KEY, JSON.stringify(o)); } catch (e) { log("Couldn't keep a recovery copy: " + e.message); }
+  if (RL.on && RL.head && (force || !(W.t - (RL.savedT ?? -99) < 30))) {   // the ride log rides along (every 30 s, and whenever the app is hidden or paused)
+    RL.savedT = W.t; try { localStorage.setItem(REC_LOG, JSON.stringify({ startMs: W.startMs, head: RL.head, rows: RL.rows, ev: RL.ev })); } catch (e) {}
+  }
 }
-function recClear() { try { localStorage.removeItem(REC_KEY); } catch (e) {} }
+function recClear() { try { localStorage.removeItem(REC_KEY); localStorage.removeItem(REC_LOG); } catch (e) {} }
+function recLogRestore(o) {                               // a reopened ride keeps its log: everything up to the last save, then carries on
+  let L = null; try { L = JSON.parse(localStorage.getItem(REC_LOG) || "null"); } catch (e) {}
+  if (L && L.head && L.startMs === o.startMs) Object.assign(RL, { on: true, head: L.head, rows: L.rows || [], ev: L.ev || [], lastIdx: -1, lastSim: null, lastCmd: "", savedT: o.t });
+  else rlStart("recovered");                              // no saved log (older version): start one now, so the Log button always works
+  rlEv("reopened", { savedAt: new Date(o.at).toISOString(), t: o.t, logKept: !!(L && L.startMs === o.startMs) });
+}
 function recLoad() { try { const o = JSON.parse(localStorage.getItem(REC_KEY) || "null"); return o && o.v === 1 && o.t > 0 && Array.isArray(o.pw) && Array.isArray(o.steps) ? o : null; } catch (e) { return null; } }
-addEventListener("pagehide", recSave); document.addEventListener("visibilitychange", () => { if (document.hidden) recSave(); });
+addEventListener("pagehide", () => recSave(true)); document.addEventListener("visibilitychange", () => { if (document.hidden) recSave(true); });
 function recRestore(o) {                                  // put the saved ride back into W, paused at the second it was last saved
   resetWorkout(); REC_F.forEach(k => { if (o[k] !== undefined) W[k] = o[k]; });
   W.simMem = W.simMem || {}; W.loaded = true; W.running = true; W.paused = true; W.recovered = true; W.lastTarget = null; W.simIdx = -1; cueIdx = W.idx;
+  recLogRestore(o);
   if (W.idx >= W.steps.length) { W.idx = W.steps.length - 1; W.stepT = W.steps[W.idx].dur - 1; }
 }
 let recData = null, recPick = null, recKept = null;
