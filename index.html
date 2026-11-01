@@ -536,7 +536,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.22</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.23</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -769,7 +769,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">v1.0.22</span>
+  <span class="ver">v1.0.23</span>
 </div>
 
 <div class="ctrl">
@@ -1572,13 +1572,21 @@ const SIMC = (() => { let o = null; try { o = JSON.parse(localStorage.getItem("k
 const simSave = () => { try { localStorage.setItem("kickrSimCal", JSON.stringify(SIMC)); } catch (e) {} showSimCal(); };
 function showSimCal() {
   const el = $("simCalTxt"); if (!el) return;
-  el.innerHTML = "Learned cadence: " + SIMC.cad.map((k, i) => SIM_BK[i] + " <b>" + Math.round(k.c) + "</b>" + (k.n ? "" : "*")).join(" · ") + " rpm" +
-    (SIMC.cad.some(k => !k.n) ? "<br>* not ridden yet: starts at " + SIM.CAD0 + " rpm" : "") +
+  el.innerHTML = "Learned cadence: " + SIMC.cad.map((k, i) => SIM_BK[i] + " <b>" + Math.round(simCad(i)) + "</b>" + (k.n ? "" : "*")).join(" · ") + " rpm" +
+    (SIMC.cad.some(k => !k.n) ? "<br>* not ridden yet: borrows the nearest learned zone (" + SIM.CAD0 + " rpm if none)" : "") +
     "<br>Trainer: slope " + SIMC.A.toFixed(1) + ", baseline " + SIMC.B.toFixed(2) + " W/rpm (" + Math.round(SIMC.S.w * 10 / 60) + " min of data)";
 }
 async function resetSimCal() {
   if (!await askYes("Reset Simulation Calibration?", "The learned cadences and trainer numbers go back to their starting values and are learned again as you ride.", "Reset")) return;
   Object.assign(SIMC, simFresh()); simSolve(SIMC); simSave(); toast("Simulation calibration reset.");
+}
+function simCad(b) {                                               // a zone's cadence; a zone not ridden yet borrows the nearest learned zone (both, averaged, on a tie), else 80 rpm
+  const k = SIMC.cad[b]; if (k.n) return k.c;
+  for (let d = 1; d < SIM_BK.length; d++) {
+    const near = [SIMC.cad[b - d], SIMC.cad[b + d]].filter(x => x && x.n);
+    if (near.length) return near.reduce((a, x) => a + x.c, 0) / near.length;
+  }
+  return SIM.CAD0;
 }
 const simBucket = st => { const [lo, hi] = bandW(st), r = (lo + hi) / 2 / ((W.ftp || 270) * (W.adj || 1)); return r < 0.76 ? 0 : r < 0.95 ? 1 : r < 1.06 ? 2 : r < 1.21 ? 3 : 4; };
 const simShort = st => !!st && st.dur < 60;                      // 30/30s, 40/20s: one grade for the whole rep, learning happens between reps
@@ -1610,12 +1618,13 @@ function simPoint(st) {                                            // every ~10 
   const key = simKey(st), m = W.simMem[key]; W.simMem[key] = m && typeof m === "object" ? { g: m.g * 0.4 + x * 0.6, y: m.y * 0.4 + y * 0.6 } : { g: x, y };
   if (inb.length >= 5) {                                           // the cadence this rider rides when they are in this band
     const k = SIMC.cad[W.simB], c = inb.reduce((a, b) => a + b, 0) / inb.length, r = Math.max(0.1, 1 / (k.n + 2));
+    if (!k.n) k.c = simCad(W.simB);                                // a new zone starts learning from what it borrowed
     k.c = Math.max(65, Math.min(105, k.c + Math.max(-3, Math.min(3, c - k.c)) * r)); k.n++;
   }
   simSave();
 }
 function simStart(st) {                                            // a new Simulation interval: pick the cadence, start from what this band showed before
-  W.simIdx = W.idx; W.simOff = 0; W.simCal = 0; W.simB = simBucket(st); W.simC = SIMC.cad[W.simB].c; W.simLoc = 0;
+  W.simIdx = W.idx; W.simOff = 0; W.simCal = 0; W.simB = simBucket(st); W.simC = simCad(W.simB); W.simLoc = 0;
   const m = W.simMem[simKey(st)]; W.simRep = !!(m && typeof m === "object");
   if (W.simRep) W.simLoc = Math.max(-0.6, Math.min(0.6, m.y - (SIMC.A * m.g + SIMC.B)));   // what the model still misses at this band's grade
   const g = simGradeFor(st);
