@@ -176,6 +176,8 @@
   .dreq { display:flex; gap:10px; margin:10px 0 4px; } .dreq label { flex:1; min-width:0; align-items:stretch; text-align:left; font-size:13px; color:var(--dim); display:flex; flex-direction:column; gap:4px; }
   .dreq input { width:100%; margin:0; } .dreq input:read-only { color:var(--dim); background:#11151a; }
   #dWoGraph:not([hidden]) { display:block; }
+  .zonebar { grid-column:1 / -1; display:flex; width:100%; height:8px; border-radius:4px; overflow:hidden; margin:1px 0; background:#1f2227; }
+  .zonebar[hidden] { display:none; } .zonebar i { display:block; height:100%; min-width:0; }
   .svcbtn { flex:1; display:flex; align-items:center; justify-content:center; gap:8px; color:#fff; font-weight:700; }
   .svcbtn .svcico { width:22px; height:22px; flex:none; }
   .dsteps { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--dim); margin:8px 0 4px; } .dsteps .mini { margin:0; }
@@ -487,7 +489,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.17</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.18</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -670,12 +672,6 @@ Cooldown
     <div class="hint">On freeride and Simulation-mode intervals the grade is set so the top of the power band comes at this cadence. Ride a little under it to sit in the band, spin faster for more.</div>
   </details>
 
-  <details class="card">
-    <summary>Map key</summary>
-    <div class="row"><input id="mapKey" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Built-in key" style="flex:1;min-width:0"></div>
-    <div class="hint">Ride summary maps use the app's built-in CARTO key. To use your own free key from carto.com/basemaps/apikey, paste it here; clear the box to go back to the built-in one.</div>
-  </details>
-
   <details class="card" open>
     <summary>Audio cues</summary>
     <div class="row"><label><input type="checkbox" id="cueOn" checked> On</label>
@@ -719,11 +715,11 @@ Cooldown
 
 <div id="run">
 <div class="top">
-  <button id="btnEdit" class="mini">‹ Library</button><button id="btnGames" class="mini" type="button" style="display:none">&#9664; Games</button>
+  <button id="btnEdit" class="mini">‹ Home</button><button id="btnGames" class="mini" type="button" style="display:none">&#9664; Games</button>
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">v1.0.17</span>
+  <span class="ver">v1.0.18</span>
 </div>
 
 <div class="ctrl">
@@ -769,6 +765,7 @@ Cooldown
     </div>
     <div class="bandbar" id="bandBar" hidden aria-hidden="true"><div class="trk"><i id="bandIn"></i></div><b class="ptr" id="bandPtr"></b></div>
   </div>
+  <div id="zoneBar" class="zonebar" hidden aria-label="Time in zones so far"></div>
   <div class="tile wide" style="padding:4px"><canvas id="profile" style="width:100%;height:calc(var(--u)*8.14);display:block"></canvas></div>
   <div class="tile wide" style="padding:4px"><canvas id="hrgraph" style="width:100%;height:calc(var(--u)*6.05);display:block"></canvas></div>
   <div class="tile"><div class="l">Cadence</div><div class="v" id="cad">--</div><div class="s" id="govState">rpm</div></div>
@@ -2159,6 +2156,18 @@ function bandBar() {                                    // where the interval av
   const p = W.iN ? Math.round(W.iSum / W.iN) : null, ptr = $("bandPtr"); ptr.style.visibility = p == null ? "hidden" : ""; if (p == null) return;
   ptr.style.left = x(p) + "%"; ptr.style.borderTopColor = p < lo ? "#8b94a3" : p > hi ? "var(--bad)" : "var(--ok)";
 }
+// Free Ride only: a thin bar under the targets splitting the ride so far by time in each power zone (same colours as the ride summary)
+let zbN = -1;
+function drawZoneBar() {
+  const el = $("zoneBar"), on = !!W.freeRide;
+  if (el.hidden === on) { el.hidden = !on; zbN = -1; }
+  if (!on || W.pw.length === zbN) return; zbN = W.pw.length;
+  const lim = [0.55, 0.75, 0.90, 1.05, 1.20, Infinity], col = ["#7a8594", "#1F77B4", "#2CA02C", "#FFCB0E", "#FF2A0E", "#9467BD"], cnt = [0, 0, 0, 0, 0, 0], ftp = W.ftp || 270;
+  W.pw.forEach(p => { cnt[lim.findIndex(l => p / ftp <= l)]++; });
+  const n = W.pw.length; el.textContent = "";
+  if (!n) return;
+  cnt.forEach((c, i) => { if (!c) return; const seg = document.createElement("i"); seg.style.width = (c / n * 100) + "%"; seg.style.background = col[i]; el.appendChild(seg); });
+}
 function render() {
   const p3 = power3s(); $("p3").textContent = p3 == null ? "--" : Math.round(p3);
   const pct = p3 == null ? null : Math.round(p3 / W.ftp * 100);
@@ -2178,7 +2187,7 @@ function render() {
   $("govState").textContent = gAct ? "GOV: " + Math.round(W.gov * 100) + "% of target" : "rpm";
   $("govState").style.color = gAct ? "var(--acc)" : "";
   { const cs = W.steps[W.idx], sv = W.running && W.erg && (isSim(cs) || (cs && cs.free) ); $("adjLbl").style.display = sv ? (W.simOff ? "block" : "none") : W.adjPct === 100 ? "none" : "block"; $("adjLbl").textContent = sv ? simOffTxt() : W.adjPct + "%"; }
-  drawProfile(); drawHR(); syncPauseOv();
+  drawZoneBar(); drawProfile(); drawHR(); syncPauseOv();
   if (!W.loaded) return;
   $("elapsed").textContent = fmt(W.t);
   const tlr = timeline(); $("remain").innerHTML = W.freeRide ? "" : fmt(tlr.left) + "<small>remaining</small>";
@@ -4475,8 +4484,9 @@ const garminName = a => /garmin/i.test(a.dev || "") ? (/^garmin/i.test(a.dev.tri
 const isZwift = a => /zwift/i.test(a.dev || "") || /zwift/i.test(a.ext || "");
 const isOurs = a => /^kickr-/.test(a.ext || "");
 let LEAF = null, rsLeaf = null;
-const CARTO_KEY = "cb1_4zbm_1_80fca4975c8fa01e2395bdd0";          // the app's public CARTO basemaps key (free, non-commercial); Settings can override it
-const mapKey = () => { try { return (localStorage.getItem("kickrMapKey") || "").trim() || CARTO_KEY; } catch (e) { return CARTO_KEY; } };
+const CARTO_KEY = "cb1_4zbm_1_80fca4975c8fa01e2395bdd0";          // the app's public CARTO basemaps key (free, non-commercial), used by everyone
+const mapKey = () => CARTO_KEY;
+try { localStorage.removeItem("kickrMapKey"); } catch (e) {}       // an override saved by v1.0.13-1.0.17 is no longer used
 function loadLeaflet() {                                         // the map library, fetched only the first time a map is shown
   if (window.L && window.L.map) return Promise.resolve();
   if (LEAF) return LEAF;
@@ -5214,8 +5224,6 @@ $("woGraph").onclick = e => {
   drawWoGraph({ idx, label: Math.abs(hit.a - hit.b) < 0.005 ? w0 + " W" : w0 + "\u2192" + w1 + " W" });
   clearTimeout(woPickT); woPickT = setTimeout(() => { $("woPick").textContent = ""; drawWoGraph(null); }, 6000);
 };
-try { $("mapKey").value = localStorage.getItem("kickrMapKey") || ""; } catch (e) {}
-$("mapKey").addEventListener("change", e => { try { const v = e.target.value.trim(); v ? localStorage.setItem("kickrMapKey", v) : localStorage.removeItem("kickrMapKey"); e.target.value = v; } catch (x) {} });
 $("simCad").value = SIM.RPM; $("simCad").addEventListener("change", e => setSimCad(e.target.value));
 $("lmErg").onclick = () => setLaunchMode("erg"); $("lmSim").onclick = () => setLaunchMode("sim");
 $("btnLaunchNo").onclick = () => { $("launchModal").style.display = "none"; pendingLaunch = null; };
