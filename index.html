@@ -93,15 +93,17 @@
   #btnErg.on { color:var(--ok); }
   .slim { display:flex; align-items:baseline; gap:10px; }
   .slim .l { font-size:13px; }
-  .slim .s { margin-left:auto; text-align:right; font-size:calc(var(--u)*4.2); font-weight:400; color:#c3cad6; line-height:1.1; }
-  .slim .v { font-size:calc(var(--u)*6.6); }
+  .slim .s { margin-left:auto; text-align:right; font-size:calc(var(--u)*3.8); font-weight:400; color:#c3cad6; line-height:1.1; }
+  .slim .v { font-size:calc(var(--u)*6); }
   .slim .s small { font-size:14px; color:var(--dim); margin-left:5px; }
-  .slim.h .v { font-size:calc(var(--u)*5.2); }
-  .slim.h .s { font-size:calc(var(--u)*3.4); }
+  .slim.h .v { font-size:calc(var(--u)*6); }
+  .slim.h .s { font-size:calc(var(--u)*2.9); display:flex; flex-direction:column; align-items:flex-end; line-height:1; }
+  .slim.h .s small { margin:2px 0 0; font-size:12px; }               /* past an hour both clocks are long: "remaining" goes under the time */
   label { display:flex; align-items:center; gap:8px; font-size:15px; }
   input[type=checkbox] { width:22px; height:22px; }
   #btnDn, #btnUp { font-size:32px; }
   .p3tile { position:relative; overflow:hidden; }
+  .p3tile .v, .hrt .v { font-size:calc(var(--u)*6); }               /* 3s power, heart rate and the timer share one size */
   #p3strip { position:absolute; left:0; right:0; bottom:0; height:0; opacity:.55; background:#7a8594; transition:height .3s, background .35s; }
   .hrt { display:flex; justify-content:space-between; gap:8px; }
   .caldel { flex:none; align-self:center; width:30px; height:30px; padding:0; margin:0; border-radius:8px; font-size:13px; line-height:1; background:#2a2f37; color:#a7b0bd; }
@@ -142,6 +144,7 @@
   .sumgrid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin:6px 0; }
   .sumgrid .tile { grid-column:auto; padding:6px 10px; }
   .sumbtns { margin-top:auto; padding-top:10px; }
+  #summary .sumbtns .logbtn { flex:0 0 74px; display:flex; align-items:center; justify-content:center; gap:4px; background:#2b3340; color:var(--fg); font-weight:600; }
   /* header stays on screen while scrolling; it shrinks once you've scrolled down */
   #stickyTop { position:sticky; top:0; z-index:5; background:var(--bg); padding-top:env(safe-area-inset-top); transition:padding .15s; }
   body.compact #stickyTop { padding-bottom:0; }
@@ -256,6 +259,8 @@
   #pauseOv { position:fixed; inset:0; z-index:40; background:rgba(0,0,0,.6); display:flex; align-items:center; justify-content:center; padding:24px; }
   #pauseOv[hidden] { display:none; }
   #pauseOv .pbox { background:#161a20; border-radius:18px; padding:20px; width:100%; max-width:320px; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,.6); }
+  #pauseOv .pvfree { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; height:50px; margin:0 0 10px; font-size:17px; font-weight:700; border-radius:14px; background:#2b3340; color:var(--fg); }
+  #pauseOv .pvfree span { color:var(--ok); } #pauseOv .pvfree[hidden] { display:none; }
   #pauseOv .pbig { width:100%; height:64px; margin:0 0 10px; font-size:19px; font-weight:700; border-radius:14px; }
   .ctrl .p1wrap { flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:4px; }   /* +1 min, with Undo under it for 10 s */
   .ctrl .p1wrap button { flex:none; width:100%; }
@@ -517,7 +522,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.20</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.21</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -680,6 +685,12 @@ Cooldown
   </details>
 
   <details class="card" open>
+    <summary>Auto-pause</summary>
+    <div class="row"><label><input type="checkbox" id="apOn" checked> On</label></div>
+    <div class="hint">If power and cadence both read zero for more than 5 seconds during a ride, it pauses and shows the pause pop-up. Tap Resume to carry on. It only arms once you've started pedalling, so clipping in after Start doesn't trigger it.</div>
+  </details>
+
+  <details class="card" open>
     <summary>Cadence governor</summary>
     <div class="row">
       <label><input type="checkbox" id="govOn" checked> On</label>
@@ -747,7 +758,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">v1.0.20</span>
+  <span class="ver">v1.0.21</span>
 </div>
 
 <div class="ctrl">
@@ -776,13 +787,13 @@ Cooldown
       <div class="s" id="tgtPct">-- % FTP</div>
     </div>
     <div>
-      <div class="l">Interval avg</div>
+      <div class="l" id="iavgL">Interval avg</div>
       <div class="v"><span id="iavg">--</span><small>W</small></div>
-      <div class="s" id="iavgS"><span id="iavgP"><span id="iavgPct">--</span>% of target</span><span id="iavgW" hidden>whole ride</span></div>
+      <div class="s" id="iavgS"><span id="iavgP"><span id="iavgPct">--</span>% of target</span><span id="iavgW" hidden>Lap 1</span></div>
     </div>
     <div class="stack">
       <div>
-        <div class="l">Interval left</div>
+        <div class="l" id="ileftL">Interval left</div>
         <div class="clk" id="ileft">--:--</div>
         <div class="bar"><div id="ibar"></div></div>
       </div>
@@ -922,6 +933,7 @@ Cooldown
     <div class="devrows">
       <button type="button" class="devrow" id="devRowT"><span class="dn">Trainer</span><span class="ds" id="devStT">Not connected</span><span class="da" id="devActT">Connect</span></button>
       <button type="button" class="devrow" id="devRowH"><span class="dn">Heart rate</span><span class="ds" id="devStH">Not connected</span><span class="da" id="devActH">Connect</span></button>
+      <button type="button" class="devrow opt" id="devRowP"><span class="dn">Power meter</span><span class="ds" id="devStP">Only if there's no smart trainer</span><span class="da" id="devActP">Connect</span></button>
       <button type="button" class="devrow opt" id="devRowC"><span class="dn">Zwift Click</span><span class="ds" id="devStC">Optional: + and \u2212 buttons</span><span class="da" id="devActC">Connect</span></button>
     </div>
     <div class="hint" style="font-size:12px;margin:10px 0 14px">Tap each one; your phone asks you to pick the device. Tap a connected status in the ride header to come back here.</div>
@@ -935,6 +947,7 @@ Cooldown
     <div id="pauseSub" class="hint" style="font-size:14px;margin:2px 0 14px"></div>
     <button type="button" id="pvResume" class="pbig" style="background:#3ddc84;color:#001018">Resume</button>
     <button type="button" id="pvChange" class="pbig" style="background:#1f6feb;color:#fff">Change Workout</button>
+    <button type="button" id="pvFree" class="pvfree"><span aria-hidden="true">&#9654;</span>Switch to Free Ride</button>
     <button type="button" id="pvDevices" class="redbtn" style="width:100%;height:40px;font-size:15px;margin:0 0 10px" hidden>Connect devices</button>
     <button type="button" id="pvEnd" style="width:100%;height:44px;margin:0;font-size:16px;font-weight:600;background:#7a2a30;color:#fff">End</button>
   </div>
@@ -1030,6 +1043,7 @@ Cooldown
   <div class="ctrl sumbtns">
     <button id="btnSaveImg" class="primary" disabled>Save image</button>
     <button id="btnSaveFit" class="primary" disabled>Save .fit</button>
+    <button id="btnSaveLog" type="button" class="logbtn" title="Save this ride's log for debugging"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>Log</button>
     <button id="btnSumClose" style="background:#35b6e4;color:#001018;border-color:#35b6e4;font-weight:700">Home</button>
   </div>
 </div>
@@ -1048,7 +1062,44 @@ const fitH = () => document.documentElement.style.setProperty("--u", (window.inn
 fitH(); window.addEventListener("resize", fitH); window.addEventListener("orientationchange", fitH);
 const FTMS = 0x1826, BIKE_DATA = 0x2ad2, CTRL_POINT = 0x2ad9, HR_SVC = 0x180d, HR_CHAR = 0x2a37;
 
-function log(m) { const el = $("log"); el.textContent = (new Date().toLocaleTimeString() + " " + m + "\n" + el.textContent).slice(0, 2500); }
+/* ---------------- Ride log (for debugging): a header, one row per second and timestamped events; saved from the summary as JSON ----------------
+   rows: [t, interval, mode (erg/sim/free/off), target sent (W) or grade sent (%), power, cadence, HR, governor %, +/- offset]
+   events: [t, kind, detail]: taps, interval changes, Simulation calibrations, trainer commands, status-log lines, uploads, errors */
+const RL = { on: false };
+function rlStart(how) {
+  const st = id => { const e = $(id); return e ? (e.type === "checkbox" ? e.checked : e.value) : null; };
+  Object.assign(RL, { on: true, rows: [], ev: [], lastIdx: -1, lastSim: null, lastCmd: "", head: {
+    app: ($("run").querySelector(".ver") || {}).textContent || "", started: new Date().toISOString(), how: how || "start", ua: navigator.userAgent,
+    ftp: W.ftp, name: W.name, freeRide: !!W.freeRide, simMode: !!W.simMode, launchMode, text: $("wo").value,
+    steps: W.steps.map(q => [q.dur, +(q.a * 100).toFixed(1), +(q.b * 100).toFixed(1), q.free ? "free" : q.sim ? (q.conv ? "conv" : "band") : "", q.lo != null ? [+(q.lo * 100).toFixed(1), +(q.hi * 100).toFixed(1)] : null]),
+    settings: { govOn: st("govOn"), govCad: st("govCad"), simCad: SIM.RPM, simA: +SIMK.a.toFixed(2), cueOn: st("cueOn"), cueVol: st("cueVol"), arcade: !!arcadeOn },
+    devices: { pm: pmOn ? (pmDev && pmDev.name) || "power meter" : null, trainer: typeof trainer !== "undefined" && trainer && cp ? trainer.name : null, hr: typeof hrDev !== "undefined" && hrDev ? hrDev.name : null, click: typeof clickOn !== "undefined" ? !!clickOn : null } } });
+}
+const rlT = () => Math.floor((W.t + (W.running && !W.paused && RL.tick0 ? Math.min(0.99, (Date.now() - RL.tick0) / 1000) : 0)) * 10) / 10;
+function rlEv(kind, d) { if (RL.on && RL.ev.length < 20000) RL.ev.push([rlT(), kind, d]); }
+function rlRow() {
+  if (!RL.on) rlStart("resumed"); RL.tick0 = Date.now();
+  const s = W.steps[W.idx], mode = !s ? "off" : s.free ? "free" : isSim(s) ? "sim" : W.erg ? "erg" : "off";
+  const tgt = mode === "erg" ? sentTarget() : mode === "sim" || mode === "free" ? +((W.simGrade ?? (W.simOff || 0)) * 100).toFixed(2) : null;
+  RL.rows.push([W.t, W.idx, mode, tgt, live.power ?? null, live.cad != null ? Math.round(live.cad) : null, live.hr ?? null, Math.round(W.gov * 100), +((W.simOff || 0) * 100).toFixed(2)]);
+  if (W.idx !== RL.lastIdx) { RL.lastIdx = W.idx; rlEv("interval", s ? { i: W.idx, dur: s.dur, a: +(s.a * 100).toFixed(1), b: +(s.b * 100).toFixed(1), kind: mode } : { i: W.idx, end: true }); }
+  if (W.simLog && W.simLog !== RL.lastSim) { RL.lastSim = W.simLog; rlEv("calibrate", W.simLog); }
+}
+document.addEventListener("click", e => { const b = e.target.closest && e.target.closest("button"); if (b && RL.on) rlEv("tap", (b.id || "") + (b.textContent ? " " + b.textContent.trim().slice(0, 30) : "")); }, true);
+addEventListener("error", e => rlEv("error", (e.message || "") + " @" + (e.lineno || "")));
+addEventListener("unhandledrejection", e => rlEv("error", "promise: " + errText(e.reason)));
+function saveRideLog() {
+  if (!RL.head) { toast("No ride log yet.", true); return; }
+  const out = { ...RL.head, ended: new Date().toISOString(), seconds: W.t, partial: W.partial || null, title: (typeof rideTitle === "function" ? rideTitle() : ""),
+    uploads: { intervals: $("sumUp").textContent, strava: $("sumStrava").textContent },
+    rowCols: ["t", "interval", "mode", "target_W_or_grade_%", "power", "cadence", "hr", "governor_%", "offset_%"], rows: RL.rows, events: RL.ev };
+  const name = (fitName || "intervals-player.fit").replace(/\.fit$/, "") + "-log.json", blob = new Blob([JSON.stringify(out)], { type: "application/json" });
+  const file = new File([blob], name, { type: "application/json" });
+  const dl = () => { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 1000); };
+  if (navigator.canShare && navigator.canShare({ files: [file] })) navigator.share({ files: [file], title: name }).catch(e => { if (!e || e.name !== "AbortError") dl(); });
+  else dl();
+}
+function log(m) { rlEv("log", String(m)); const el = $("log"); el.textContent = (new Date().toLocaleTimeString() + " " + m + "\n" + el.textContent).slice(0, 2500); }
 function setStatus(id, text, cls) { for (const k of [id, id + "2"]) { const e = $(k); if (e) { e.textContent = text; e.className = "status " + (cls || ""); } } }
 const fmt = s => { s = Math.max(0, Math.round(s)); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), ss = s % 60;
   return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(ss).padStart(2, "0"); };
@@ -1056,7 +1107,7 @@ const fmt = s => { s = Math.max(0, Math.round(s)); const h = Math.floor(s / 3600
 const wRange = s => { if (s.free) return "free"; if (isSim(s)) { const [lo, hi] = bandW(s); return lo + "-" + hi + "w"; } const a = Math.round(s.a * W.ftp * W.adj), b = Math.round(s.b * W.ftp * W.adj); return a === b ? a + "w" : a + "-" + b + "w"; };
 // What is left of the workout: the rest of the current step plus every later step. Skipped time drops out of it.
 function timeline() {
-  if (W.freeRide) return { rem: [], left: 0, total: Math.max(1800, W.t) };   // free ride: a 30-minute window that stretches as the ride goes on
+  if (W.freeRide) return { rem: [], left: 0, start: 0, total: Math.max(1800, W.t) };   // free ride: a 30-minute window that stretches as the ride goes on
   const rem = [];
   for (let i = W.idx; i < W.steps.length; i++) {
     const st = W.steps[i], off = i === W.idx ? W.stepT : 0;
@@ -1064,7 +1115,7 @@ function timeline() {
     rem.push({ dur: st.dur - off, a: st.a + (st.b - st.a) * (off / st.dur), b: st.b });
   }
   const left = rem.reduce((a, r) => a + r.dur, 0);
-  return { rem, left, total: W.t + left };
+  return { rem, left, start: 0, total: W.t + left };
 }
 
 /* ---------------- live data ---------------- */
@@ -1099,7 +1150,9 @@ function parseBike(dv) {
 }
 
 function cpWrite(bytes) {
+  if (!cp) return Promise.resolve(null);                             // power meter only: nothing to send
   // serialise writes; wait for the indication response of each request
+  const hx = bytes.map(x => x.toString(16).padStart(2, "0")).join(" "); if (hx !== RL.lastCmd) { RL.lastCmd = hx; rlEv("cmd", hx); }
   cpPending++;
   writeChain = writeChain.then(async () => {
     const op = bytes[0];
@@ -1113,7 +1166,7 @@ function onCpIndication(ev) {
   const dv = ev.target.value;
   if (dv.getUint8(0) !== 0x80) return;
   const reqOp = dv.getUint8(1), result = dv.getUint8(2);
-  if (result !== 1) log("FTMS op 0x" + reqOp.toString(16) + " result " + result);
+  if (result !== 1) log("FTMS op 0x" + reqOp.toString(16) + " result " + result); else if (RL.on && reqOp !== 0x05 && reqOp !== 0x11) rlEv("ok", "0x" + reqOp.toString(16));
   const i = cpWaiters.findIndex(w => w.op === reqOp);
   if (i >= 0) cpWaiters.splice(i, 1)[0].res(result);
 }
@@ -1234,6 +1287,40 @@ async function autoReconnect() {
 const autoWanted = () => (document.body.dataset.screen === "run" || W.running) && (!cp && hasRemembered("kickrTrainerId") || !hrOn && hasRemembered("kickrHrId"));
 function autoConnSoon() { clearTimeout(autoT); autoT = setTimeout(() => { if (autoWanted()) autoReconnect(); }, 1500); }
 /* (the 5 s retry loop is off: Bluefy does not reconnect remembered devices this way; the Devices pop-up does it by hand) */
+/* ---------------- Power meter (riders without a smart trainer): Bluetooth Cycling Power, read only ----------------
+   Used only when no trainer is connected. Targets show as bands (like Simulation mode) and nothing is sent anywhere. */
+let pmOn = false, pmDev = null, pmBusy = false, pmCrank = null;
+const pmOnly = () => pmOn && !cp;                                    // riding on a power meter alone
+function parsePower(dv) {                                            // Cycling Power Measurement (0x2A63): power, and cadence from crank revolutions
+  const f = dv.getUint16(0, true); let o = 4; const r = { power: dv.getInt16(2, true) };
+  if (f & 1) o += 1; if (f & 4) o += 2; if (f & 16) o += 6;
+  if (f & 32) { const revs = dv.getUint16(o, true), tt = dv.getUint16(o + 2, true), now = Date.now();
+    if (pmCrank) { const dr = (revs - pmCrank.revs + 65536) % 65536, dtt = ((tt - pmCrank.tt + 65536) % 65536) / 1024;
+      if (dr > 0 && dtt > 0) { r.cad = Math.min(200, dr / dtt * 60); pmCrank = { revs, tt, now }; }
+      else if (now - pmCrank.now > 2500) r.cad = 0;                   // no crank event for 2.5 s: not pedalling
+    } else pmCrank = { revs, tt, now };
+  }
+  return r;
+}
+async function connectPM() {
+  if (pmOn || pmBusy) return; pmBusy = true; refreshDevBtns();
+  try {
+    const CPW = "00001818-0000-1000-8000-00805f9b34fb";
+    const dev = await navigator.bluetooth.requestDevice({ filters: [{ services: [CPW] }], optionalServices: [CPW] });
+    if (!dev._ipDisc) { dev._ipDisc = true; dev.addEventListener("gattserverdisconnected", () => { pmOn = false; pmCrank = null; if (!cp) { live.power = null; live.cad = null; } log("Power meter disconnected."); refreshButtons(); }); }
+    const server = await withTimeout(dev.gatt.connect(), 10000, "connecting");
+    const ch = await (await server.getPrimaryService(CPW)).getCharacteristic(0x2a63);
+    if (!ch._ipL) { ch._ipL = true; ch.addEventListener("characteristicvaluechanged", e => {
+      if (cp) return;                                                // a trainer is connected: it supplies power and cadence
+      const r = parsePower(e.target.value), t = Date.now();
+      live.power = r.power; powerBuf.push({ t, w: r.power });
+      if (r.cad != null) { live.cad = r.cad; cadBuf.push({ t, c: r.cad }); }
+    }); }
+    await ch.startNotifications();
+    pmDev = dev; pmOn = true; log("Power meter connected: " + (dev.name || "power meter") + ".");
+  } catch (e) { if (!/cancel/i.test(errText(e))) log("Power meter: " + errText(e)); }
+  pmBusy = false; refreshButtons();
+}
 async function connectHR(known) {
   if (known && (hrBusy || hrOn)) return;
   hrBusy = true;
@@ -1356,12 +1443,12 @@ function loadWorkout() {
   const p = updateWoInfo();
   if (!p) { W.loaded = false; refreshButtons(); return false; }
   W.ftp = p.ftp; W.steps = p.steps; W.loaded = true; W.freeRide = false; resetWorkout();
-  W.simMode = launchMode === "sim"; W.simOff = 0; if (W.simMode) simConvert(W.steps);
+  W.simMode = launchMode === "sim" || pmOnly(); W.simOff = 0; if (W.simMode) simConvert(W.steps);   // power meter only: every interval shows as a band
   refreshButtons(); render();
   return true;
 }
 function resetWorkout() {
-  clearInterval(W.timer); clearInterval(W.fast); Object.assign(W, { simOff: 0, simBase: null, simGrade: null, simMem: {}, simIdx: -1, simSentT: null, tgtHist: [], hrHist: [], cadHist: [], cadRaw: [], running: false, paused: false, idx: 0, stepT: 0, t: 0, adj: 1, adjPct: 100, erg: true, ramp: null, fast: null, gov: 1, kj: 0, pw: [], sum4: 0, n4: 0, iSum: 0, iN: 0, lastTarget: null, timer: null });
+  clearInterval(W.timer); clearInterval(W.fast); Object.assign(W, { simOff: 0, simBase: null, simGrade: null, simMem: {}, simIdx: -1, simSentT: null, tgtHist: [], hrHist: [], cadHist: [], cadRaw: [], running: false, paused: false, idx: 0, stepT: 0, t: 0, adj: 1, adjPct: 100, erg: true, ramp: null, fast: null, gov: 1, kj: 0, pw: [], sum4: 0, n4: 0, iSum: 0, iN: 0, lastTarget: null, timer: null, partial: null, laps: [] });
 }
 // A step rides in road simulation when it is a freeride band, or when the workout was launched in Simulation mode
 // (every step converted, "conv") and the ERG button hasn't switched it back to ERG.
@@ -1418,7 +1505,8 @@ function commandedTarget() {
 const GOV_FLOOR = 0.5, GOV_MAX_PCT = 0.80;
 function govStep(dt) {
   const on = $("govOn").checked, thr = Math.max(30, +$("govCad").value || 55), c = cad3s();
-  if (!on || !W.erg || c == null) { W.gov = 1; return; }
+  const st = W.steps[W.idx];                                       // only an ERG power target is ever governed: never Free Ride, Simulation bands or freeride intervals
+  if (!on || !W.erg || c == null || W.freeRide || !st || st.free || isSim(st)) { W.gov = 1; return; }
   const planPct = (commandedTarget() ?? 0) / W.ftp;               // the target before the governor touches it
   const goal = planPct <= GOV_MAX_PCT ? 1 : Math.min(1, Math.max(GOV_FLOOR, c / thr));   // at or below 80% FTP: hands off
   W.gov = goal < W.gov ? Math.max(goal, W.gov - 0.6 * dt) : Math.min(goal, W.gov + 0.2 * dt);
@@ -1428,8 +1516,9 @@ function sentTarget() { const t = commandedTarget(); return t == null ? null : M
 
 async function startWorkout() {
   ensureAudio();
-  if (!cp) return;
+  if (!cp && !pmOn) return;
   resetWorkout(); cueIdx = -1; W.running = true; W.startMs = Date.now(); W.name = W.freeRide ? "Free Ride" : $("woName").value.trim() || autoName(W.steps);
+  rlStart("start"); apZero = 0; apArmed = false;
   await cpWrite([0x07]);                           // start / resume
   await pushTarget(true);
   W.timer = setInterval(tick, 1000);
@@ -1475,7 +1564,7 @@ function simCalibrate(st, w, rep) {                               // one check: 
   W.simMem[simKey(st)] = W.simBase;                                 // remembered for the next time this band comes round
 }
 function pushTarget(force) {
-  const st = W.steps[W.idx]; if (!st || !W.erg) return;           // ERG off: the trainer is left alone
+  const st = W.steps[W.idx]; if (!st || !W.erg || !cp) return;           // ERG off: the trainer is left alone
   if (isSim(st)) {
     if (!W.simMem) W.simMem = {};
     if (W.simIdx !== W.idx) {                                       // a new interval: the +/- bias goes back to zero, the hill starts from memory if this band was ridden before
@@ -1548,6 +1637,8 @@ function cues() {                                        // called once a second
 }
 function tick() {
   if (!W.running || W.paused) return;
+  rlRow();
+  if (autoPauseCheck()) return;
   W.tgtHist.push(sentTarget() ?? stepTarget() ?? Math.round(live.power ?? 0));
   W.t++; W.stepT++;
   W.hrHist.push(live.hr ?? null);
@@ -1589,11 +1680,26 @@ function skipStep() {
   cues();
   pushTarget(true); render();
 }
+// Auto-pause: both power and cadence at zero for more than 5 s (a missing reading, e.g. a Bluetooth dropout, doesn't count)
+let apZero = 0, apArmed = false;
+function autoPauseCheck() {
+  if (!$("apOn").checked) { apZero = 0; return false; }
+  const p = live.power, c = live.cad;
+  if (p == null || c == null) { apZero = 0; return false; }
+  if (p > 0 || c > 0) { apArmed = true; apZero = 0; return false; }
+  if (!apArmed) return false;                                       // not pedalled yet since Start / Resume
+  if (++apZero <= 5) return false;
+  apZero = 0; apArmed = false; log("Auto-paused: no pedalling for 5 s.");
+  togglePause(); syncPauseOv(); return true;
+}
+try { $("apOn").checked = localStorage.getItem("kickrAutoPause") !== "0"; } catch (e) {}
+$("apOn").addEventListener("change", e => { try { localStorage.setItem("kickrAutoPause", e.target.checked ? "1" : "0"); } catch (x) {} });
 function togglePause() {
+  apZero = 0; apArmed = false;
   if (!W.running) return;
   W.paused = !W.paused; $("btnPause").textContent = W.paused ? "Resume" : "Pause";
   if (!W.paused && W.recovered) {                         // first Resume after reopening the app: the trainer needs its start command again
-    if (!cp) { W.paused = true; $("btnPause").textContent = "Resume"; toast("Connect the trainer first, then tap Resume.", true); return; }
+    if (!cp && !pmOn) { W.paused = true; $("btnPause").textContent = "Resume"; toast("Connect the trainer (or power meter) first, then tap Resume.", true); return; }
     W.recovered = false; ensureAudio(); cpWrite([0x07]);
   }
   if (W.paused) { W.ramp = null; W.gov = 1; W.lastTarget = null; if (W.erg) setTargetPower(50); recSave(); } else pushTarget(true);
@@ -1656,7 +1762,7 @@ function summaryData() {
    Every 5 s (and on pause, and when the page is hidden) the whole ride so far is written to localStorage. It is cleared
    only when the ride is saved or discarded, so if the app is closed mid-ride, the next launch offers Resume / Save / Discard. */
 const REC_KEY = "kickrRecover";
-const REC_F = ["freeRide", "steps", "ftp", "name", "startMs", "t", "idx", "stepT", "adj", "adjPct", "erg", "kj", "pw", "hrHist", "cadHist", "cadRaw", "tgtHist", "sum4", "n4", "iSum", "iN", "simMode", "simMem"];
+const REC_F = ["freeRide", "steps", "ftp", "name", "startMs", "t", "idx", "stepT", "adj", "adjPct", "erg", "kj", "pw", "hrHist", "cadHist", "cadRaw", "tgtHist", "sum4", "n4", "iSum", "iN", "simMode", "simMem", "partial", "laps"];
 function recSave() {
   if (!W.running || !W.t) return;
   const o = { v: 1, at: Date.now(), arcade: arcadeOn }; REC_F.forEach(k => o[k] = W[k]);
@@ -1694,7 +1800,7 @@ $("recResume").onclick = () => {
   W.timer = setInterval(tick, 1000);
   W.fast = setInterval(() => { if (W.running && !W.paused) { govStep(0.25); pushTarget(false); bandBar(); } }, 250);
   $("btnPause").textContent = "Resume"; showScreen("run"); refreshButtons(); render();
-  if (!cp || !hrOn) openDevices();                       // devices first: the pause pop-up waits until they're connected (or Done)
+  if ((!cp && !pmOn) || !hrOn) openDevices();            // devices first: the pause pop-up waits until they're connected (or Done)
   else toast("Tap Resume when you're pedalling.");
 };
 $("recSave").onclick = () => recStage("save");
@@ -1859,11 +1965,17 @@ function buildFit() {
   def(2, 20, recF);
   for (let i = 0; i < n; i++) msg(2, recF, [t0 + i + 1, W.hrHist[i] == null ? 255 : Math.min(254, rd(W.hrHist[i])), Math.min(254, rd(W.cadRaw[i] || 0)), Math.min(65534, rd(W.pw[i] || 0)), rd(sm.d[i] * 100), Math.min(65534, rd(sm.v[i] * 1000))]);
   put(1, 21, [[253, "u32"], [0, "enum"], [1, "enum"]], [tEnd, 0, 4]);                                           // event: timer stop
-  put(3, 19, [[253, "u32"], [2, "u32"], [7, "u32"], [8, "u32"], [0, "enum"], [1, "enum"], [15, "u8"], [16, "u8"], [17, "u8"], [19, "u16"], [20, "u16"], [9, "u32"], [13, "u16"], [14, "u16"]],
-    [tEnd, t0, n * 1000, n * 1000, 9, 1, rd(avg(hrs)), rd(mx(hrs)), rd(avg(cads)), rd(ap), rd(mx(W.pw)), rd(dTot * 100), rd(vAvg * 1000), rd(vMax * 1000)]);        // lap
+  const lapF = [[253, "u32"], [2, "u32"], [7, "u32"], [8, "u32"], [0, "enum"], [1, "enum"], [15, "u8"], [16, "u8"], [17, "u8"], [19, "u16"], [20, "u16"], [9, "u32"], [13, "u16"], [14, "u16"]];
+  const cuts = [0].concat((W.laps || []).filter(x => x > 0 && x < n)).concat([n]).filter((x, i, a) => i === 0 || x > a[i - 1]);   // lap boundaries in seconds
+  def(3, 19, lapF);
+  for (let k = 0; k + 1 < cuts.length; k++) {                                                                      // lap(s): one per Free Ride lap, else the whole ride
+    const a = cuts[k], b = cuts[k + 1], len = b - a, pw = W.pw.slice(a, b), hr = W.hrHist.slice(a, b).filter(v => v != null), cd = W.cadRaw.slice(a, b).filter(v => v > 0);
+    const dA = a ? sm.d[a - 1] || 0 : 0, dB = sm.d[b - 1] || dA;
+    msg(3, lapF, [t0 + b, t0 + a, len * 1000, len * 1000, 9, 1, rd(avg(hr)), rd(mx(hr)), rd(avg(cd)), rd(avg(pw)), rd(mx(pw)), rd((dB - dA) * 100), rd(len ? (dB - dA) / len * 1000 : 0), rd(mx(sm.v.slice(a, b)) * 1000)]);
+  }
   put(4, 18, [[253, "u32"], [2, "u32"], [7, "u32"], [8, "u32"], [5, "enum"], [6, "enum"], [0, "enum"], [1, "enum"], [25, "u16"], [26, "u16"],
     [16, "u8"], [17, "u8"], [18, "u8"], [20, "u16"], [21, "u16"], [34, "u16"], [35, "u16"], [36, "u16"], [45, "u16"], [48, "u32"], [9, "u32"], [14, "u16"], [15, "u16"]],
-    [tEnd, t0, n * 1000, n * 1000, 2, 6, 9, 1, 0, 1, rd(avg(hrs)), rd(mx(hrs)), rd(avg(cads)), rd(ap), rd(mx(W.pw)), rd(np), rd(tss * 10), rd(IF * 1000), W.ftp, rd(W.kj * 1000), rd(dTot * 100), rd(vAvg * 1000), rd(vMax * 1000)]); // session
+    [tEnd, t0, n * 1000, n * 1000, 2, 6, 9, 1, 0, Math.max(1, cuts.length - 1), rd(avg(hrs)), rd(mx(hrs)), rd(avg(cads)), rd(ap), rd(mx(W.pw)), rd(np), rd(tss * 10), rd(IF * 1000), W.ftp, rd(W.kj * 1000), rd(dTot * 100), rd(vAvg * 1000), rd(vMax * 1000)]); // session
   put(5, 34, [[253, "u32"], [0, "u32"], [1, "u16"], [2, "enum"], [3, "enum"], [4, "enum"]], [tEnd, n * 1000, 1, 0, 26, 1]);   // activity
 
   const crcT = [0x0000, 0xCC01, 0xD801, 0x1400, 0xF001, 0x3C00, 0x2800, 0xE401, 0xA001, 0x6C00, 0x7800, 0xB401, 0x5000, 0x9C01, 0x8801, 0x4400];
@@ -1891,11 +2003,32 @@ function saveFit() {
 let rideUploaded = false;
 // The title on Strava and intervals.icu. A free ride is named for the zone of its normalized power, e.g. "Intervals - Tempo Free Ride"
 // (zones as in the automatic names: Recovery <56%, Endurance 56-75, Tempo 76-83, Sweet Spot 84-94, Threshold 95-105, VO2 Max 106-120, Anaerobic 121+).
+const npZone = f => f >= 1.21 ? "Anaerobic" : f >= 1.06 ? "VO2 Max" : f >= 0.95 ? "Threshold" : f >= 0.84 ? "Sweet Spot" : f >= 0.76 ? "Tempo" : f >= 0.56 ? "Endurance" : "Recovery";
+function npOf(pw) {                                               // normalized power of a stretch of 1 s power (30 s rolling average); plain average if under 30 s
+  if (!pw.length) return 0; if (pw.length < 30) return pw.reduce((a, b) => a + b, 0) / pw.length;
+  let sum = 0, s4 = 0, n = 0; for (let i = 0; i < pw.length; i++) { sum += pw[i]; if (i >= 30) sum -= pw[i - 30]; if (i >= 29) { s4 += (sum / 30) ** 4; n++; } }
+  return (s4 / n) ** 0.25;
+}
+// A workout that was switched to Free Ride part-way: "Intervals - SST 1.1 3x15 (2/3) + Tempo Free Ride" (zone of the free-ride part's NP)
 function rideTitle() {
+  if (W.partial) return "Intervals - " + W.partial.name + " (" + W.partial.done + "/" + W.partial.total + ") + " + npZone(npOf(W.pw.slice(W.partial.at)) / (W.ftp || 270)) + " Free Ride";
   if (!W.freeRide) return "Intervals - " + (W.name || autoName(W.steps));
-  const ap = W.pw.length ? W.pw.reduce((a, b) => a + b, 0) / W.pw.length : 0, np = W.n4 > 0 ? (W.sum4 / W.n4) ** 0.25 : ap, f = np / (W.ftp || 270);
-  const z = f >= 1.21 ? "Anaerobic" : f >= 1.06 ? "VO2 Max" : f >= 0.95 ? "Threshold" : f >= 0.84 ? "Sweet Spot" : f >= 0.76 ? "Tempo" : f >= 0.56 ? "Endurance" : "Recovery";
-  return "Intervals - " + z + " Free Ride";
+  const ap = W.pw.length ? W.pw.reduce((a, b) => a + b, 0) / W.pw.length : 0, np = W.n4 > 0 ? (W.sum4 / W.n4) ** 0.25 : ap;
+  return "Intervals - " + npZone(np / (W.ftp || 270)) + " Free Ride";
+}
+// Pause pop-up → Switch to Free Ride: drop the rest of the plan and carry on riding a flat road (+/- or the Click tilt it).
+// Hard intervals counted as done: the ones already passed, and the current one if 80% of it was ridden.
+async function switchToFree() {
+  if (!W.running || W.freeRide) return;
+  const name = W.name || autoName(W.steps), hard = hardIdx(W.steps).idx, cur = W.steps[W.idx];
+  const done = hard.filter(i => i < W.idx || (i === W.idx && W.stepT >= 0.8 * cur.dur)).length;
+  if (!await askYes("Switch to Free Ride?", "The rest of \u201c" + name + "\u201d is dropped and the ride carries on as a free ride on a flat road (+ and \u2212 tilt it). It will be saved as \u201c" + name + " (" + done + "/" + hard.length + ") + Free Ride\u201d.", "Switch")) return;
+  const kept = W.steps.slice(0, W.idx).concat(W.stepT > 0 ? [{ ...cur, dur: W.stepT }] : []);
+  W.partial = { name, done, total: hard.length, at: W.pw.length }; W.laps = [W.pw.length];
+  W.steps = kept.concat([{ dur: 24 * 3600, a: 0, b: 0, free: true }]); W.idx = W.steps.length - 1; W.stepT = 0;
+  W.freeRide = true; W.ramp = null; W.gov = 1; W.simOff = 0; W.freeIdx = -1; W.lastTarget = null; W.iSum = 0; W.iN = 0;
+  $("pauseOv").hidden = true; refreshButtons(); if (W.paused) togglePause(); else pushTarget(true);
+  render(); recSave && recSave(); toast("Free Ride: + and \u2212 tilt the road.");
 }
 async function uploadRide() {
   const box = $("sumUp"); box.style.color = ""; box.textContent = ""; rideUploaded = false;
@@ -2068,6 +2201,7 @@ function setLaunchMode(m) {                                       // ERG holds e
   $("lmHint").textContent = m === "sim" ? "Each interval is converted to a \u00b110w band calibrated to a cadence target of " + SIM.RPM + " rpm (cadence can be adjusted in settings). You can switch to ERG mode mid-ride." : "The trainer holds each power target.";
 }
 function askLaunch(item, dur, tss) {
+  if (pmOnly()) toast("Power meter only: each interval shows as a target band; nothing controls the resistance.");
   pendingLaunch = item; $("launchName").textContent = item.name; $("launchInfo").textContent = [dur, tss, effFolder(item.folder)].filter(Boolean).join("  \u00b7  ");
   setLaunchMode(launchMode); $("launchModal").style.display = "flex";
 }
@@ -2370,10 +2504,10 @@ function bandBar() {                                    // where the interval av
   const p = W.iN ? Math.round(W.iSum / W.iN) : null, ptr = $("bandPtr"); ptr.style.visibility = p == null ? "hidden" : ""; if (p == null) return;
   ptr.style.left = x(p) + "%"; ptr.style.borderTopColor = p < lo ? "#8b94a3" : p > hi ? "var(--bad)" : "var(--ok)";
 }
-// Free Ride only: a thin bar under the targets splitting the ride so far by time in each power zone (same colours as the ride summary)
+// A thin bar under the targets splitting the ride so far by time in each power zone (same colours as the ride summary)
 let zbN = -1;
 function drawZoneBar() {
-  const el = $("zoneBar"), on = !!W.freeRide;
+  const el = $("zoneBar"), on = !!W.loaded;                        // every ride: workouts and Free Ride
   if (el.hidden === on) { el.hidden = !on; zbN = -1; }
   if (!on || W.pw.length === zbN) return; zbN = W.pw.length;
   const lim = [0.55, 0.75, 0.90, 1.05, 1.20, Infinity], col = ["#7a8594", "#1F77B4", "#2CA02C", "#FFCB0E", "#FF2A0E", "#9467BD"], cnt = [0, 0, 0, 0, 0, 0], ftp = W.ftp || 270;
@@ -2397,7 +2531,7 @@ function render() {
   const c3 = cad3s(), thr = Math.max(30, +$("govCad").value || 55);
   $("cad").textContent = c3 == null ? "--" : Math.round(c3);
   $("cad").style.color = c3 == null || c3 >= thr ? "" : c3 >= thr - 10 ? "var(--acc)" : "var(--bad)";
-  const gAct = $("govOn").checked && W.running && W.erg && W.gov < 0.98;
+  const gSt = W.steps[W.idx], gAct = $("govOn").checked && W.running && W.erg && !W.freeRide && gSt && !gSt.free && !isSim(gSt) && W.gov < 0.98;
   $("govState").textContent = gAct ? "GOV: " + Math.round(W.gov * 100) + "% of target" : "rpm";
   $("govState").style.color = gAct ? "var(--acc)" : "";
   { const cs = W.steps[W.idx], sv = W.running && W.erg && (isSim(cs) || (cs && cs.free) ); $("adjLbl").style.display = sv ? (W.simOff ? "block" : "none") : W.adjPct === 100 ? "none" : "block"; $("adjLbl").textContent = sv ? simOffTxt() : W.adjPct + "%"; }
@@ -2416,9 +2550,11 @@ function render() {
   if (band && W.simOff) { $("tgtPct").textContent = simOffTxt(); $("adjLbl").style.display = "none"; }
   $("target").classList.toggle("freelbl", !!W.freeRide); $("target").nextElementSibling.style.display = W.freeRide ? "none" : "";   /* no "W" after Free Ride */
   if (W.freeRide) {                                       // free ride: no target, no intervals; the road's grade sits under the label
-    $("target").innerHTML = "Free<br>Ride"; $("tgtPct").style.display = ""; $("tgtPct").classList.add("adjg"); $("tgtPct").textContent = W.running ? "Grade " + simOffTxt() : "+ / \u2212 to adjust"; $("adjLbl").style.display = "none";
+    $("target").innerHTML = "Free<br>Ride"; $("tgtPct").style.display = ""; $("tgtPct").classList.add("adjg"); $("tgtPct").textContent = pmOnly() ? "Power meter" : W.running ? "Grade " + simOffTxt() : "+ / \u2212 to adjust"; $("adjLbl").style.display = "none";
   }
-  $("ileft").textContent = W.running && !W.freeRide ? fmt(s.dur - W.stepT) : "--:--";
+  const lap0 = W.laps && W.laps.length ? W.laps[W.laps.length - 1] : (W.partial ? W.partial.at : 0), lapN = Math.max(1, W.laps ? W.laps.length : 1);
+  $("ileftL").textContent = W.freeRide ? "Lap time" : "Interval left"; $("iavgL").textContent = W.freeRide ? "Lap avg" : "Interval avg";
+  $("ileft").textContent = W.running && W.freeRide ? fmt(W.t - lap0) : W.running ? fmt(s.dur - W.stepT) : "--:--";
   $("ileft").style.fontSize = (s.dur - W.stepT) >= 3600 ? "calc(var(--u)*3.3)" : "";
   const nx = W.steps[W.idx + 1], nxt = !W.running || W.freeRide ? "--" : !nx ? "Finish" : fmt(nx.dur) + (wRange(nx).includes("-") ? " " : " \u00b7 ") + wRange(nx);
   $("nextStep").textContent = nxt; $("nextStep").className = "nxt" + (nxt.length > 12 ? " long" : "");
@@ -2428,7 +2564,7 @@ function render() {
   { const zone = band || (tgt ? [tgt * 0.97, tgt * 1.03] : null), ref = band ? band[1] : tgt, iv = ia == null ? null : Math.round(ia);   // a band (shown as % of its top), or within 3% of an ERG target, counts as on target
     $("iavgPct").textContent = ia == null || !ref ? "--" : Math.round(ia / ref * 100);
     $("iavgS").style.color = W.freeRide || iv == null || !zone ? "" : iv < zone[0] ? "#8b94a3" : iv > zone[1] ? "var(--bad)" : "var(--ok)";
-    $("iavgP").hidden = !!W.freeRide; $("iavgW").hidden = !W.freeRide; }
+    $("iavgP").hidden = !!W.freeRide; $("iavgW").hidden = !W.freeRide; $("iavgW").textContent = "Lap " + lapN; }
   $("kj").textContent = Math.round(W.kj);
   $("npu").style.display = W.n4 ? "" : "none";
   $("pavg").textContent = W.pw.length ? Math.round(W.pw.reduce((a, b) => a + b, 0) / W.pw.length) : "--";
@@ -2506,10 +2642,10 @@ function drawProfileGraph(cv, o) {
   const c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, w, h);
   if (o.actual) return drawActual(c, w, h);
   if (!W.loaded || !W.steps.length) return;
-  const tl = timeline(), total = tl.total, ftp = W.ftp; if (total <= 0) return;
-  const histMax = W.tgtHist.length ? Math.max(...W.tgtHist) / ftp : 0;
+  const tl = timeline(), total = tl.total, t0w = tl.start || 0, i0 = Math.max(0, Math.floor(t0w) - 1), ftp = W.ftp; if (total <= 0) return;
+  const histMax = W.tgtHist.length ? Math.max(...W.tgtHist.slice(i0)) / ftp : 0;
   const maxF = Math.max(1.3, tl.rem.reduce((m, r) => Math.max(m, r.a, r.b), 0) * W.adj * 1.05, histMax * 1.05);
-  const X = t => t / total * w, Y = f => h - 2 - (f / maxF) * (h - 6);
+  const X = t => (t - t0w) / total * w, Y = f => h - 2 - (f / maxF) * (h - 6);
   const cursor = X(W.t);
 
   // what is left of the plan (starting at the cursor), scaled by the current intensity adjustment
@@ -2523,7 +2659,7 @@ function drawProfileGraph(cv, o) {
 
   // completed part: the targets that were actually sent, one column per second
   c.globalAlpha = 1; const cw = Math.max(1, X(1) + 0.6);
-  W.tgtHist.forEach((tg, i) => { const f = tg / ftp; c.fillStyle = zoneColor(f); c.fillRect(X(i), Y(f), cw, h - Y(f)); });
+  for (let i = i0; i < W.tgtHist.length; i++) { const f = W.tgtHist[i] / ftp; c.fillStyle = zoneColor(f); c.fillRect(X(i), Y(f), cw, h - Y(f)); }
 
   // FTP reference line
   c.globalAlpha = 0.5; c.strokeStyle = "#fff"; c.setLineDash([3, 4]); c.lineWidth = 1;
@@ -2531,7 +2667,7 @@ function drawProfileGraph(cv, o) {
 
   // actual power trace (3-sample smoothing), dark outline under a bright line so it reads over any bar color
   if (W.pw.length > 1) {
-    const pts = W.pw.map((_, i) => { const sl = W.pw.slice(Math.max(0, i - 2), i + 1); return [X(i + 1), Math.max(0, Y(sl.reduce((a, b) => a + b, 0) / sl.length / ftp))]; });
+    const pts = []; for (let i = i0; i < W.pw.length; i++) { const sl = W.pw.slice(Math.max(0, i - 2), i + 1); pts.push([X(i + 1), Math.max(0, Y(sl.reduce((a, b) => a + b, 0) / sl.length / ftp))]); }
     const trace = (col, lw) => { c.strokeStyle = col; c.lineWidth = lw; c.lineJoin = "round"; c.beginPath(); pts.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.stroke(); };
     trace("rgba(255,45,45,.75)", 0.5);   /* a hairline: there if you look for it */
   }
@@ -2547,15 +2683,15 @@ function drawHR(cv, o) {
   if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
   const c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, w, h);
   if (!W.loaded || !W.steps.length) return;
-  const total = timeline().total, X = t => t / total * w; if (total <= 0) return;
-  const vals = W.hrHist.filter(v => v != null);
+  const tl = timeline(), total = tl.total, t0w = tl.start || 0, i0 = Math.max(0, Math.floor(t0w) - 1), X = t => (t - t0w) / total * w; if (total <= 0) return;
+  const allHr = W.hrHist.filter(v => v != null), win = W.hrHist.slice(i0).filter(v => v != null), vals = win.length ? win : allHr;   // the scale fits what's on screen; avg / max are the whole ride
   c.font = "10px -apple-system,system-ui,sans-serif"; c.textBaseline = "top"; c.fillStyle = "#8b94a3";
   if (!vals.length) { c.fillText("HEART RATE", 4, 3); }
   else {
-    const mx = Math.max(...vals), avg = vals.reduce((a, b) => a + b, 0) / vals.length;
-    let lo = Math.floor((Math.min(...vals) - 5) / 10) * 10, hi = Math.ceil((mx + 5) / 10) * 10; if (hi - lo < 40) hi = lo + 40;
+    const mx = Math.max(...allHr), avg = allHr.reduce((a, b) => a + b, 0) / allHr.length, vmx = Math.max(...vals);
+    let lo = Math.floor((Math.min(...vals) - 5) / 10) * 10, hi = Math.ceil((vmx + 5) / 10) * 10; if (hi - lo < 40) hi = lo + 40;
     const Y = v => h - 3 - (v - lo) / (hi - lo) * (h - 17);
-    let i = 0;
+    let i = i0;
     while (i < W.hrHist.length) {                                   // draw each uninterrupted run of readings
       if (W.hrHist[i] == null) { i++; continue; }
       let j = i; while (j + 1 < W.hrHist.length && W.hrHist[j + 1] != null) j++;
@@ -4122,13 +4258,15 @@ function riderSprite(crank, spin) {
 window.addEventListener("resize", () => { drawProfile(); drawHR(); });
 function refreshDevBtns() {                                  // red Connect buttons in the ride header while a device is missing
   try {
-    const tOn = !!cp, hOn = hrOn;
+    const tOn = !!cp || pmOn, hOn = hrOn;
     $("stTrainer2").style.display = tOn ? "" : "none"; $("stHR2").style.display = hOn ? "" : "none";   // connected ones show their status
     $("btnDevices").style.display = tOn && hOn ? "none" : "";                                       // one red button while anything is missing
     $("btnDevices").textContent = !tOn && !hOn ? "Connect devices" : !tOn ? "Connect trainer" : "Connect HR";
     const row = (k, on, busy, name) => { $("devRow" + k).classList.toggle("on", on); $("devRow" + k).classList.toggle("busy", !on && busy);
       $("devSt" + k).textContent = on ? "\u2713 " + (name || "Connected") : busy ? "Connecting\u2026" : "Not connected"; $("devAct" + k).textContent = on ? "Connected" : busy ? "\u2026" : "Connect"; };
-    row("T", tOn, trainerBusy, trainer && trainer.name); row("H", hOn, hrBusy, hrDev && hrDev.name);
+    row("T", !!cp, trainerBusy, trainer && trainer.name); row("H", hOn, hrBusy, hrDev && hrDev.name); row("P", pmOn, pmBusy, pmDev && pmDev.name);
+    if (!pmOn && !pmBusy) $("devStP").textContent = cp ? "Not needed: the trainer measures power" : "Only if there's no smart trainer";
+    if (pmOnly()) { $("stTrainer2").textContent = "Power meter: connected"; }
     row("C", clickOn, clickBusy, (clickDev && clickDev.name || "Zwift Click") + (clickBatt != null ? " \u00b7 " + clickBatt + "%" : ""));
     if (!clickOn && !clickBusy) $("devStC").textContent = "Optional: + and \u2212 buttons";
     if (tOn && hOn && (clickOn || !hasRemembered("kickrClickId")) && $("devModal").style.display === "flex" && !devAutoClosed) {   /* stays open for a Click you have used before */ devAutoClosed = true; setTimeout(() => { $("devModal").style.display = "none"; syncPauseOv(); }, 700); }   // both in: close by itself
@@ -4136,9 +4274,9 @@ function refreshDevBtns() {                                  // red Connect butt
 }
 function syncPauseOv() {                                     // the pause pop-up: Resume and Change Workout big, End smaller at the bottom
   const show = W.running && W.paused && !arcadeOn && document.body.dataset.screen === "run" && $("devModal").style.display !== "flex";
-  if ($("pauseOv").hidden === !show) { if (show) { $("pvDevices").hidden = !!cp && hrOn; $("pauseSub").textContent = fmt(W.t) + " ridden"; } return; }
+  if ($("pauseOv").hidden === !show) { if (show) { $("pvDevices").hidden = (!!cp || pmOn) && hrOn; $("pvFree").hidden = !!W.freeRide; $("pauseSub").textContent = fmt(W.t) + " ridden"; } return; }
   $("pauseOv").hidden = !show;
-  if (show) { $("pvDevices").hidden = !!cp && hrOn; $("pauseSub").textContent = fmt(W.t) + " ridden"; }
+  if (show) { $("pvDevices").hidden = (!!cp || pmOn) && hrOn; $("pvFree").hidden = !!W.freeRide; $("pauseSub").textContent = fmt(W.t) + " ridden"; }
 }
 function syncPauseBtn() {                                    // Resume is green while paused
   const b = $("btnPause");
@@ -4147,10 +4285,13 @@ function syncPauseBtn() {                                    // Resume is green 
 }
 function refreshButtons() {
   refreshDevBtns(); syncPauseBtn(); syncPauseOv();
-  const ready = !!cp && W.loaded;
+  const ready = (!!cp || pmOn) && W.loaded;
   $("btnStart").disabled = !ready || W.running;
   ["btnPause", "btnSkip", "btnUp", "btnDn", "btnErg", "btnPlus1"].forEach(id => $(id).disabled = !W.running);
-  if (W.freeRide) { $("btnErg").disabled = true; $("btnSkip").disabled = true; $("btnPlus1").disabled = true; }   // nothing to skip, extend or hold
+  if (W.freeRide || pmOnly()) $("btnErg").disabled = true;                       // nothing for ERG to hold
+  if (pmOnly()) { $("btnUp").disabled = true; $("btnDn").disabled = true; }      // power meter only: no resistance to adjust
+  if (W.freeRide) { $("btnSkip").disabled = true; }   // nothing to skip or hold; +1 min becomes Lap
+  $("btnPlus1").textContent = W.freeRide ? "Lap" : "+1 min";
   $("btnErg").classList.toggle("on", W.running && W.erg && !W.freeRide && !(W.simMode && W.steps.some(s => s.conv)));
   $("btnStart").textContent = W.running ? "Running" : "Start";
   $("btnEnd").style.display = (W.running && W.paused) ? "" : "none";     // End only appears while paused
@@ -5203,7 +5344,7 @@ $("btnRenameYes").onclick = applyRename; $("renameInput").onkeydown = e => { if 
 function askSaveRide() { $("saveModal").style.display = "flex"; }
 $("btnSaveRide").onclick = () => { $("saveModal").style.display = "none"; showSummary(true); };
 $("btnDiscardRide").onclick = () => { $("saveModal").style.display = "none"; showSummary(false); };
-$("btnSaveImg").onclick = saveSummaryImage; $("btnSaveFit").onclick = saveFit; $("btnSumClose").onclick = closeSummary; $("btnImgClose").onclick = () => { $("imgModal").style.display = "none"; };
+$("btnSaveImg").onclick = saveSummaryImage; $("btnSaveFit").onclick = saveFit; $("btnSaveLog").onclick = saveRideLog; $("btnSumClose").onclick = closeSummary; $("btnImgClose").onclick = () => { $("imgModal").style.display = "none"; };
 /* One Devices pop-up for both: each row is its own tap, because the phone opens only one device picker per tap. */
 let devAutoClosed = false;
 function openDevices() { devAutoClosed = !!cp && hrOn && (clickOn || !hasRemembered("kickrClickId")); refreshDevBtns(); $("devModal").style.display = "flex"; }
@@ -5211,6 +5352,7 @@ $("btnDevices").onclick = openDevices; $("stTrainer2").onclick = openDevices; $(
 $("devRowT").onclick = async () => { if (cp) return; const p = connectTrainer(); refreshDevBtns(); await p; refreshDevBtns(); };
 $("devRowH").onclick = async () => { if (hrOn) return; const p = connectHR(); refreshDevBtns(); await p; refreshDevBtns(); };
 $("devDone").onclick = () => { $("devModal").style.display = "none"; syncPauseOv(); };
+$("devRowP").onclick = () => { if (!pmOn) connectPM(); };
 $("devRowC").onclick = async () => { if (clickOn || clickBusy) return; const p = connectClick(); refreshDevBtns(); await p; refreshDevBtns(); };
 $("btnStart").onclick = startWorkout;
 /* ---------------- Schedule a workout onto the intervals.icu calendar ---------------- */
@@ -5233,8 +5375,15 @@ $("btnSchedYes").onclick = async () => {
   const it = pendingSched, date = $("schedDate").value;
   $("schedModal").style.display = "none"; pendingSched = null;
   if (!it || !/^\d{4}-\d{2}-\d{2}$/.test(date)) { toast("Pick a date.", true); return; }
-  await scheduleOn(date, it.name, it.text);
+  if (await scheduleOn(date, it.name, it.text)) { loadToday(); loadNext7(); goHome(); }
 };
+// After scheduling: back to the home screen (Plan tab, top), closing whatever screens were open on the way
+function goHome() {
+  if ($("dayScr").classList.contains("show")) closeDay();
+  if (dvOpen()) closeToday();
+  $("woSheet").style.display = "none";
+  showTab("plan"); window.scrollTo(0, 0); document.body.style.overflow = "";
+}
 /* The app's own yes/no pop-up: Bluefy doesn't show the browser's confirm() box and silently answers no. */
 const niceDay = ds => { const [y, m, d] = ds.split("-").map(Number); return new Date(y, m - 1, d).toLocaleDateString([], { weekday: "long", month: "short", day: "numeric" }); };
 function askYes(title, text, yes) {
@@ -5279,7 +5428,7 @@ async function daySchedule(name, text, btn, plain) {
   if (!dayDate) return; const was = btn.innerHTML; btn.disabled = true; btn.textContent = btn.classList.contains("schedbtn") ? "\u2026" : "Scheduling\u2026";
   const ok = await scheduleOn(dayDate, name, text, plain);
   btn.disabled = false; btn.innerHTML = was;
-  if (ok) { closeDay(); loadToday(); loadNext7(); if (dvOpen()) refreshDayView(); }
+  if (ok) { loadToday(); loadNext7(); goHome(); }
   return ok;
 }
 function renderDayLib() {                                      // same folders and rows as the home library; each row's only button is Schedule
@@ -5612,6 +5761,7 @@ window.addEventListener("resize", fitArc);
 $("btnPause").onclick = togglePause;
 $("pvResume").onclick = () => { togglePause(); syncPauseOv(); };
 $("pvChange").onclick = () => { $("pauseOv").hidden = true; changeWorkout(); };
+$("pvFree").onclick = switchToFree;
 $("pvEnd").onclick = () => { $("endModal").style.display = "flex"; };          // still asks once more
 $("pvDevices").onclick = () => { openDevices(); syncPauseOv(); }; $("btnEnd").onclick = () => { $("endModal").style.display = "flex"; };
 $("btnEndNo").onclick = () => { $("endModal").style.display = "none"; };
@@ -5621,12 +5771,20 @@ $("btnEndYes").onclick = () => { $("endModal").style.display = "none"; finishWor
 let plus1 = null;                                               // { idx, n, timer }
 function hideUndo1() { if (plus1) clearTimeout(plus1.timer); plus1 = null; $("btnUndo1").hidden = true; $("p1wrap").classList.remove("undo"); }
 $("btnPlus1").onclick = () => {
+  if (W.freeRide) { lapNow(); return; }
   if (!W.running || W.idx >= W.steps.length) return;
   W.steps[W.idx].dur += 60;
   const n = plus1 && plus1.idx === W.idx ? plus1.n + 1 : 1; if (plus1) clearTimeout(plus1.timer);
   plus1 = { idx: W.idx, n, timer: setTimeout(hideUndo1, 10000) };
   $("btnUndo1").textContent = n > 1 ? "Undo +" + n : "Undo"; $("btnUndo1").hidden = false; $("p1wrap").classList.add("undo"); render();
 };
+// Free Ride lap: the Lap avg (in the Interval avg tile) and the lap clock start again; each lap becomes a lap in the .fit file
+function lapNow() {
+  if (!W.running || !W.freeRide) return;
+  if (!W.laps || !W.laps.length) W.laps = [W.partial ? W.partial.at : 0];
+  if (W.t - W.laps[W.laps.length - 1] < 3) return;                 // a double tap doesn't make an empty lap
+  W.laps.push(W.t); W.iSum = 0; W.iN = 0; render(); recSave(); toast("Lap " + W.laps.length);
+}
 $("btnUndo1").onclick = () => {
   if (plus1 && W.running && W.idx === plus1.idx) { const st = W.steps[W.idx]; st.dur = Math.max(W.stepT + 1, st.dur - 60 * plus1.n); }
   hideUndo1(); render();
