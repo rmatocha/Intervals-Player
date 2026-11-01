@@ -176,6 +176,8 @@
   .dreq { display:flex; gap:10px; margin:10px 0 4px; } .dreq label { flex:1; min-width:0; align-items:stretch; text-align:left; font-size:13px; color:var(--dim); display:flex; flex-direction:column; gap:4px; }
   .dreq input { width:100%; margin:0; } .dreq input:read-only { color:var(--dim); background:#11151a; }
   #dWoGraph:not([hidden]) { display:block; }
+  .svcbtn { flex:1; display:flex; align-items:center; justify-content:center; gap:8px; color:#fff; font-weight:700; }
+  .svcbtn .svcico { width:22px; height:22px; flex:none; }
   .dsteps { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--dim); margin:8px 0 4px; } .dsteps .mini { margin:0; }
   .schedbtn { flex:none; width:44px; margin:4px 0; padding:0; font-size:24px; font-weight:700; line-height:1; background:var(--acc); color:#000; }
   .havedel { flex:none; width:36px; height:32px; padding:0; margin:0; border-radius:8px; font-size:13px; background:#2a2f37; color:#a7b0bd; align-self:center; }
@@ -485,7 +487,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.16</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.17</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -639,6 +641,14 @@ Cooldown
 <div id="settingsScr" class="hscreen" role="dialog" aria-label="Settings">
   <div class="hbar"><button id="setBack" type="button">‹ Back</button><span>Settings</span></div>
   <div class="hin">
+  <details class="card" id="icuCard" open>
+    <summary>Connections</summary>
+    <div class="row" style="margin:0"><button id="btnIcuConnect" class="svcbtn" style="background:#dd0447;border-color:#dd0447"><svg class="svcico" viewBox="0 0 462.9 462.9" aria-hidden="true"><path fill="currentColor" d="M438.7 258.5 347.9 246 312.7 89.8l-.1-.3c-1.7-7.3-7.3-13.4-15.1-15.2-10.9-2.6-21.8 4.1-24.4 15l-49.9 210.5-47.1-146.7-.1-.2c-1.9-5.7-6.5-10.3-12.6-12-9.7-2.6-19.8 3.2-22.4 12.9l-25.3 94.7-91.2 10.1c-2.7.3-4.9 2.4-5.2 5.2-.4 3.3 2 6.2 5.2 6.5l105 11.6c7.3.8 14.3-3.7 16.3-11l.5-1.9 13.5-47.7 49 149.8c1.8 5.5 6.4 10.1 12.4 11.7 9.5 2.4 19.2-3.3 21.6-12.8v-.1l48.4-188.3 19.2 87.2.6 2.6c2 8.9 10.5 14.9 19.7 13.7l107.9-14.8c2.6-.4 4.7-2.4 5.1-5.1.5-3.2-1.7-6.2-5-6.7"/></svg><span id="icuBtnTxt">Connect intervals.icu</span></button></div>
+    <div id="icuOut" class="hint" style="margin-top:8px;font-size:13px"></div>
+    <div class="row" style="margin:12px 0 0"><button id="btnStrava" class="svcbtn" style="background:#FC4C02;border-color:#FC4C02"><span id="stravaBtnTxt">Connect Strava</span></button></div>
+    <div id="stravaOut" class="hint" style="margin-top:8px;font-size:13px"></div>
+  </details>
+
   <details class="card" open>
     <summary>Cadence governor</summary>
     <div class="row">
@@ -684,13 +694,6 @@ Cooldown
     <div class="hint">Distance is estimated from power with a physics model (air drag + rolling resistance + momentum), scaled so 150 w holds this speed on flat ground. It goes into the summary and the .fit file.</div>
   </details>
 
-  <details class="card" id="icuCard" open>
-    <summary>Connections</summary>
-    <div class="row" style="margin:0"><button id="btnIcuConnect" style="flex:1;background:#35b6e4;color:#001018;border-color:#35b6e4;font-weight:700">Connect intervals.icu</button></div>
-    <div id="icuOut" class="hint" style="margin-top:8px;font-size:13px"></div>
-    <div class="row" style="margin:12px 0 0"><button id="btnStrava" style="flex:1;background:#FC4C02;color:#fff;border-color:#FC4C02;font-weight:700">Connect Strava</button></div>
-    <div id="stravaOut" class="hint" style="margin-top:8px;font-size:13px"></div>
-  </details>
   </div>
 </div>
 <div id="histAll" class="hscreen" role="dialog" aria-label="Ride history">
@@ -720,7 +723,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">v1.0.16</span>
+  <span class="ver">v1.0.17</span>
 </div>
 
 <div class="ctrl">
@@ -3988,8 +3991,9 @@ function stravaCapture() {                                   // the helper retur
 }
 function stravaShow() {
   let t = null; try { t = JSON.parse(localStorage.getItem("kickrStrava") || "null"); } catch (e) {}
-  $("stravaOut").textContent = t && t.access_token ? "Connected to Strava." : "Not connected to Strava.";
-  $("btnStrava").textContent = t && t.access_token ? "Reconnect Strava" : "Connect Strava";
+  const on = !!(t && t.access_token);
+  $("stravaOut").textContent = on ? "Tap to reconnect if uploads to Strava stop working." : "Not connected to Strava.";
+  $("stravaBtnTxt").textContent = on ? "\u2713 Connected to Strava" : "Connect Strava";
 }
 $("btnStrava").onclick = () => { location.href = STRAVA_HELPER + "/auth"; };
 function icuAuth() {                               // OAuth token when connected; otherwise a saved API key (older setup)
@@ -4011,8 +4015,8 @@ function icuCapture() {                           // the Worker returns here aft
 function icuShow() {
   let t = null; try { t = JSON.parse(localStorage.getItem("kickrIcuOAuth") || "null"); } catch (e) {}
   const on = !!((t && t.access_token) || (localStorage.getItem("kickrIcuKey") || "").trim());
-  icuOut(on ? "Connected to intervals.icu." : "Not connected to intervals.icu.");
-  $("btnIcuConnect").textContent = on ? "Reconnect intervals.icu" : "Connect intervals.icu";
+  icuOut(on ? "Tap to reconnect if syncing with intervals.icu stops working." : "Not connected to intervals.icu.");
+  $("icuBtnTxt").textContent = on ? "\u2713 Connected to Intervals.icu" : "Connect intervals.icu";
 }
 $("btnIcuConnect").onclick = () => { location.href = STRAVA_HELPER + "/icu-auth"; };   // sign in on intervals.icu; the helper brings us back
 icuCapture(); stravaCapture(); stravaShow(); icuShow();
