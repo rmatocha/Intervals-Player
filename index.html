@@ -178,6 +178,26 @@
   #dWoGraph:not([hidden]) { display:block; }
   .zonebar { grid-column:1 / -1; display:flex; width:100%; height:8px; border-radius:4px; overflow:hidden; margin:1px 0; background:#1f2227; }
   .zonebar[hidden] { display:none; } .zonebar i { display:block; height:100%; min-width:0; }
+  .wsbox { background:#161a20; border-radius:16px; padding:14px 12px; max-width:560px; width:100%; max-height:100%; overflow-y:auto; }
+  .wshead { display:flex; align-items:flex-start; gap:10px; } #wsName { flex:1; min-width:0; font-size:19px; font-weight:700; line-height:1.25; overflow-wrap:anywhere; }
+  #wsClose { flex:none; width:36px; height:36px; padding:0; margin:-4px -4px 0 0; font-size:16px; background:#222831; }
+  #wsGraph { width:100%; height:130px; display:block; margin:12px 0 8px; border-radius:8px; background:#11151a; }
+  #wsInfo { font-size:16px; font-weight:600; font-variant-numeric:tabular-nums; } #wsMod { font-size:13px; color:var(--acc); min-height:18px; margin:2px 0 10px; }
+  .wsplay { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; height:52px; margin:0; font-size:18px; font-weight:700; background:#2b3340; color:var(--fg); border-radius:12px; }
+  .wsplay span { color:var(--ok); font-size:20px; }
+  .wsrow { display:flex; gap:8px; margin-top:8px; } .wsrow button { flex:1; height:46px; margin:0; font-weight:600; display:flex; align-items:center; justify-content:center; }
+  #wsEdit, #wsSched { background:#2b3340; color:var(--fg); } #wsEdit[hidden], #wsLoad[hidden] { display:none; }
+  #wsSched.wsbig { font-size:17px; font-weight:700; flex:2; }
+  #wsFor { font-size:14px; color:var(--acc); font-weight:600; margin-top:2px; } #wsFor[hidden] { display:none; }
+  #wsWork { font-size:13px; color:#c3cad6; margin-top:2px; }
+  .wsadj { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; padding-top:12px; border-top:1px solid #2a303a; }
+  .wsh { font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--dim); text-align:center; margin-bottom:6px; }
+  .wspm { display:flex; align-items:center; gap:6px; } .wspm button { flex:none; width:44px; height:44px; padding:0; margin:0; font-size:24px; font-weight:700; line-height:1; background:#2b3340; color:var(--fg); }
+  .wspm button:disabled { opacity:.35; } .wspm span { flex:1; min-width:0; text-align:center; font-size:13px; font-weight:600; font-variant-numeric:tabular-nums; }
+  .dschedbtn { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; height:46px; font-size:16px; font-weight:600; margin:12px 0 0; background:#2b3340; color:var(--fg); }
+  .dschedbtn span { font-size:16px; line-height:1; }
+  .dvload { flex:1; min-width:0; height:44px; margin:0; display:flex; align-items:center; justify-content:center; gap:8px; background:#2b3340; color:var(--fg); font-weight:700; }
+  .dvload span { color:var(--ok); font-size:17px; } .dvedit { flex:none; width:72px; height:44px; margin:0; background:#2b3340; color:var(--fg); font-weight:600; }
   .svcbtn { flex:1; display:flex; align-items:center; justify-content:center; gap:8px; color:#fff; font-weight:700; }
   .svcbtn .svcico { width:22px; height:22px; flex:none; }
   .dsteps { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--dim); margin:8px 0 4px; } .dsteps .mini { margin:0; }
@@ -185,6 +205,9 @@
   .havedel { flex:none; width:36px; height:32px; padding:0; margin:0; border-radius:8px; font-size:13px; background:#2a2f37; color:#a7b0bd; align-self:center; }
   .wobtns { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:10px; }   /* Save to Library, Launch Workout, Schedule on one row */
   .wobtns #btnSchedule { white-space:nowrap; padding:0 3px; }
+  .wobtns button { display:flex; align-items:center; justify-content:center; gap:6px; background:#2b3340; color:var(--fg); font-weight:600; text-align:left; }
+  .wobtns .wbp { color:var(--ok); font-size:18px; flex:none; } .wobtns .wbc { font-size:15px; line-height:1; flex:none; }
+  .wobtns .wbi { width:18px; height:18px; flex:none; color:#8fb8ff; }
   .wobtns button { width:auto; min-width:0; height:52px; margin:0; padding:0 6px; font-size:15px; line-height:1.15; border-radius:12px; white-space:normal; }
   .todaybtns { display:flex; gap:8px; margin:10px 0 0; }   /* a small refresh icon and a grey Free Ride with a green play mark, same height */
   .todaybtns button { height:48px; margin:0; border-radius:12px; }
@@ -489,7 +512,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.18</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.19</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -561,7 +584,7 @@ Cooldown
     <div id="woInfo" class="status" style="margin-top:6px;font-size:14px"></div>
     <canvas id="woGraph" style="width:100%;height:64px;display:block;margin-top:8px;border-radius:8px;background:#11151a;cursor:pointer"></canvas>
     <div id="woPick" class="status" style="font-size:14px;min-height:20px;margin-top:4px;color:var(--fg)"></div>
-    <div class="wobtns"><button id="btnSaveLib" class="primary">Save to Library</button><button id="btnLaunch" class="primary big">Launch Workout</button><button id="btnSchedule" class="primary" title="Add to intervals.icu calendar" disabled><span aria-hidden="true" style="font-size:15px;line-height:1;margin-right:4px;vertical-align:-1px">📅</span>Schedule</button></div>
+    <div class="wobtns"><button id="btnLaunch" class="big"><span class="wbp" aria-hidden="true">&#9654;</span><span id="btnLaunchTxt">Launch Workout</span></button><button id="btnSchedule" title="Add to intervals.icu calendar" disabled><span class="wbc" aria-hidden="true">📅</span>Schedule</button><button id="btnSaveLib"><svg class="wbi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h11l5 5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v6h9V3"/><rect x="7" y="13" width="10" height="8" rx="1"/></svg><span>Save to Library</span></button></div>
   </div>
 
   </div>
@@ -630,7 +653,7 @@ Cooldown
       <textarea id="dWo" spellcheck="false" placeholder="-10m ramp 50%-65%&#10;&#10;3x&#10;-8m 95%&#10;-4m 55%&#10;&#10;-10m 50%"></textarea>
       <div id="dWoInfo" class="status" style="margin-top:6px;font-size:14px">Type the workout steps above.</div>
       <canvas id="dWoGraph" hidden style="width:100%;height:64px;margin-top:8px;border-radius:8px;background:#11151a"></canvas>
-      <button id="dSched" class="primary" type="button" style="width:100%;height:44px;font-size:16px;margin:12px 0 0" disabled>Schedule</button>
+      <button id="dSched" type="button" class="dschedbtn" disabled><span aria-hidden="true">&#128197;</span>Schedule</button>
     </div>
   </div>
 </div>
@@ -719,7 +742,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">v1.0.18</span>
+  <span class="ver">v1.0.19</span>
 </div>
 
 <div class="ctrl">
@@ -820,6 +843,22 @@ Cooldown
 </div>
 
 <div id="log" class="hint" style="margin-top:10px;white-space:pre-wrap"></div>
+
+<div id="woSheet" role="dialog" aria-modal="true" aria-labelledby="wsName" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:50;align-items:center;justify-content:center;padding:8px">
+  <div class="wsbox">
+    <div class="wshead"><div style="flex:1;min-width:0"><div id="wsName"></div><div id="wsFor" hidden></div></div><button id="wsClose" type="button" aria-label="Close">&#10005;</button></div>
+    <canvas id="wsGraph"></canvas>
+    <div id="wsInfo"></div>
+    <div id="wsWork"></div>
+    <div id="wsMod"></div>
+    <button id="wsLoad" type="button" class="wsplay"><span aria-hidden="true">&#9654;</span>Load Workout</button>
+    <div class="wsrow"><button id="wsSched" type="button"><span id="wsSchedIco" aria-hidden="true" style="font-size:15px;line-height:1;margin-right:6px">&#128197;</span><span id="wsSchedTxt">Schedule</span></button><button id="wsEdit" type="button">Edit</button></div>
+    <div class="wsadj">
+      <div><div class="wsh">Length</div><div class="wspm"><button id="wsLenM" type="button" aria-label="15 minutes shorter">&minus;</button><span id="wsLenV">As written</span><button id="wsLenP" type="button" aria-label="15 minutes longer">+</button></div></div>
+      <div><div class="wsh">Difficulty</div><div class="wspm"><button id="wsDifM" type="button" aria-label="Hard intervals 1% easier">&minus;</button><span id="wsDifV">As written</span><button id="wsDifP" type="button" aria-label="Hard intervals 1% harder">+</button></div></div>
+    </div>
+  </div>
+</div>
 
 <div id="launchModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:50;align-items:center;justify-content:center;padding:24px">
   <div style="background:#161a20;border-radius:16px;padding:20px;max-width:340px;width:100%;text-align:center">
@@ -1845,13 +1884,21 @@ function saveFit() {
 // Upload the finished ride's .fit file to intervals.icu (uses the key saved in the connection panel).
 // external_id ties the upload to this ride's start time, so a re-try refers to the same activity.
 let rideUploaded = false;
+// The title on Strava and intervals.icu. A free ride is named for the zone of its normalized power, e.g. "Intervals - Tempo Free Ride"
+// (zones as in the automatic names: Recovery <56%, Endurance 56-75, Tempo 76-83, Sweet Spot 84-94, Threshold 95-105, VO2 Max 106-120, Anaerobic 121+).
+function rideTitle() {
+  if (!W.freeRide) return "Intervals - " + (W.name || autoName(W.steps));
+  const ap = W.pw.length ? W.pw.reduce((a, b) => a + b, 0) / W.pw.length : 0, np = W.n4 > 0 ? (W.sum4 / W.n4) ** 0.25 : ap, f = np / (W.ftp || 270);
+  const z = f >= 1.21 ? "Anaerobic" : f >= 1.06 ? "VO2 Max" : f >= 0.95 ? "Threshold" : f >= 0.84 ? "Sweet Spot" : f >= 0.76 ? "Tempo" : f >= 0.56 ? "Endurance" : "Recovery";
+  return "Intervals - " + z + " Free Ride";
+}
 async function uploadRide() {
   const box = $("sumUp"); box.style.color = ""; box.textContent = ""; rideUploaded = false;
   const auth = icuAuth(), id = icuId();
   if (!auth) { box.textContent = "Not uploaded: not connected to intervals.icu."; return; }
   if (!fitBlob) { box.textContent = "Not uploaded: no .fit file was made."; box.style.color = "var(--bad, #ff6b6b)"; return; }
   box.textContent = "Uploading to intervals.icu\u2026";
-  const name = W.name || autoName(W.steps);              // the workout's name (the file keeps its date-stamped name)
+  const name = rideTitle();                               // same title as on Strava (the file keeps its date-stamped name)
   const url = "https://intervals.icu/api/v1/athlete/" + encodeURIComponent(id) + "/activities?name=" + encodeURIComponent(name) + "&external_id=" + encodeURIComponent("kickr-" + W.startMs);
   const form = new FormData(); form.append("file", new File([fitBlob], fitName, { type: "application/octet-stream" }));
   try {
@@ -1883,7 +1930,7 @@ async function stravaUpload() {
   if (!token) return;                                        // not connected: say nothing
   if (!fitBlob) return;
   box.textContent = "Uploading to Strava\u2026";
-  const name = "Intervals - " + (W.name || autoName(W.steps)), ext = "kickr-" + W.startMs;
+  const name = rideTitle(), ext = "kickr-" + W.startMs;
   try {
     const form = new FormData(); form.append("file", new File([fitBlob], fitName, { type: "application/octet-stream" }));
     const r = await fetch(STRAVA_HELPER + "/upload?name=" + encodeURIComponent(name) + "&external_id=" + encodeURIComponent(ext), { method: "POST", headers: { "X-Strava-Token": token }, body: form });
@@ -1919,7 +1966,7 @@ function planStats(steps) {                              // estimated NP / IF / 
 }
 let woSteps = null, woPickT = null;                 // parsed steps of the builder graph, for tap-to-read
 function drawMini(cv, steps, o) {
-  o = o || {}; const w = 600, h = o.h || 52; cv.width = w; cv.height = h;
+  o = o || {}; const w = o.w || 600, h = o.h || 52; cv.width = w; cv.height = h;
   const c = cv.getContext("2d"), total = steps.reduce((a, s) => a + s.dur, 0); if (!total) return;
   const maxF = o.maxF || Math.max(1.15, steps.reduce((m, s) => Math.max(m, s.a, s.b), 0) * 1.05), Y = f => h - (Math.min(f, maxF) / maxF) * (h - 2);
   let t = 0;
@@ -2019,6 +2066,144 @@ function askLaunch(item, dur, tss) {
   pendingLaunch = item; $("launchName").textContent = item.name; $("launchInfo").textContent = [dur, tss, effFolder(item.folder)].filter(Boolean).join("  \u00b7  ");
   setLaunchMode(launchMode); $("launchModal").style.display = "flex";
 }
+/* ---------------- Workout pop-up from the library: graph, duration, TSS; Load / Schedule / Edit; Length and Difficulty ----------------
+   Hard intervals: steps at 76%+ FTP, 20 s or longer, after the warm-up. The warm-up (never touched) ends where its first long
+   easy block (8 min+) starts, or at 10 minutes if there isn't one.
+   Longer (+15 min): about a third goes to the hard intervals (whole minutes each when they're 5 min+, else 15 s steps), the rest
+   to the easy riding before the first and after the last hard interval, split evenly (the extra minute goes before). Recoveries
+   between hard intervals stay as they are.
+   Shorter (-15 min): about half from the hard intervals and half from the easy riding after the warm-up (recoveries included),
+   each shrunk in proportion, nothing below a quarter of its length or 30 s.
+   Difficulty: each tap moves every hard interval 1% of FTP. */
+const WS = { item: null, base: null, len: 0, dif: 0, steps: null, text: "", cal: null, day: null };   // cal: { ev, day } editing a planned workout; day: date when adding one
+const stepLvl = st => st.free ? 0.5 : st.sim && st.lo != null ? (st.lo + st.hi) / 2 : (st.a + st.b) / 2;
+function hardIdx(steps) {                                         // the warm-up ends where its first long easy block (8 min+, before the main work) starts, else at 10 minutes
+  const total = steps.reduce((a, q) => a + q.dur, 0), out = []; let t = 0, warm = total >= 1500 ? 600 : 0;
+  const hardAt = steps.map((q, i) => !q.free && stepLvl(q) >= 0.76 ? i : -1).filter(i => i >= 0);
+  const big = hardAt.find(i => steps[i].dur >= 120), lim = big != null ? big : hardAt.length ? hardAt[hardAt.length - 1] : steps.length;   // the block must come before the main work
+  for (let i = 0, t0 = 0; i < lim; t0 += steps[i].dur, i++) if (t0 >= 300 && steps[i].dur >= 480 && !(stepLvl(steps[i]) >= 0.76)) { warm = t0; break; }
+  steps.forEach((st, i) => { if (t >= warm && st.dur >= 20 && !st.free && stepLvl(st) >= 0.76) out.push(i); t += st.dur; });
+  return { idx: out, warm };
+}
+const startOf = (steps, i) => steps.slice(0, i).reduce((a, q) => a + q.dur, 0);
+function lengthen(steps) {
+  steps = steps.map(q => ({ ...q })); const { idx: H, warm } = hardIdx(steps), ADD = 900;
+  const easyBetween = (lo, hi) => { let best = -1; for (let i = lo; i < hi; i++) { const q = steps[i]; if (startOf(steps, i) >= warm && !(stepLvl(q) >= 0.76) && (best < 0 || q.dur > steps[best].dur)) best = i; } return best; };
+  if (!H.length) { const i = easyBetween(0, steps.length); (steps[i >= 0 ? i : steps.length - 1]).dur += ADD; return steps; }
+  const first = H[0], last = H[H.length - 1], per0 = ADD / 3 / H.length, unit = steps[first].dur >= 300 ? 60 : 15;
+  let per = Math.round(per0 / unit) * unit; if (per * H.length > ADD * 0.6) per = Math.floor(ADD * 0.6 / H.length / unit) * unit;
+  H.forEach(i => { steps[i].dur += per; });
+  const rest = ADD - per * H.length, before = Math.ceil(rest / 2 / 60) * 60, after = rest - before;
+  let bi = easyBetween(0, first), ai = easyBetween(last + 1, steps.length);
+  if (ai >= 0) steps[ai].dur += after; else steps.push({ dur: after, a: 0.55, b: 0.55, free: false });
+  if (bi >= 0) steps[bi].dur += before; else steps.splice(first, 0, { dur: before, a: 0.6, b: 0.6, free: false });
+  return steps;
+}
+function shorten(steps) {
+  steps = steps.map(q => ({ ...q })); const { idx: H, warm } = hardIdx(steps), CUT = 900, hs = new Set(H);
+  const E = steps.map((q, i) => i).filter(i => !hs.has(i) && startOf(steps, i) >= warm);
+  const floor = i => Math.min(steps[i].dur, Math.max(30, Math.round(steps[i].dur * 0.25)));
+  const room = ids => ids.reduce((a, i) => a + steps[i].dur - floor(i), 0), rH = room(H), rE = room(E);
+  if (rH + rE < CUT) return null;                                 // too short to lose another 15 minutes
+  let cH = Math.min(rH, CUT / 2), cE = CUT - cH; if (cE > rE) { cE = rE; cH = CUT - cE; }
+  const cut = (ids, amt) => { const r = room(ids); if (!r) return; ids.forEach(i => { const q = steps[i], u = q.dur >= 120 ? 15 : 5; q.dur = Math.max(floor(i), Math.round((q.dur - (q.dur - floor(i)) * amt / r) / u) * u); }); };
+  const before = steps.reduce((a, q) => a + q.dur, 0); cut(H, cH); cut(E, cE);
+  let left = steps.reduce((a, q) => a + q.dur, 0) - (before - CUT);          // rounding left-over: settle it on the longest easy step
+  const fix = (E.length ? E : H).slice().sort((x, y) => steps[y].dur - steps[x].dur)[0];
+  if (fix != null) steps[fix].dur = Math.max(floor(fix), steps[fix].dur - left);
+  return steps;
+}
+function harder(steps, d) {
+  steps = steps.map(q => ({ ...q })); const f = d / 100;
+  hardIdx(steps).idx.forEach(i => { const q = steps[i]; q.a += f; q.b += f; if (q.lo != null) { q.lo += f; q.hi += f; } });
+  return steps;
+}
+function stepsText(steps) {                                       // back to workout text (only used once something was changed)
+  const du = s => { s = Math.round(s); return s % 60 === 0 ? s / 60 + "m" : s > 60 ? Math.floor(s / 60) + "m" + (s % 60) + "s" : s + "s"; }, pc = x => Math.round(x * 100) + "%";
+  return steps.map(q => "-" + du(q.dur) + " " + (q.free ? "freeride" : q.sim && q.lo != null ? "freeride " + pc(q.lo) + "-" + pc(q.hi) : q.a !== q.b ? "ramp " + pc(q.a) + "-" + pc(q.b) : pc(q.a))).join("\n") + "\n";
+}
+function wsBuild(len, dif) {                                      // the workout with this many 15-minute steps and % points applied, or null
+  let st = WS.base.map(q => ({ ...q }));
+  for (let k = 0; k < Math.abs(len) && st; k++) st = len > 0 ? lengthen(st) : shorten(st);
+  return st ? harder(st, dif) : null;
+}
+function openWoSheet(item, cal, day) {
+  let base; try { base = parseText(item.text, +$("ftp").value || 270); } catch (e) { toast("This workout's text can't be read.", true); return; }
+  Object.assign(WS, { item, base, len: 0, dif: 0, cal: cal || null, day: day || null });
+  $("wsEdit").hidden = !!cal; $("wsLoad").hidden = !!day; $("wsSched").disabled = false; $("wsSched").classList.toggle("wsbig", !!day);
+  $("wsSchedTxt").textContent = cal ? "Save to Calendar" : "Schedule";
+  $("wsFor").hidden = !day; $("wsFor").textContent = day ? "For " + niceDay(day) : ""; $("wsSchedIco").innerHTML = cal ? WS_SAVE_ICO : "&#128197;";
+  renderWoSheet(); $("woSheet").style.display = "flex";
+}
+const WS_SAVE_ICO = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#8fb8ff" stroke-width="2" stroke-linejoin="round" style="display:block"><path d="M5 3h11l5 5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v6h9V3"/><rect x="7" y="13" width="10" height="8" rx="1"/></svg>';
+function renderWoSheet() {
+  const st = wsBuild(WS.len, WS.dif); if (!st) return;
+  WS.steps = st; WS.text = WS.len || WS.dif ? stepsText(st) : WS.item.text;
+  const dur = st.reduce((a, q) => a + q.dur, 0), tss = Math.round(planStats(st).tss);
+  $("wsName").textContent = WS.item.name; $("wsInfo").textContent = fmt(dur) + "  ·  TSS " + tss;
+  $("wsMod").textContent = [WS.len ? (WS.len > 0 ? "+" : "−") + Math.abs(WS.len) * 15 + " min" : "", WS.dif ? (WS.dif > 0 ? "+" : "−") + Math.abs(WS.dif) + "% on hard intervals" : ""].filter(Boolean).join("  ·  ");
+  $("wsLenV").textContent = WS.len ? (WS.len > 0 ? "+" : "−") + Math.abs(WS.len) * 15 + " min" : "As written";
+  $("wsDifV").textContent = WS.dif ? (WS.dif > 0 ? "+" : "−") + Math.abs(WS.dif) + "% FTP" : "As written";
+  $("wsLenM").disabled = !wsBuild(WS.len - 1, WS.dif); $("wsLenP").disabled = WS.len >= 8;
+  if (WS.cal) $("wsSched").disabled = !(WS.len || WS.dif);           // nothing to save until something changed
+  const hard = hardIdx(st).idx; $("wsDifM").disabled = !hard.length || WS.dif <= -20; $("wsDifP").disabled = !hard.length || WS.dif >= 20;
+  requestAnimationFrame(() => drawWsGraph(st));
+  const groups = []; hard.forEach(i => { const q = st[i], d = durLbl(q.dur), pc = pctLbl(q), g = groups.find(x => x.d === d && x.pc === pc);
+    if (g) g.n++; else groups.push({ d, pc, n: 1 }); });
+  $("wsWork").textContent = groups.length ? "Work: " + groups.map(g => (g.n > 1 ? g.n + " \u00d7 " : "") + g.d + " @ " + g.pc).join(", ") : "";
+}
+const durLbl = s => { s = Math.round(s); return s < 60 ? s + "s" : s % 60 ? Math.floor(s / 60) + "'" + String(s % 60).padStart(2, "0") : s / 60 + "'"; };
+const pctLbl = q => q.sim && q.lo != null ? Math.round(q.lo * 100) + "-" + Math.round(q.hi * 100) + "%" : q.a !== q.b ? Math.round(q.a * 100) + "-" + Math.round(q.b * 100) + "%" : Math.round(q.a * 100) + "%";
+// The pop-up's graph at the screen's real pixel size, with each hard interval's length and % FTP written on it where it fits.
+function drawWsGraph(st) {
+  const cv = $("wsGraph"), dpr = Math.max(1, window.devicePixelRatio || 1), W2 = Math.round(cv.clientWidth * dpr), H2 = Math.round(cv.clientHeight * dpr);
+  if (!W2 || !H2) return;
+  const maxF = Math.max(1.15, st.reduce((m, q) => Math.max(m, q.a, q.b, q.hi || 0), 0) * 1.05);
+  drawMini(cv, st, { w: W2, h: H2, ftpLine: true, maxF });
+  const c = cv.getContext("2d"), total = st.reduce((a, q) => a + q.dur, 0), Y = f => H2 - (Math.min(f, maxF) / maxF) * (H2 - 2), fs = Math.round(11 * dpr);
+  c.font = "700 " + fs + "px -apple-system,system-ui,sans-serif"; c.textAlign = "center"; c.textBaseline = "top";
+  const starts = []; let t = 0; st.forEach(q => { starts.push(t); t += q.dur; });
+  hardIdx(st).idx.forEach(i => {
+    const q = st[i], x0 = starts[i] / total * W2, x1 = (starts[i] + q.dur) / total * W2, top = Y(Math.max(q.a, q.b));
+    const l1 = durLbl(q.dur), l2 = pctLbl(q), need = Math.max(c.measureText(l1).width, c.measureText(l2).width) + 4 * dpr;
+    const cx = (x0 + x1) / 2;
+    if (x1 - x0 >= need && H2 - top >= fs * 2.4) {                  // wide enough: two lines across the top of the bar
+      const y = top + 3 * dpr;
+      c.fillStyle = "rgba(0,0,0,.55)"; c.fillText(l1, cx + dpr, y + dpr); c.fillText(l2, cx + dpr, y + fs * 1.1 + dpr);
+      c.fillStyle = "#fff"; c.fillText(l1, cx, y); c.fillText(l2, cx, y + fs * 1.1); return;
+    }
+    const one = l1 + " \u00b7 " + l2, len = c.measureText(one).width + 6 * dpr;
+    if (x1 - x0 < fs * 1.05 || H2 - top < len) return;              // too thin even sideways: the Work line lists it
+    c.save(); c.translate(cx, top + 3 * dpr); c.rotate(Math.PI / 2); c.textAlign = "left"; c.textBaseline = "middle";   // narrow: one line reading down the bar
+    c.fillStyle = "rgba(0,0,0,.55)"; c.fillText(one, dpr, -dpr); c.fillStyle = "#fff"; c.fillText(one, 0, 0); c.restore();
+  });
+}
+const wsItem = () => ({ ...WS.item, text: WS.text, custom: isHard(WS.item) ? "hard" : "none" });
+const closeWoSheet = () => { $("woSheet").style.display = "none"; };
+$("wsClose").onclick = closeWoSheet;
+$("woSheet").addEventListener("click", e => { if (e.target === $("woSheet")) closeWoSheet(); });
+$("wsLenP").onclick = () => { WS.len++; renderWoSheet(); }; $("wsLenM").onclick = () => { WS.len--; renderWoSheet(); };
+$("wsDifP").onclick = () => { WS.dif++; renderWoSheet(); }; $("wsDifM").onclick = () => { WS.dif--; renderWoSheet(); };
+$("wsLoad").onclick = () => { const it = wsItem(), dur = WS.steps.reduce((a, q) => a + q.dur, 0); closeWoSheet(); if (WS.cal && dvOpen()) closeToday(); askLaunch(it, fmt(dur), "TSS " + Math.round(planStats(WS.steps).tss)); };
+$("wsSched").onclick = async () => { const it = wsItem(); if (WS.cal) { saveCalEdit(); return; }
+  if (WS.day) { const ok = await daySchedule(it.name, it.text, $("wsSched")); if (ok) closeWoSheet(); return; }   // Add Calendar Entry: straight onto that day
+  closeWoSheet(); askSchedule(it.name, it.text); };
+// Overwrite the planned workout on the intervals.icu calendar with the adjusted steps (intervals.icu works out the new time and load)
+async function saveCalEdit() {
+  const { ev, day } = WS.cal, btn = $("wsSched"), txt = $("wsSchedTxt"); btn.disabled = true; txt.textContent = "Saving\u2026";
+  try {
+    const r = await fetch("https://intervals.icu/api/v1/athlete/" + encodeURIComponent(icuId()) + "/events/" + encodeURIComponent(ev.id), {
+      method: "PUT", headers: { Authorization: icuAuth(), "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ description: WS.text, moving_time: WS.steps.reduce((a, q) => a + q.dur, 0), icu_training_load: Math.round(planStats(WS.steps).tss) }) });
+    if (!r.ok) throw new Error(r.status === 403 ? "intervals.icu refused (403): reconnect intervals.icu in Settings" : "intervals.icu replied " + r.status);
+    closeWoSheet(); toast("Saved \u201c" + WS.item.name + "\u201d on " + niceDay(day) + ".");
+    loadToday(); loadNext7(); if (dvOpen()) refreshDayView();
+  } catch (e) { txt.textContent = "Save to Calendar"; btn.disabled = false; toast("Couldn't save (" + e.message + ").", true); }
+}
+$("wsEdit").onclick = () => { const it = WS.item; closeWoSheet();
+  if (WS.day) { $("dWo").value = WS.text; $("dName").value = it.name; dayInfo(); $("dName").scrollIntoView({ behavior: "smooth", block: "start" }); return; }   // the day's own builder, which schedules on that day
+  $("wo").value = WS.text; $("woName").value = it.name; refreshFolderSelect(effFolder(it.folder)); updateWoInfo(); libMsg("");
+  $("woName").scrollIntoView({ behavior: "smooth", block: "start" }); };
 function libRow(item) {
   const row = document.createElement("div"); row.style.cssText = "display:flex;gap:6px;align-items:stretch";
   const b = document.createElement("button"); b.className = "libitem"; b.style.flex = "1"; b.style.minWidth = "0";
@@ -2029,9 +2214,9 @@ function libRow(item) {
   const g = document.createElement("canvas"); if (steps && steps.length) drawMini(g, steps);
   const t = document.createElement("span"); t.textContent = tss; t.className = "r";
   b.append(n, d, g, t);
-  b.onclick = () => { $("wo").value = item.text; $("woName").value = item.name; refreshFolderSelect(effFolder(item.folder)); updateWoInfo(); libMsg(""); $("woName").scrollIntoView({ behavior: "smooth", block: "start" }); };
+  b.onclick = () => openWoSheet(item);
   row.appendChild(b);
-  const go = document.createElement("button"); go.textContent = "\u25b6"; go.title = "Load and launch"; go.style.cssText = "width:48px;margin:4px 0;font-size:16px;flex:none;background:var(--acc);color:#000";
+  const go = document.createElement("button"); go.textContent = "\u25b6"; go.title = "Load and launch"; go.style.cssText = "width:48px;margin:4px 0;font-size:18px;flex:none;color:var(--ok)";
   const cal = document.createElement("button"); cal.textContent = "\uD83D\uDCC5"; cal.title = "Add to intervals.icu calendar"; cal.style.cssText = "width:44px;margin:4px 0;font-size:17px;flex:none;padding:0";
   cal.onclick = () => askSchedule(item.name, item.text);
   row.appendChild(cal);
@@ -3959,10 +4144,10 @@ let arcSwitch = false;                                       // the change came 
 function changeWorkout() {
   if (arcadeOn) { openArcLib(); return; }
   switching = true; showTab("lib");
-  $("switchBanner").style.display = ""; $("btnLaunch").textContent = "Switch to this workout";
+  $("switchBanner").style.display = ""; $("btnLaunchTxt").textContent = "Switch to this workout";
   showScreen("landing");
 }
-function endSwitch() { switching = false; $("switchBanner").style.display = "none"; $("btnLaunch").textContent = "Launch Workout"; }
+function endSwitch() { switching = false; $("switchBanner").style.display = "none"; $("btnLaunchTxt").textContent = "Launch Workout"; }
 function applySwitch() {                                     // the new workout replaces the rest of the plan; the ride clock and what was already ridden carry on
   const p = updateWoInfo(); if (!p) return false;
   W.steps = W.steps.some(s => s.conv) ? simConvert(p.steps) : p.steps; W.ftp = p.ftp; W.idx = 0; W.stepT = 0; W.iSum = 0; W.iN = 0; W.ramp = null; W.name = $("woName").value.trim() || autoName(W.steps);
@@ -4652,7 +4837,7 @@ async function loadToday() {
     const g = document.createElement("canvas"); if (steps && steps.length) drawMini(g, steps);
     if (note) b.append(n, d, note, t); else b.append(n, d, g, t);
     if (!steps) b.style.opacity = "1"; // the button stays inert (disabled), but its text should not look faded
-    const go = document.createElement("button"); go.textContent = "\u25b6"; go.title = "Load and launch"; go.style.cssText = "width:48px;margin:0;font-size:16px;flex:none;background:var(--acc);color:#000";
+    const go = document.createElement("button"); go.textContent = "\u25b6"; go.title = "Load and launch"; go.style.cssText = "width:48px;margin:0;font-size:18px;flex:none;color:var(--ok)";
     go.style.display = steps ? "" : "none"; b.disabled = !steps;
     const item = { name: x.name || "Planned workout", text };
     b.disabled = false; b.onclick = openToday;                  // the Today window: everything for today, with Load / Delete
@@ -4723,11 +4908,13 @@ function renderDayView() {
     else if (isWo) { const no = document.createElement("div"); no.className = "hint"; no.style.cssText = "font-size:13px;margin-top:4px"; no.textContent = "Planned ride (no workout steps)"; card.appendChild(no); }
     const bt = document.createElement("div"); bt.style.cssText = "display:flex;gap:8px;margin-top:10px";
     if (isWo && steps) {
-      const ld = document.createElement("button"); ld.type = "button"; ld.className = "primary"; ld.style.cssText = "flex:1;height:44px;margin:0;font-weight:700"; ld.innerHTML = "&#9654;&ensp;Load"; ld.disabled = !steps;
+      const ld = document.createElement("button"); ld.type = "button"; ld.className = "dvload"; ld.innerHTML = '<span aria-hidden="true">&#9654;</span>Load Workout'; ld.disabled = !steps;
       ld.onclick = () => { const item = { name, text }; closeToday(); askLaunch(item, fmt(dur), tss != null ? "TSS " + Math.round(tss) : ""); };
-      bt.appendChild(ld);
+      const ed = document.createElement("button"); ed.type = "button"; ed.className = "dvedit"; ed.textContent = "Edit";
+      ed.onclick = () => openWoSheet({ name, text }, { ev: x, day: DV.ds });
+      bt.append(ld, ed);
     } else { const sp = document.createElement("span"); sp.style.flex = "1"; bt.appendChild(sp); }
-    const dl = document.createElement("button"); dl.type = "button"; dl.style.cssText = "flex:none;width:96px;height:44px;margin:0;background:#7a2a30;color:#fff;font-weight:600"; dl.textContent = "Delete";
+    const dl = document.createElement("button"); dl.type = "button"; dl.style.cssText = "flex:none;width:80px;height:44px;margin:0;background:#7a2a30;color:#fff;font-weight:600"; dl.textContent = "Delete";
     dl.onclick = () => askCalDelete({ ...x, id: x.id, cat, name }, dayLbl);
     bt.appendChild(dl); card.appendChild(bt); body.appendChild(card);
   });
@@ -5060,9 +5247,9 @@ function openDay(date, d) {
 function closeDay() { $("dayScr").classList.remove("show"); if (!dvOpen()) document.body.style.overflow = ""; dayDate = null; }
 $("dayBack").onclick = closeDay;
 async function daySchedule(name, text, btn, plain) {
-  if (!dayDate) return; const was = btn.textContent; btn.disabled = true; btn.textContent = btn.classList.contains("schedbtn") ? "\u2026" : "Scheduling\u2026";
+  if (!dayDate) return; const was = btn.innerHTML; btn.disabled = true; btn.textContent = btn.classList.contains("schedbtn") ? "\u2026" : "Scheduling\u2026";
   const ok = await scheduleOn(dayDate, name, text, plain);
-  btn.disabled = false; btn.textContent = was;
+  btn.disabled = false; btn.innerHTML = was;
   if (ok) { closeDay(); loadToday(); loadNext7(); if (dvOpen()) refreshDayView(); }
   return ok;
 }
@@ -5084,7 +5271,7 @@ function renderDayLib() {                                      // same folders a
     if (!open) return;
     items.forEach(it => {
       const row = document.createElement("div"); row.style.cssText = "display:flex;gap:6px;align-items:stretch";
-      const info = document.createElement("div"); info.className = "libitem"; info.style.cssText = "flex:1;min-width:0;background:#1c222b;border-radius:10px;cursor:default";
+      const info = document.createElement("button"); info.type = "button"; info.className = "libitem"; info.style.cssText = "flex:1;min-width:0;background:#1c222b;border-radius:10px";
       let steps = null, dur = "", tss = ""; try { steps = parseText(it.text, ftp); dur = fmt(steps.reduce((a, q) => a + q.dur, 0)); tss = "TSS " + Math.round(planStats(steps).tss); } catch (e) {}
       const n = document.createElement("span"); n.textContent = it.name; n.style.cssText = "overflow-wrap:anywhere;line-height:1.2;font-weight:600;align-self:center";
       const d = document.createElement("span"); d.className = "r"; d.style.fontSize = "15px"; d.textContent = dur;
@@ -5094,11 +5281,11 @@ function renderDayLib() {                                      // same folders a
       const sb = document.createElement("button"); sb.type = "button"; sb.className = "schedbtn"; sb.textContent = "+"; sb.disabled = !steps;
       sb.title = "Add to calendar"; sb.setAttribute("aria-label", "Schedule " + it.name + " on this day");
       sb.onclick = () => daySchedule(it.name, it.text, sb);
+      info.onclick = () => openWoSheet(it, null, dayDate);
       row.append(info, sb); box.appendChild(row);
     });
   });
 }
-// Duration as typed: "1:30", "90" (minutes), "1h30", "1h", "45m". Seconds, or null.
 // Duration as typed. Accepts H:MM (3:30), hours and minutes (3h30m, 3h30, 3h, 45m) and decimal hours (2.25h, 2.25).
 // A bare number is hours up to 24 (2.5 = 2:30), minutes above that (90 = 1:30). Seconds, or null.
 function parseDurIn(v) {
@@ -5149,16 +5336,47 @@ let hardMode = "pct", pendingHard = null;
 const hardFtp = () => +$("ftp").value || 270;
 // Work intervals: everything above 100% FTP lasting 30 seconds or more, from the first 10+ minute block onward.
 // Warm-up primers and the warm-up itself stay as written.
+// mode "pct"/"w": every work interval at one target; mode "band": every work interval as a freeride 106-115% band (Simulation).
+// If the workout has no 10+ minute block to mark the end of the warm-up, work intervals start after the first 10 minutes.
 function hardText(text, mode, val) {
   const pct = mode === "w" ? Math.round(val / hardFtp() * 100) : Math.round(val);
-  let work = false;
-  return text.split("\n").map(l => {
-    const m = l.match(/^-(\d+)(m|s) (\d+)%\s*$/);
+  const tgt = mode === "band" ? "freeride 106%-115%" : pct + "%";
+  const lines = text.split("\n"), re = /^-(\d+)(m|s) (\d+)%\s*$/;
+  const hasBlock = lines.some(l => { const m = l.match(re); return m && (m[2] === "m" ? +m[1] * 60 : +m[1]) >= 600; });
+  let work = false, t = 0;
+  return lines.map(l => {
+    const m = l.match(re);
     if (!m) return l;
     const secs = m[2] === "m" ? +m[1] * 60 : +m[1];
-    if (secs >= 600) work = true;
-    return work && secs >= 30 && +m[3] > 100 ? l.replace(/(\d+)%\s*$/, pct + "%") : l;
+    if (hasBlock ? secs >= 600 : t >= 600) work = true;
+    t += secs;
+    return work && secs >= 30 && +m[3] > 100 ? l.replace(/(\d+)%\s*$/, tgt) : l;
   }).join("\n");
+}
+// A VO2 Max workout gets the target question (ERG) or the 106-115% band (Simulation). The app's own library decides for its
+// workouts (the HIDIT sets keep their built-in steps); anything else (calendar, own library, builder) counts when its main
+// work is VO2 Max by the same rule as the automatic names.
+function isHard(it) {
+  if (!it || !it.text) return false;
+  if (it.custom === "hard") return true;
+  if (it.custom === "none") return false;
+  const t = it.text.trim(), lib = LIBRARY.find(x => x.text.trim() === t);
+  if (lib) return lib.custom === "hard";
+  try { return /^VO2 Max/.test(autoName(parseText(it.text, hardFtp()))); } catch (e) { return false; }
+}
+// The prompt starts at the workout's current work target, so OK keeps it as written.
+function hardNow(text) {
+  const m = hardText(text, "pct", 9999).split("\n").map((l, i) => l.includes("9999%") ? text.split("\n")[i].match(/(\d+)%\s*$/) : null).filter(Boolean).map(x => +x[1]);
+  return m.length ? Math.max(...m) : 120;
+}
+// Launch a VO2 workout: Simulation goes straight in with 106-115% bands; ERG asks for the target first. True when handled here.
+function launchHard(it) {
+  if (!isHard(it)) return false;
+  if (launchMode !== "sim") { askHard(it); return true; }
+  $("wo").value = hardText(it.text, "band"); $("woName").value = it.name; refreshFolderSelect(it.folder || ""); updateWoInfo();
+  if (switching) { applySwitch(); return true; }
+  if (loadWorkout()) showScreen("run");
+  return true;
 }
 function hardPreview() {
   const v = +$("hardVal").value; if (!(v > 0)) { $("hardPreview").textContent = "Enter a value."; return; }
@@ -5175,7 +5393,7 @@ function setHardMode(m) {
 }
 function askHard(item) {
   pendingHard = item; $("hardName").textContent = item.name;
-  hardMode = "pct"; $("hardVal").value = 120; setHardMode("pct");
+  hardMode = "pct"; $("hardVal").value = hardNow(item.text); setHardMode("pct");
   $("hardModal").style.display = "flex";
 }
 $("btnHardPct").onclick = () => setHardMode("pct"); $("btnHardW").onclick = () => setHardMode("w");
@@ -5335,19 +5553,19 @@ $("arcAskYes").onclick = () => {
   const it = arcPending; closeArcLib(); if (!it) return;
   if (arcLibMode === "pre") {                                                                // before the ride: load it into the player and wait for Start
     if (window.RIDER) { window.RIDER.inv = null; window.RIDER.fight = null; window.RIDER.br = null; window.RIDER.cm = null; window.RIDER.wc = null; }
-    if (it.custom === "hard") { askHard(it); return; }
+    if (launchHard(it)) return;
     $("wo").value = it.text; $("woName").value = it.name; refreshFolderSelect(it.folder || ""); updateWoInfo();
     if (loadWorkout()) showScreen("run"); return;
   }
   switching = true; arcSwitch = true;
-  if (it.custom === "hard") { askHard(it); return; }
+  if (launchHard(it)) return;
   $("wo").value = it.text; $("woName").value = it.name; refreshFolderSelect(it.folder || ""); updateWoInfo();
   if (!applySwitch()) { arcSwitch = false; endSwitch(); toast("Couldn't load that workout.", true); }
 };
 $("btnArcade").onclick = openGameSelect;
 $("btnLaunchYes").onclick = () => {
   const it = pendingLaunch; $("launchModal").style.display = "none"; pendingLaunch = null; if (!it) return;
-  if (it.custom === "hard") { askHard(it); return; }
+  if (launchHard(it)) return;
   $("wo").value = it.text; $("woName").value = it.name; refreshFolderSelect(it.folder || ""); updateWoInfo();
   if (switching) { applySwitch(); return; }
   if (loadWorkout()) showScreen("run");
