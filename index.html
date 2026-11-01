@@ -175,6 +175,7 @@
   .wkday .tl { font-size:11px; color:#7b8291; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .dreq { display:flex; gap:10px; margin:10px 0 4px; } .dreq label { flex:1; min-width:0; align-items:stretch; text-align:left; font-size:13px; color:var(--dim); display:flex; flex-direction:column; gap:4px; }
   .dreq input { width:100%; margin:0; } .dreq input:read-only { color:var(--dim); background:#11151a; }
+  #dWoGraph:not([hidden]) { display:block; }
   .dsteps { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--dim); margin:8px 0 4px; } .dsteps .mini { margin:0; }
   .schedbtn { flex:none; width:44px; margin:4px 0; padding:0; font-size:24px; font-weight:700; line-height:1; background:var(--acc); color:#000; }
   .havedel { flex:none; width:36px; height:32px; padding:0; margin:0; border-radius:8px; font-size:13px; background:#2a2f37; color:#a7b0bd; align-self:center; }
@@ -484,7 +485,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.15</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.16</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -617,13 +618,14 @@ Cooldown
       <h2>Workout builder</h2>
       <input id="dName" type="text" value="Custom Workout" placeholder="Name (required)" maxlength="60" style="width:100%;margin-top:0" aria-label="Name">
       <div class="dreq">
-        <label>Duration<input id="dDur" type="text" inputmode="numeric" placeholder="h:mm" autocomplete="off"></label>
+        <label>Duration<input id="dDur" type="text" inputmode="text" placeholder="3:30, 3h30m, 3.5h" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
         <label>Load (TSS)<input id="dLoad" type="number" inputmode="numeric" min="0" max="999" placeholder="TSS"></label>
       </div>
+      <div id="dDurNote" class="hint" style="font-size:12px;margin:0 0 2px"></div>
       <div class="dsteps"><span>Workout steps (optional; they set Duration and Load)</span></div>
       <textarea id="dWo" spellcheck="false" placeholder="-10m ramp 50%-65%&#10;&#10;3x&#10;-8m 95%&#10;-4m 55%&#10;&#10;-10m 50%"></textarea>
       <div id="dWoInfo" class="status" style="margin-top:6px;font-size:14px">Type the workout steps above.</div>
-      <canvas id="dWoGraph" style="width:100%;height:64px;display:block;margin-top:8px;border-radius:8px;background:#11151a"></canvas>
+      <canvas id="dWoGraph" hidden style="width:100%;height:64px;margin-top:8px;border-radius:8px;background:#11151a"></canvas>
       <button id="dSched" class="primary" type="button" style="width:100%;height:44px;font-size:16px;margin:12px 0 0" disabled>Schedule</button>
     </div>
   </div>
@@ -718,7 +720,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">v1.0.15</span>
+  <span class="ver">v1.0.16</span>
 </div>
 
 <div class="ctrl">
@@ -5083,12 +5085,16 @@ function renderDayLib() {                                      // same folders a
   });
 }
 // Duration as typed: "1:30", "90" (minutes), "1h30", "1h", "45m". Seconds, or null.
+// Duration as typed. Accepts H:MM (3:30), hours and minutes (3h30m, 3h30, 3h, 45m) and decimal hours (2.25h, 2.25).
+// A bare number is hours up to 24 (2.5 = 2:30), minutes above that (90 = 1:30). Seconds, or null.
 function parseDurIn(v) {
-  v = String(v || "").trim().toLowerCase(); let m;
+  v = String(v || "").trim().toLowerCase().replace(/\s+/g, ""); let m;
   if (!v) return null;
-  if ((m = v.match(/^(\d+):([0-5]?\d)$/))) return (+m[1] * 60 + +m[2]) * 60;
-  if ((m = v.match(/^(\d+(?:\.\d+)?)\s*(?:m|min)?$/))) return Math.round(+m[1] * 60);
-  if ((m = v.match(/^(\d+(?:\.\d+)?)\s*h(?:\s*(\d+)\s*m?)?$/))) return Math.round(+m[1] * 3600 + (m[2] ? +m[2] * 60 : 0));
+  if ((m = v.match(/^(\d+):([0-5]\d)$/))) return (+m[1] * 60 + +m[2]) * 60;
+  if ((m = v.match(/^(\d+(?:\.\d{1,2})?)(?:h|hr|hrs)$/))) return Math.round(+m[1] * 3600);
+  if ((m = v.match(/^(\d+)(?:h|hr|hrs)(\d{1,2})(?:m|min|mins)?$/)) && +m[2] < 60) return (+m[1] * 60 + +m[2]) * 60;
+  if ((m = v.match(/^(\d+)(?:m|min|mins)$/))) return +m[1] * 60;
+  if ((m = v.match(/^(\d+(?:\.\d{1,2})?)$/))) return +m[1] <= 24 ? Math.round(+m[1] * 3600) : Math.round(+m[1] * 60);
   return null;
 }
 const hmIn = sec => Math.floor(sec / 3600) + ":" + String(Math.round(sec % 3600 / 60)).padStart(2, "0");
@@ -5103,15 +5109,18 @@ function dayInfo() {                                            // steps typed: 
   if (auto) {
     const total = st.reduce((a, q) => a + q.dur, 0), tss = Math.round(planStats(st).tss);
     $("dDur").value = hmIn(total); $("dLoad").value = tss;
-    info.textContent = "Total " + fmt(total) + "  ·  " + st.length + " steps  ·  TSS " + tss; info.className = "status ok"; drawMini(cv, st, { h: 128, ftpLine: true });
+    cv.hidden = false; info.textContent = "Total " + fmt(total) + "  ·  " + st.length + " steps  ·  TSS " + tss; info.className = "status ok"; drawMini(cv, st, { h: 128, ftpLine: true });
   } else {
-    cv.getContext("2d").clearRect(0, 0, cv.width, cv.height);
+    cv.getContext("2d").clearRect(0, 0, cv.width, cv.height); cv.hidden = true;   // no blank graph box until there are steps
     if (!bad) { info.textContent = "No steps: the ride goes on the calendar with the duration and load above."; info.className = "status"; }
   }
-  const name = ($("dName").value || "").trim(), dur = parseDurIn($("dDur").value), ld = $("dLoad").value.trim(), load = ld === "" ? NaN : +ld;
+  const durTxt = $("dDur").value.trim(), dur = parseDurIn(durTxt);
+  $("dDurNote").textContent = auto || !durTxt ? "" : dur > 0 ? "= " + Math.floor(dur / 3600) + " h " + String(Math.round(dur % 3600 / 60)).padStart(2, "0") + " min" : "Use 3:30, 3h30m or 3.5h";
+  $("dDurNote").style.color = durTxt && !auto && !(dur > 0) ? "var(--bad)" : "";
+  const name = ($("dName").value || "").trim(), ld = $("dLoad").value.trim(), load = ld === "" ? NaN : +ld;
   const ok = !bad && !!name && dur > 0 && isFinite(load) && load >= 0;
   $("dSched").disabled = !ok;
-  $("dSched").title = ok ? "" : !name ? "Enter a name" : !(dur > 0) ? "Enter a duration, e.g. 1:30" : "Enter the load (TSS)";
+  $("dSched").title = ok ? "" : !name ? "Enter a name" : !(dur > 0) ? "Enter a duration, e.g. 3:30, 3h30m or 3.5h" : "Enter the load (TSS)";
   dayPlan = ok ? { name, text: auto ? txt : "", dur, load: Math.round(load) } : null;
 }
 ["dWo", "dName", "dDur", "dLoad"].forEach(id => $(id).addEventListener("input", dayInfo));
