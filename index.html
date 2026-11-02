@@ -19,6 +19,9 @@
   .ctrl button { display:flex; align-items:center; justify-content:center; flex:1 1 0; min-width:0; height:calc(var(--u)*6.05); font-size:min(20px,calc(var(--u)*2.86)); padding:0 6px; border-radius:12px; }
   .top { display:flex; flex-wrap:wrap; gap:2px 12px; align-items:center; margin:8px 0 2px; }
   .top .ver { margin-left:auto; font-size:12px; color:var(--dim); }
+  #btnRunSet { background:none; padding:2px; margin-left:-4px; line-height:0; color:var(--dim); } body.arcade #btnRunSet { display:none; }
+  #setReturn { display:flex; align-items:center; justify-content:center; width:100%; height:50px; margin:0 0 10px; font-size:17px; font-weight:700; border-radius:12px; background:#2b3340; color:var(--fg); }
+  #setReturn[hidden] { display:none; }
   .row { display:flex; gap:6px; flex-wrap:wrap; margin:6px 0; align-items:center; }
   .status { font-size:12px; color:var(--dim); }
   .status.ok { color:var(--ok); } .status.bad { color:var(--bad); }
@@ -37,7 +40,10 @@
   .hrow .hc { grid-area:c; align-self:center; font-size:22px; color:var(--dim); }
   .hscreen { display:none; position:fixed; inset:0; z-index:45; background:var(--bg); overflow-y:auto; -webkit-overflow-scrolling:touch; }
   .hscreen.show { display:block; } #rideSheet { z-index:46; } #dayScr { z-index:47; }
-  #settingsScr details.card { margin:0 0 10px; }
+  #settingsScr .setlist { padding:4px 14px; }
+  #settingsScr .setsec { padding:12px 0; border-top:1px solid #262c36; } #settingsScr .setsec:first-child { border-top:0; }
+  #settingsScr .seth { color:var(--dim); font-size:12px; text-transform:uppercase; letter-spacing:.05em; margin:0 0 8px; }
+  #settingsScr .setsec .row { margin:0; }
   .hbar { position:sticky; top:0; z-index:2; display:flex; align-items:center; gap:12px; padding:calc(8px + env(safe-area-inset-top)) 12px 8px; background:var(--bg); border-bottom:1px solid #222831; }
   .hbar span { font-weight:700; font-size:16px; } .hbar button { padding:8px 12px; }
   .hin { padding:12px 12px calc(24px + env(safe-area-inset-bottom)); max-width:640px; margin:0 auto; }
@@ -276,6 +282,8 @@
   #pauseOv .pvfree { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; height:50px; margin:0 0 10px; font-size:17px; font-weight:700; border-radius:14px; background:#2b3340; color:var(--fg); }
   #pauseOv .pvfree span { color:var(--ok); } #pauseOv .pvfree[hidden] { display:none; }
   #pauseOv .pbig { width:100%; height:64px; margin:0 0 10px; font-size:19px; font-weight:700; border-radius:14px; }
+  #pauseOv .pgrey { display:flex; align-items:center; justify-content:center; gap:10px; background:#2b3340; color:var(--fg); }
+  #pauseOv .pgrey .pic { color:var(--ok); font-size:20px; line-height:1; } #pauseOv .pgrey .pbook { color:var(--fg); display:flex; }
   .ctrl .p1wrap { flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:4px; }   /* +1 min, with Undo under it for 10 s */
   .ctrl .p1wrap button { flex:none; width:100%; }
   .ctrl .p1wrap.undo button { height:calc(var(--u)*3.025 - 2px) !important; font-size:14px !important; border-radius:10px; }
@@ -533,10 +541,93 @@
 </style>
 </head>
 <body data-screen="landing">
+<script>
+/* Appearance: colour scheme + dark mode. Graphite in dark mode is the app as designed (nothing runs).
+   Any other choice re-tints the app once: a recoloured copy of the stylesheet, inline styles as they appear,
+   and canvas colours as they're drawn (cached, so a colour is worked out only once). Arcade mode is left alone. */
+(() => {
+  const SCHEMES = {
+    graphite: { name: "Graphite", h: 215, s: 0.12, acc: "#ffb020", accL: "#e08600" },
+    teal:     { name: "Midnight Teal", h: 205, s: 0.45, lk: 1.05, acc: "#2dd4bf", hL: 200, sL: 0.35, accL: "#0d9488" },
+    plum:     { name: "Plum", h: 285, s: 0.28, lk: 1.05, acc: "#ff7a59", hL: 300, sL: 0.18, accL: "#e2522d" },
+    ember:    { name: "Ember", h: 18, s: 0.18, acc: "#ff4d2e", hL: 35, sL: 0.30, accL: "#d9381e" }
+  };
+  let TH = null, cache = new Map(), observer = null, copy = null;
+  const orig = new WeakMap();                                   // element -> { o: original style, c: converted }
+  const hex2rgb = h => { h = h.slice(1); if (h.length === 3) h = h.replace(/./g, c => c + c); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255); };
+  const rgb2hsl = (r, g, b) => { const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2; if (mx === mn) return [0, 0, l];
+    const d = mx - mn, s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn); const h = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; return [h * 60, s, l]; };
+  const hsl = (h, s, l, a) => "hsla(" + h.toFixed(1) + "," + (s * 100).toFixed(1) + "%," + (Math.max(0, Math.min(1, l)) * 100).toFixed(1) + "%," + (a == null ? 1 : a) + ")";
+  function map(r, g, b, a) {
+    const [h, s, l] = rgb2hsl(r, g, b), C = Math.max(r, g, b) - Math.min(r, g, b);
+    if (C < 0.13) {                                             // greys: tinted to the scheme (and flipped in light mode)
+      if (!TH.light) return hsl(TH.h, TH.s * (l < 0.5 ? 1 : 0.35), l < 0.5 ? l * (TH.lk || 1) : l, a);
+      if (l < 0.02) return hsl(TH.h, TH.s * 0.5, 0.08, a);        // black text on accent buttons stays dark
+      const L = l > 0.97 ? 0.11 : l < 0.5 ? 1 - l * 0.55 : 1 - l * 0.92;
+      return hsl(TH.h, TH.s * (l < 0.5 ? 0.6 : 0.5), L, a);
+    }
+    if (h > 28 && h < 52 && s > 0.6) return hsl(TH.ah, TH.as, TH.al + (l - 0.56) * 0.5, a);   // the amber accent family
+    if (TH.light && l > 0.6) return hsl(h, s, l - 0.18, a);     // bright colours a little darker on a light background
+    return null;
+  }
+  function conv(str) {
+    if (!TH || typeof str !== "string" || arcOn()) return str;
+    let v = cache.get(str); if (v !== undefined) return v;
+    v = str.replace(/#([0-9a-f]{6}|[0-9a-f]{3})\b/gi, m => map(...hex2rgb(m)) || m)
+      .replace(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\)/gi, (m, r, g, b, a) => map(r / 255, g / 255, b / 255, a == null ? null : +a) || m);
+    if (cache.size > 3000) cache.clear(); cache.set(str, v); return v;
+  }
+  const ARC = '[id^="arc"],#gameModal';                         // arcade screens keep their own colours
+  const gm = () => document.getElementById("gameModal");
+  const arcOn = () => (typeof arcadeOn !== "undefined" && arcadeOn) || (document.body && document.body.classList.contains("arcade")) || !!(gm() && gm().classList.contains("show"));
+  const arcCv = new WeakMap(), skipCv = cv => { if (!cv || !cv.isConnected) return false; let v = arcCv.get(cv); if (v === undefined) { v = !!cv.closest(ARC); arcCv.set(cv, v); } return v; };
+  const P = CanvasRenderingContext2D.prototype;               // canvas: colours converted as they're set
+  for (const k of ["fillStyle", "strokeStyle", "shadowColor"]) {
+    const d = Object.getOwnPropertyDescriptor(P, k);
+    Object.defineProperty(P, k, { get() { return d.get.call(this); }, set(v) { d.set.call(this, TH && !skipCv(this.canvas) ? conv(v) : v); }, configurable: true });
+  }
+  const addStop = CanvasGradient.prototype.addColorStop;
+  CanvasGradient.prototype.addColorStop = function (o, c) { return addStop.call(this, o, TH && !arcOn() ? conv(c) : c); };
+  function fixEl(e) {
+    const s = e.getAttribute("style"); if (!s || e.closest(ARC)) return;   // arcade screens keep their own colours
+    const m = orig.get(e); if (m && m.c === s) return;          // already converted
+    const c = conv(s); orig.set(e, { o: s, c }); if (c !== s) e.setAttribute("style", c);
+  }
+  function fixTree(n) { if (n.nodeType !== 1) return; if (n.hasAttribute("style")) fixEl(n); n.querySelectorAll("[style]").forEach(fixEl); }
+  function apply(scheme, dark) {
+    const S = SCHEMES[scheme] || SCHEMES.graphite;
+    // undo the previous scheme
+    if (observer) { observer.disconnect(); observer = null; }
+    if (copy) { copy.remove(); copy = null; }
+    document.querySelectorAll("[style]").forEach(e => { const m = orig.get(e); if (m && m.c === e.getAttribute("style")) e.setAttribute("style", m.o); orig.delete(e); });
+    cache = new Map();
+    document.documentElement.dataset.scheme = scheme; document.documentElement.dataset.mode = dark ? "dark" : "light";
+    if (scheme === "graphite" && dark) { TH = null; return; }   // the app as designed
+    const acc = dark ? S.acc : S.accL, [ah, as, al] = rgb2hsl(...hex2rgb(acc));
+    TH = { h: dark ? S.h : (S.hL ?? S.h), s: dark ? S.s : (S.sL ?? S.s), lk: dark ? S.lk : 1, light: !dark, ah, as, al };
+    let css = "";                                               // recolour the stylesheet, leaving arcade rules alone
+    document.querySelectorAll("style:not([data-scheme-copy]):not(#arcadeMode)").forEach(st => { try { for (const r of st.sheet.cssRules) if (!/arcade/.test(r.cssText)) css += r.cssText + "\n"; } catch (e) {} });
+    css = conv(css);
+    copy = document.createElement("style"); copy.dataset.schemeCopy = "1";
+    copy.textContent = css + ":root{--acc:" + acc + "}" + (dark ? "" : ":root{color-scheme:light}");
+    document.head.appendChild(copy);
+    if (document.body) fixTree(document.body);
+    observer = new MutationObserver(list => { if (!TH || arcOn()) return;
+      for (const r of list) { if (r.type === "attributes") fixEl(r.target); else r.addedNodes.forEach(fixTree); } });
+    observer.observe(document.documentElement, { subtree: true, childList: true, attributes: true, attributeFilter: ["style"] });
+  }
+  let scheme = "graphite", dark = true;
+  try { scheme = localStorage.getItem("ipScheme") || "graphite"; dark = localStorage.getItem("ipDark") !== "0"; } catch (e) {}
+  if (!SCHEMES[scheme]) scheme = "graphite";
+  apply(scheme, dark);
+  window.Appearance = { SCHEMES, get: () => ({ scheme, dark }),
+    set(s, d) { scheme = SCHEMES[s] ? s : "graphite"; dark = !!d; try { localStorage.setItem("ipScheme", scheme); localStorage.setItem("ipDark", dark ? "1" : "0"); } catch (e) {} apply(scheme, dark); } };
+})();
+</script>
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.24</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.25</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -690,22 +781,36 @@ Cooldown
 <div id="settingsScr" class="hscreen" role="dialog" aria-label="Settings">
   <div class="hbar"><button id="setBack" type="button">‹ Back</button><span>Settings</span></div>
   <div class="hin">
-  <details class="card" id="icuCard" open>
-    <summary>Connections</summary>
+  <button type="button" id="setReturn" hidden>Return to Workout</button>
+  <div class="card setlist">
+  <div class="setsec" id="icuCard">
+    <div class="seth">Connections</div>
     <div class="row" style="margin:0"><button id="btnIcuConnect" class="svcbtn" style="background:#dd0447;border-color:#dd0447"><svg class="svcico" viewBox="0 0 462.9 462.9" aria-hidden="true"><path fill="currentColor" d="M438.7 258.5 347.9 246 312.7 89.8l-.1-.3c-1.7-7.3-7.3-13.4-15.1-15.2-10.9-2.6-21.8 4.1-24.4 15l-49.9 210.5-47.1-146.7-.1-.2c-1.9-5.7-6.5-10.3-12.6-12-9.7-2.6-19.8 3.2-22.4 12.9l-25.3 94.7-91.2 10.1c-2.7.3-4.9 2.4-5.2 5.2-.4 3.3 2 6.2 5.2 6.5l105 11.6c7.3.8 14.3-3.7 16.3-11l.5-1.9 13.5-47.7 49 149.8c1.8 5.5 6.4 10.1 12.4 11.7 9.5 2.4 19.2-3.3 21.6-12.8v-.1l48.4-188.3 19.2 87.2.6 2.6c2 8.9 10.5 14.9 19.7 13.7l107.9-14.8c2.6-.4 4.7-2.4 5.1-5.1.5-3.2-1.7-6.2-5-6.7"/></svg><span id="icuBtnTxt">Connect intervals.icu</span></button></div>
     <div id="icuOut" class="hint" style="margin-top:8px;font-size:13px"></div>
     <div class="row" style="margin:12px 0 0"><button id="btnStrava" class="svcbtn" style="background:#FC4C02;border-color:#FC4C02"><span id="stravaBtnTxt">Connect Strava</span></button></div>
     <div id="stravaOut" class="hint" style="margin-top:8px;font-size:13px"></div>
-  </details>
+  </div>
 
-  <details class="card" open>
-    <summary>Auto-pause</summary>
+  <div class="setsec">
+    <div class="seth">Appearance</div>
+    <div class="row"><select id="appScheme" aria-label="Colour scheme"><option value="graphite">Graphite</option><option value="teal">Midnight Teal</option><option value="plum">Plum</option><option value="ember">Ember</option></select>
+      <label><input type="checkbox" id="appDark" checked> Dark mode</label></div>
+  </div>
+
+  <div class="setsec">
+    <div class="seth">Audio cues</div>
+    <div class="row"><label><input type="checkbox" id="cueOn" checked> On</label>
+      <select id="cueVol" aria-label="Cue volume"><option value="1">Normal</option><option value="2">Loud</option><option value="3">Max (over fans)</option></select>
+      <button type="button" class="mini" id="cueTest">Test</button></div>
+  </div>
+
+  <div class="setsec">
+    <div class="seth">Auto-pause</div>
     <div class="row"><label><input type="checkbox" id="apOn" checked> On</label></div>
-    <div class="hint">If power and cadence both read zero for more than 5 seconds during a ride, it pauses and shows the pause pop-up. Tap Resume to carry on. It only arms once you've started pedalling, so clipping in after Start doesn't trigger it.</div>
-  </details>
+  </div>
 
-  <details class="card" open>
-    <summary>Cadence governor</summary>
+  <div class="setsec">
+    <div class="seth">Cadence governor</div>
     <div class="row">
       <label><input type="checkbox" id="govOn" checked> On</label>
       <span class="status">full power above</span>
@@ -713,32 +818,24 @@ Cooldown
       <span class="status">rpm</span>
     </div>
     <div class="hint">Below that cadence, target power is reduced in proportion (never under 50%) so resistance can't snowball. It only acts when the target is above 80% of FTP.</div>
-  </details>
+  </div>
 
-  <details class="card" open>
-    <summary>Simulation mode</summary>
+  <div class="setsec">
+    <div class="seth">Simulation mode</div>
     <div class="hint" id="simCalTxt" style="line-height:1.5"></div>
     <div class="row"><button id="btnSimReset" type="button" style="background:#2b3340;border-color:#2b3340;color:#fff">Reset calibration</button></div>
-    <div class="hint">On freeride and Simulation-mode intervals the grade is set so the middle of the power band comes at the cadence you ride at that intensity, learned as you ride. If a band feels off, tap + / − (0.25% a tap): the app learns from where you settle and starts the next interval there.</div>
-  </details>
+  </div>
 
-  <details class="card" open>
-    <summary>Audio cues</summary>
-    <div class="row"><label><input type="checkbox" id="cueOn" checked> On</label>
-      <select id="cueVol" aria-label="Cue volume"><option value="1">Normal</option><option value="2">Loud</option><option value="3">Max (over fans)</option></select>
-      <button type="button" class="mini" id="cueTest">Test</button></div>
-    <div class="hint">Loud and Max push the cues as hard as the phone speaker allows (a limiter keeps them from distorting), and Max also makes the ticks longer and brighter so they cut through fan noise. A bell with 10 s left in an interval, a tick each second for the last 5 s, and a higher tick when the next interval starts. Needs sound on and the ringer switch up.</div>
-  </details>
-
-  <details class="card" open>
-    <summary>Distance model</summary>
+  <div class="setsec">
+    <div class="seth">Distance model</div>
     <div class="row">
       <span class="status">Average speed at 150 w</span>
       <input id="distMph" type="number" value="17.5" step="0.5" inputmode="decimal" style="width:64px">
       <span class="status">mph</span>
     </div>
     <div class="hint">Distance is estimated from power with a physics model (air drag + rolling resistance + momentum), scaled so 150 w holds this speed on flat ground. It goes into the summary and the .fit file.</div>
-  </details>
+  </div>
+  </div>
 
   </div>
 </div>
@@ -769,7 +866,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">v1.0.24</span>
+  <span class="ver">v1.0.25</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
 </div>
 
 <div class="ctrl">
@@ -956,9 +1053,9 @@ Cooldown
   <div class="pbox">
     <div id="pauseTitle" style="font-size:20px;font-weight:700">Paused</div>
     <div id="pauseSub" class="hint" style="font-size:14px;margin:2px 0 14px"></div>
-    <button type="button" id="pvResume" class="pbig" style="background:#3ddc84;color:#001018">Resume</button>
-    <button type="button" id="pvChange" class="pbig" style="background:#1f6feb;color:#fff">Change Workout</button>
+    <button type="button" id="pvResume" class="pbig pgrey"><span class="pic" aria-hidden="true">&#9654;</span>Resume</button>
     <button type="button" id="pvFree" class="pvfree"><span aria-hidden="true">&#9654;</span>Switch to Free Ride</button>
+    <button type="button" id="pvChange" class="pbig pgrey"><span class="pic pbook"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg></span><span id="pvChangeTxt">Change Workout</span></button>
     <button type="button" id="pvDevices" class="redbtn" style="width:100%;height:40px;font-size:15px;margin:0 0 10px" hidden>Connect devices</button>
     <button type="button" id="pvEnd" style="width:100%;height:44px;margin:0;font-size:16px;font-weight:600;background:#7a2a30;color:#fff">End</button>
   </div>
@@ -2280,7 +2377,7 @@ function refreshFolderSelect(sel) {
   $("woFolderNew").style.display = el.value === "__new__" ? "" : "none";
 }
 const curFolder = () => $("woFolder").value === "__new__" ? $("woFolderNew").value.trim() : $("woFolder").value;
-let pendingLaunch = null, launchMode = (() => { try { return localStorage.getItem("kickrLaunchMode") === "sim" ? "sim" : "erg"; } catch (e) { return "erg"; } })();
+let pendingLaunch = null, launchMode = (() => { try { return localStorage.getItem("kickrLaunchMode") === "erg" ? "erg" : "sim"; } catch (e) { return "sim"; } })();   // last choice; Simulation for a new user
 function setLaunchMode(m) {                                       // ERG holds each target; Simulation turns every interval into a band ridden on a grade
   launchMode = m; try { localStorage.setItem("kickrLaunchMode", m); } catch (e) {}
   $("lmErg").classList.toggle("on", m === "erg"); $("lmSim").classList.toggle("on", m === "sim");
@@ -4362,14 +4459,16 @@ function refreshDevBtns() {                                  // red Connect butt
 }
 function syncPauseOv() {                                     // the pause pop-up: Resume and Change Workout big, End smaller at the bottom
   const show = W.running && W.paused && !arcadeOn && document.body.dataset.screen === "run" && $("devModal").style.display !== "flex";
-  if ($("pauseOv").hidden === !show) { if (show) { $("pvDevices").hidden = (!!cp || pmOn) && hrOn; $("pvFree").hidden = !!W.freeRide; $("pauseSub").textContent = fmt(W.t) + " ridden"; } return; }
+  if ($("pauseOv").hidden === !show) { if (show) { $("pvDevices").hidden = !!cp || pmOn; $("pvFree").hidden = !!W.freeRide; $("pvChangeTxt").textContent = W.freeRide ? "Select Workout" : "Change Workout"; $("pauseSub").textContent = fmt(W.t) + " ridden"; } return; }
   $("pauseOv").hidden = !show;
-  if (show) { $("pvDevices").hidden = (!!cp || pmOn) && hrOn; $("pvFree").hidden = !!W.freeRide; $("pauseSub").textContent = fmt(W.t) + " ridden"; }
+  if (show) { $("pvDevices").hidden = !!cp || pmOn; $("pvFree").hidden = !!W.freeRide; $("pvChangeTxt").textContent = W.freeRide ? "Select Workout" : "Change Workout"; $("pauseSub").textContent = fmt(W.t) + " ridden"; }
 }
-function syncPauseBtn() {                                    // Resume is green while paused
-  const b = $("btnPause");
-  if (W.paused) { b.style.background = "#3ddc84"; b.style.color = "#001018"; b.style.fontWeight = "700"; }
-  else { b.style.background = ""; b.style.color = ""; b.style.fontWeight = ""; }
+function syncPauseBtn() {                                    // while paused, Running + Resume merge into one grey "Paused" (arcade keeps a green Resume)
+  const b = $("btnPause"), arc = document.body.classList.contains("arcade"), merge = W.running && W.paused && !arc;
+  $("btnStart").style.display = merge ? "none" : "";
+  if (merge) { b.textContent = "Paused"; b.style.background = "#2b3340"; b.style.color = "var(--fg)"; b.style.fontWeight = "700"; }
+  else if (W.paused) { b.textContent = "Resume"; b.style.background = "#3ddc84"; b.style.color = "#001018"; b.style.fontWeight = "700"; }
+  else { b.textContent = "Pause"; b.style.background = ""; b.style.color = ""; b.style.fontWeight = ""; }
 }
 function refreshButtons() {
   refreshDevBtns(); syncPauseBtn(); syncPauseOv();
@@ -5041,9 +5140,14 @@ async function rideStreams(a) {                                // power and hear
   } catch (e) { box.hidden = true; }
 }
 function closeRide() { $("rideSheet").classList.remove("show"); if (!$("histAll").classList.contains("show") && !$("todayScr").classList.contains("show")) document.body.style.overflow = ""; }
-function openSettings() { $("settingsScr").classList.add("show"); $("settingsScr").scrollTop = 0; document.body.style.overflow = "hidden"; }
+function openSettings(fromRide) { $("setReturn").hidden = fromRide !== true; $("settingsScr").classList.add("show"); $("settingsScr").scrollTop = 0; document.body.style.overflow = "hidden"; }
 function closeSettings() { $("settingsScr").classList.remove("show"); document.body.style.overflow = ""; }
-$("btnSettings").onclick = openSettings; $("btnSettings2").onclick = openSettings; $("setBack").onclick = closeSettings;
+$("btnSettings").onclick = () => openSettings(); $("btnSettings2").onclick = () => openSettings(); $("setBack").onclick = closeSettings;
+$("btnRunSet").onclick = () => { if (W.running && !W.paused) togglePause(); openSettings(true); };   // ride screen gear: pause, then Settings
+$("setReturn").onclick = closeSettings;
+{ const a = Appearance.get(); $("appScheme").value = a.scheme; $("appDark").checked = a.dark;
+  const setApp = () => { Appearance.set($("appScheme").value, $("appDark").checked); try { loadToday(); loadNext7(); renderSummary(); } catch (e) {} };
+  $("appScheme").onchange = setApp; $("appDark").onchange = setApp; }
 $("btnHistAll").onclick = openHistAll; $("haBack").onclick = closeHistAll; $("rsBack").onclick = closeRide;
 
 $("btnYearMinus").onclick = () => { yearSel = Math.max(new Date().getFullYear() - 2, yearSel - 1); renderYear(); };
