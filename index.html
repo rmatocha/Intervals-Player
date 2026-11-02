@@ -415,7 +415,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">b1.0.2</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">b1.0.4</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -614,6 +614,7 @@ Cooldown
   <div class="setsec">
     <div class="seth">Simulation mode</div>
     <div class="hint" id="simCalTxt" style="line-height:1.5"></div>
+    <div class="hint" id="simSync" style="line-height:1.5"></div>
     <div class="row"><button id="btnSimReset" type="button" style="background:#2b3340;border-color:#2b3340;color:#fff">Reset calibration</button></div>
     <div class="biasrow"><span>Default bias</span><button type="button" id="sbM" aria-label="Default bias lower">&minus;</button><b id="sbV">0.00%</b><button type="button" id="sbP" aria-label="Default bias higher">+</button></div>
     <div class="biasrow"><span>Stand bias</span><button type="button" id="stM" aria-label="Stand bias lower">&minus;</button><b id="stV">+2.50%</b><button type="button" id="stP" aria-label="Stand bias higher">+</button></div>
@@ -636,8 +637,8 @@ Cooldown
   <div class="hbar"><button id="haBack" type="button">‹ Back</button><span>Ride history</span></div>
   <div class="hin"><div id="haSum" class="hsums"></div><div id="haList"></div><div id="haNote" class="hint" style="margin:10px 2px 0;font-size:12px"></div></div>
 </div>
-<div id="rideSheet" class="hscreen" role="dialog" aria-label="Ride summary">
-  <div class="hbar"><button id="rsBack" type="button">‹ Back</button><span>Ride summary</span></div>
+<div id="rideSheet" class="hscreen" role="dialog" aria-label="Ride Summary">
+  <div class="hbar"><button id="rsBack" type="button">‹ Back</button><span>Ride Summary</span></div>
   <div class="hin">
     <div id="rsName" style="font-size:20px;font-weight:700;line-height:1.25;overflow-wrap:anywhere"></div>
     <div id="rsWhen" class="status" style="margin:4px 0 0;font-size:13px"></div>
@@ -660,7 +661,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">b1.0.2</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+  <span class="ver">b1.0.4</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
 </div>
 
 <div class="ctrl">
@@ -1048,7 +1049,7 @@ async function connectTrainer2(known) {
     step = "finding control point";     cp = await svc.getCharacteristic(CTRL_POINT);
     if (!cp._ipL) { cp._ipL = true; cp.addEventListener("characteristicvaluechanged", onCpIndication); }
     step = "subscribing to control point"; await cp.startNotifications();   // responses arrive as indications
-    trainer = dev;
+    trainer = dev; calTrainer(dev.name || "");
     step = "requesting control";        await cpWrite([0x00]);
     setStatus("stTrainer", "Trainer: connected", "ok"); log("Trainer connected: " + (dev.name || "trainer") + (known ? " (automatically)" : "") + ".");
     if (W.running) { await cpWrite([0x07]); W.lastTarget = null; if (!W.paused) pushTarget(true); else if (W.erg) setTargetPower(50); }   // came back mid-ride: pick up the current target
@@ -1402,8 +1403,10 @@ function simFresh() {
 const SIMC = (() => { let o = null; try { o = JSON.parse(localStorage.getItem("kickrSimCal")); } catch (e) {}
   if (o && Array.isArray(o.cad)) while (o.cad.length < SIM_BK.length) o.cad.push({ c: SIM.CAD0, n: 0 });
   if (!o || !o.S || !Array.isArray(o.cad) || o.cad.length !== SIM_BK.length || !(o.A0 > 0)) o = simFresh();
+  if (!o.tc && o.cad.some(k => k.n)) o.tc = 1;                    // learned before sync existed: counts, but loses to any real save
+  if (!o.tt && o.S.w > 0) o.tt = 1;
   simSolve(o); return o; })();
-const simSave = () => { try { localStorage.setItem("kickrSimCal", JSON.stringify(SIMC)); } catch (e) {} showSimCal(); };
+const simSave = (touch = true) => { if (touch) SIMC.tc = SIMC.tt = Date.now(); try { localStorage.setItem("kickrSimCal", JSON.stringify(SIMC)); } catch (e) {} showSimCal(); };
 function showSimCal() {
   const el = $("simCalTxt"); if (!el) return;
   el.innerHTML = "Learned cadence: " + SIMC.cad.map((k, i) => SIM_BK[i] + " <b>" + Math.round(simCad(i)) + "</b>" + (k.n ? "" : "*")).join(" · ") + " rpm" +
@@ -1412,7 +1415,7 @@ function showSimCal() {
 }
 async function resetSimCal() {
   if (!await askYes("Reset Simulation Calibration?", "The learned cadences and trainer numbers go back to their starting values and are learned again as you ride.", "Reset")) return;
-  Object.assign(SIMC, simFresh()); simSolve(SIMC); simSave(); toast("Simulation calibration reset.");
+  const tr = SIMC.tr; Object.assign(SIMC, simFresh()); SIMC.A = null; simSolve(SIMC); SIMC.tr = tr; simSave(); calPush(); toast("Simulation calibration reset.");
 }
 function simCad(b) {                                               // a zone's cadence; a zone not ridden yet borrows the nearest learned zone (both, averaged, on a tie), else 80 rpm
   const k = SIMC.cad[b]; if (k.n) return k.c;
@@ -1705,10 +1708,10 @@ function summaryData() {
   const f = (v, d) => v == null ? "--" : d ? v.toFixed(d) : String(Math.round(v));
   return [
     { l: "Time", v: fmt(W.t), u: "" },
-    { l: "Avg power", v: f(ap), u: "w" },         { l: "Norm. power", v: f(np), u: "w" },
+    { l: "Norm. power", v: f(np), u: "w" },       { l: "Avg power", v: f(ap), u: "w" },
     { l: "IF", v: f(IF, 2), u: "" },              { l: "TSS", v: f(tss), u: "" },
     { l: "Avg HR", v: f(hr), u: "bpm" },          { l: "Avg cadence", v: f(cad), u: "rpm" },
-    { l: "Energy", v: f(W.kj), u: "kJ" }
+    { l: "Work", v: f(W.kj), u: "kJ" }
   ];
 }
 /* ---------------- crash recovery ----------------
@@ -1787,6 +1790,7 @@ function showSummary(save = true) {
     if (save) { try { prepareFit(); } catch (e) { log("FIT failed: " + e.message); } obSaveCurrent(); }
     else { $("sumUp").textContent = "Discarded. Not uploaded."; $("sumUp").style.color = ""; $("sumStrava").textContent = ""; }
     drawProfile($("sumProfile"), { noCursor: true, actual: true }); drawHR($("sumHR"), { noCursor: true }); prepareSummaryImage(d);
+    setTimeout(calPush, 3000);
   }, 40);
 }
 
@@ -1804,11 +1808,15 @@ function buildSummaryImage(d, title, dateTxt, D) {      // square-ish (1080 wide
   let ts = 54; c.font = "700 " + ts + "px " + F; while (ts > 30 && c.measureText(title).width > S - 96 - 110) { ts -= 2; c.font = "700 " + ts + "px " + F; }
   c.fillStyle = "#f2f4f7"; c.fillText(title, 48, 82);
   c.fillStyle = "#8b94a3"; c.font = "400 26px " + F; c.fillText(dateTxt, 48, 122);
-  c.fillStyle = "rgba(255,210,63,.55)"; c.fillRect(48, 136, 984, 2);      // thin accent rule
+  const zp = D && D.pw && D.pw.length > 1 && D.ftp ? zoneShares(D.pw, D.ftp) : null;
+  if (zp) {                                                // the separator is the ride's time in zone: each colour's length is its share of the ride
+    let x = 48; c.save(); rrect(c, 48, 134, 984, 12, 6); c.clip();
+    zp.forEach((p, i) => { const w = p * 984; c.fillStyle = ZONE6[i]; c.fillRect(x, 134, w + 0.5, 12); x += w; }); c.restore();
+  } else { c.fillStyle = "rgba(255,210,63,.55)"; c.fillRect(48, 136, 984, 2); }   // no power data yet: the thin accent rule
   drawBarsLogo(c, 1080 - 48 - 91, 33, 0.1);
   const cols = 4, gap = 12, tw = (S - 96 - gap * (cols - 1)) / cols, th = 150;
   d.forEach((m, i) => {
-    const x = 48 + (i % cols) * (tw + gap), y = 148 + Math.floor(i / cols) * (th + gap);
+    const x = 48 + (i % cols) * (tw + gap), y = 156 + Math.floor(i / cols) * (th + gap);
     c.fillStyle = "#161a20"; rrect(c, x, y, tw, th, 16); c.fill();
     c.fillStyle = "#8b94a3"; c.font = "600 18px " + F; c.fillText(m.l.toUpperCase(), x + 14, y + 32);
     let vs = 50; const hasU = m.u && m.v !== "--";
@@ -1816,10 +1824,12 @@ function buildSummaryImage(d, title, dateTxt, D) {      // square-ish (1080 wide
     c.font = "700 " + vs + "px " + F; c.fillStyle = "#f2f4f7"; c.fillText(m.v, x + 14, y + 114);
     if (hasU) { const vw = c.measureText(m.v).width; c.fillStyle = "#8b94a3"; c.font = "600 22px " + F; c.fillText(m.u, x + 14 + vw + 6, y + 114); }
   });
-  c.fillStyle = "#161a20"; rrect(c, 48, 484, 984, 280, 20); c.fill();
-  c.strokeStyle = "rgba(255,210,63,.35)"; c.lineWidth = 1; rrect(c, 48.5, 484.5, 983, 279, 20); c.stroke();
-  if (D && D.pw && D.pw.length > 1) { const g1 = document.createElement("canvas"); g1.width = 968; g1.height = 264; const gc = g1.getContext("2d"); gc.setTransform(2, 0, 0, 2, 0, 0); drawActual(gc, 484, 132, D); c.drawImage(g1, 56, 492); }
+  c.fillStyle = "#161a20"; rrect(c, 48, 486, 984, 278, 20); c.fill();
+  if (D && D.pw && D.pw.length > 1) { const g1 = document.createElement("canvas"); g1.width = 968; g1.height = 262; const gc = g1.getContext("2d"); gc.setTransform(2, 0, 0, 2, 0, 0); drawActual(gc, 484, 131, D); c.drawImage(g1, 56, 494); }
   return new Promise(res => cv.toBlob(b => res(b), "image/png"));
+}
+function zoneShares(pw, ftp) {                           // share of the ride in each of the six power zones (same limits as the ride summary's time-in-zone)
+  const n = [0, 0, 0, 0, 0, 0]; pw.forEach(v => { n[ZLIM.findIndex(l => (v || 0) / ftp <= l)]++; }); return n.map(k => k / pw.length);
 }
 function prepareSummaryImage(d) {                       // the ride just finished
   buildSummaryImage(d, "Workout Summary", $("sumDate").textContent, { pw: W.pw, plan: W.planHist && W.planHist.length ? W.planHist : null, ftp: W.ftp })
@@ -2871,6 +2881,89 @@ function icuCapture() {                           // the Worker returns here aft
   try { localStorage.setItem("kickrIcuOAuth", JSON.stringify({ access_token: p.get("icu_token"), athlete: p.get("icu_athlete") || "" })); } catch (e) {}
   history.replaceState(null, "", location.pathname + location.search);   // hide the token from the address bar
 }
+/* ---------------- calibration sync ----------------
+   Simulation calibration follows the rider: the helper keeps one copy per intervals.icu athlete (it checks the
+   sign-in with intervals.icu itself). Three parts, each with its own save time, newest wins: the rider's zone
+   cadences, the default/stand bias, and one trainer curve per trainer name. Every phone keeps working on its
+   own copy offline; it pulls when the app opens or comes back to the front, and pushes after a ride or a change. */
+var biasShow = () => {};
+const calMap = () => { try { return JSON.parse(localStorage.getItem("kickrSimTrainers") || "{}") || {}; } catch (e) { return {}; } };
+const calMapSave = m => { try { localStorage.setItem("kickrSimTrainers", JSON.stringify(m)); } catch (e) {} };
+const biasT = () => { const t = +localStorage.getItem("kickrBiasT"); if (t > 0) return t;
+  return localStorage.getItem("kickrSimBias") != null || localStorage.getItem("kickrStandBias") != null ? 1 : 0; };
+const okCurve = v => v && v.A0 > 20 && v.A0 < 300 && isFinite(v.B0) && v.S && ["w", "x", "y", "xx", "xy"].every(k => isFinite(v.S[k])) && +v.t > 0;
+const CAL = { at: 0, state: "", timer: 0, pulledAt: 0 };
+function calTrainer(name) {                                // a trainer connected: make its curve the active one
+  name = String(name || "").trim().slice(0, 64); if (!name || SIMC.tr === name) return;
+  if (!SIMC.tr) { SIMC.tr = name; simSave(false); calPushSoon(); return; }  // first trainer seen: the curve already here is its curve
+  const map = calMap(); if (SIMC.tt) map[SIMC.tr] = { A0: SIMC.A0, B0: SIMC.B0, A: SIMC.A, B: SIMC.B, S: SIMC.S, t: SIMC.tt };
+  const m = okCurve(map[name]) ? map[name] : null, f = simFresh();
+  Object.assign(SIMC, m ? { A0: m.A0, B0: m.B0, S: m.S, tt: m.t } : { A0: f.A0, B0: f.B0, S: f.S, tt: 0 }); SIMC.tr = name; calCurve(m); simSolve(SIMC);
+  delete map[name]; calMapSave(map); simSave(false);
+  log("Simulation: " + name + (m ? " connected, its own trainer curve loaded." : " is a new trainer: its curve starts fresh (your cadences stay)."));
+}
+function calCurve(v) {                                     // the slope and baseline as last solved, so a phone shows exactly what the other one had
+  const ok = v && +v.A > 30 && +v.A < 250 && +v.B > -0.5 && +v.B < 3; SIMC.A = ok ? +v.A : null; SIMC.B = ok ? +v.B : null;
+}
+function calPack() {
+  const tr = { ...calMap() }; if (SIMC.tr && SIMC.tt) tr[SIMC.tr] = { A0: SIMC.A0, B0: SIMC.B0, A: SIMC.A, B: SIMC.B, S: SIMC.S, t: SIMC.tt };
+  return { rider: SIMC.tc ? { cad: SIMC.cad, t: SIMC.tc } : null, bias: biasT() ? { sim: BIAS.sim, stand: BIAS.stand, t: biasT() } : null, trainers: tr };
+}
+function calApply(c) {                                     // take whatever the account has that is newer than this phone's
+  if (!c || typeof c !== "object") return; let ch = false;
+  const R = c.rider;
+  if (R && +R.t > (SIMC.tc || 0) && Array.isArray(R.cad) && R.cad.length === SIM_BK.length && R.cad.every(k => k && k.c > 30 && k.c < 160 && k.n >= 0)) {
+    SIMC.cad = R.cad.map(k => ({ c: +k.c, n: +k.n })); SIMC.tc = +R.t; ch = true; }
+  const B = c.bias;
+  if (B && +B.t > biasT() && Math.abs(+B.sim) <= 0.05 && +B.stand > 0 && +B.stand <= 0.06) {
+    BIAS.sim = +B.sim; BIAS.stand = +B.stand;
+    try { localStorage.setItem("kickrSimBias", String(BIAS.sim)); localStorage.setItem("kickrStandBias", String(BIAS.stand)); localStorage.setItem("kickrBiasT", String(+B.t)); } catch (e) {}
+    biasShow(); }
+  const T = c.trainers && typeof c.trainers === "object" ? c.trainers : {}, map = calMap(); let mc = false;
+  if (!SIMC.tr) { const best = Object.keys(T).filter(n => okCurve(T[n])).sort((a, b) => T[b].t - T[a].t)[0]; if (best && +T[best].t > (SIMC.tt || 0)) { SIMC.tr = best; SIMC.tt = 0; } }
+  for (const [n, v] of Object.entries(T)) {
+    if (!okCurve(v)) continue;
+    if (n === SIMC.tr) { if (+v.t > (SIMC.tt || 0)) { SIMC.A0 = +v.A0; SIMC.B0 = +v.B0; SIMC.S = { ...v.S }; SIMC.tt = +v.t; calCurve(v); simSolve(SIMC); ch = true; } }
+    else if (!map[n] || +v.t > (+map[n].t || 0)) { map[n] = v; mc = true; }
+  }
+  if (mc) calMapSave(map);
+  if (ch) simSave(false);
+}
+function calLocalNewer(c) {
+  c = c || {}; const T = c.trainers || {}, t = x => +(x && x.t) || 0;
+  if ((SIMC.tc || 0) > t(c.rider) || biasT() > t(c.bias)) return true;
+  if (SIMC.tr && (SIMC.tt || 0) > t(T[SIMC.tr])) return true;
+  return Object.entries(calMap()).some(([n, v]) => t(v) > t(T[n]));
+}
+function calShow() {
+  const e = $("simSync"); if (!e) return;
+  const tm = CAL.at ? new Date(CAL.at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) : "";
+  e.textContent = !icuAuth() ? "Saved on this phone only. Connect intervals.icu to keep it on every device."
+    : CAL.state === "ok" ? "Synced with your intervals.icu account" + (tm ? " at " + tm : "") + "."
+    : CAL.state === "fail" ? "Couldn't sync just now; saved on this phone and will try again." : "";
+}
+async function calCall(method, body) {
+  const auth = icuAuth(); if (!auth) throw new Error("not connected");
+  const r = await fetch(STRAVA_HELPER + "/cal?athlete=" + encodeURIComponent(icuId()), { method, headers: body ? { Authorization: auth, "Content-Type": "application/json" } : { Authorization: auth }, body: body ? JSON.stringify(body) : undefined });
+  if (!r.ok) throw new Error("helper replied " + r.status);
+  return r.json();
+}
+async function calPull() {
+  if (!icuAuth() || W.running) { calShow(); return; }
+  CAL.pulledAt = Date.now();
+  try { const c = await calCall("GET"); if (W.running) return; calApply(c); if (calLocalNewer(c)) await calPush(); else { CAL.state = "ok"; CAL.at = Date.now(); } }
+  catch (e) { CAL.state = "fail"; log("Calibration sync: " + e.message); }
+  calShow();
+}
+async function calPush() {
+  clearTimeout(CAL.timer); if (!icuAuth()) { calShow(); return; }
+  try { const c = await calCall("PUT", calPack()); if (!W.running) calApply(c); CAL.state = "ok"; CAL.at = Date.now(); }
+  catch (e) { CAL.state = "fail"; log("Calibration sync: " + e.message); }
+  calShow();
+}
+function calPushSoon() { clearTimeout(CAL.timer); CAL.timer = setTimeout(calPush, 3000); }
+document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - CAL.pulledAt > 60000) calPull(); });
+setTimeout(calPull, 1500);
 function icuShow() {
   let t = null; try { t = JSON.parse(localStorage.getItem("kickrIcuOAuth") || "null"); } catch (e) {}
   const on = !!((t && t.access_token) || (localStorage.getItem("kickrIcuKey") || "").trim());
@@ -3332,10 +3425,10 @@ const RS = { a: null, blob: null, d: null };
 function rideTiles(a) {                                    // the same eight tiles as the end-of-ride image, from intervals.icu's numbers
   const f = (v, k) => v == null || !isFinite(v) ? "--" : k ? (+v).toFixed(k) : String(Math.round(v));
   return [{ l: "Time", v: a.el || a.sec ? fmt(a.el || a.sec) : "--", u: "" },
-    { l: "Avg power", v: f(a.avgW), u: "w" }, { l: "Norm. power", v: f(a.np), u: "w" },
+    { l: "Norm. power", v: f(a.np), u: "w" }, { l: "Avg power", v: f(a.avgW), u: "w" },
     { l: "IF", v: f(a.ifx, 2), u: "" }, { l: "TSS", v: f(a.load), u: "" },
     { l: "Avg HR", v: f(a.hr), u: "bpm" }, { l: "Avg cadence", v: f(a.cad), u: "rpm" },
-    { l: "Energy", v: f(a.kj), u: "kJ" }];
+    { l: "Work", v: f(a.kj), u: "kJ" }];
 }
 /* The targets under a history ride's power line: the plan this phone saved when the ride was recorded (b1.0.2 on), or else the
    ride's workout from the library, when its length matches the ride (within 3% / 2 min); otherwise none (fill by power). */
@@ -3872,7 +3965,7 @@ $("btnDoneSave").onclick = doneSave; $("btnDoneFree").onclick = doneFree;
 $("btnSaveRide").onclick = () => { $("saveModal").style.display = "none"; showSummary(true); };
 $("btnDiscardRide").onclick = () => { $("saveModal").style.display = "none"; showSummary(false); };
 $("btnSaveImg").onclick = saveSummaryImage;
-$("rsSaveImg").onclick = () => { const a = RS.a; if (!a) return; shareImage(RS.blob, "ride-" + String(a.start || a.date || "").slice(0, 10) + "-" + (a.name || "ride").replace(/[^a-z0-9]+/gi, "-").slice(0, 40) + ".png", a.name || "Ride summary"); }; $("btnSaveFit").onclick = saveFit; $("btnSaveLog").onclick = saveRideLog; $("btnSumClose").onclick = closeSummary; $("btnImgClose").onclick = () => { $("imgModal").style.display = "none"; };
+$("rsSaveImg").onclick = () => { const a = RS.a; if (!a) return; shareImage(RS.blob, "ride-" + String(a.start || a.date || "").slice(0, 10) + "-" + (a.name || "ride").replace(/[^a-z0-9]+/gi, "-").slice(0, 40) + ".png", a.name || "Ride Summary"); }; $("btnSaveFit").onclick = saveFit; $("btnSaveLog").onclick = saveRideLog; $("btnSumClose").onclick = closeSummary; $("btnImgClose").onclick = () => { $("imgModal").style.display = "none"; };
 /* One Devices pop-up for both: each row is its own tap, because the phone opens only one device picker per tap. */
 let devAutoClosed = false;
 function openDevices() { devAutoClosed = !!cp && hrOn && (clickOn || !hasRemembered("kickrClickId")); refreshDevBtns(); $("devModal").style.display = "flex"; }
@@ -4211,7 +4304,8 @@ loadFtp(true);
 setTimeout(recOffer, 300);                             // an unfinished ride from last time? offer Resume / Save / Discard
 { const fm = v => (v > 0 ? "+" : v < 0 ? "\u2212" : "") + Math.abs(v * 100).toFixed(2) + "%";
   const show = () => { $("sbV").textContent = fm(BIAS.sim); $("stV").textContent = fm(BIAS.stand); $("sbM").disabled = BIAS.sim <= -0.05; $("sbP").disabled = BIAS.sim >= 0.05; $("stM").disabled = BIAS.stand <= 0.0025; $("stP").disabled = BIAS.stand >= 0.06; };
-  const set = (k, d) => { BIAS[k] = Math.round((BIAS[k] + d) * 10000) / 10000; try { localStorage.setItem(k === "sim" ? "kickrSimBias" : "kickrStandBias", String(BIAS[k])); } catch (e) {} show();
+  biasShow = show;
+  const set = (k, d) => { BIAS[k] = Math.round((BIAS[k] + d) * 10000) / 10000; try { localStorage.setItem(k === "sim" ? "kickrSimBias" : "kickrStandBias", String(BIAS[k])); localStorage.setItem("kickrBiasT", String(Date.now())); } catch (e) {} show(); calPushSoon();
     if (W.running && k === "sim" && isSim(W.steps[W.idx])) regrade(); };
   $("sbM").onclick = () => set("sim", -0.0025); $("sbP").onclick = () => set("sim", 0.0025); $("stM").onclick = () => set("stand", -0.0025); $("stP").onclick = () => set("stand", 0.0025); show(); }
 $("obRetry").onclick = () => { if (navigator.onLine === false) toast("No connection right now."); obFlush(); };
