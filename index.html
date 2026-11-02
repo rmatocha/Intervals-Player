@@ -216,10 +216,24 @@
   .favhead { display:flex; justify-content:space-between; width:100%; text-align:left; margin:6px 0 2px; padding:10px 12px 10px 18px; font-size:15px; background:#1c222b; border-radius:10px; box-shadow:inset 5px 0 0 #ffc53d; }
   #wsFor { font-size:14px; color:var(--acc); font-weight:600; margin-top:2px; } #wsFor[hidden] { display:none; }
   #wsWork { font-size:13px; color:#c3cad6; margin-top:2px; }
-  .wsadj { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; padding-top:12px; border-top:1px solid #2a303a; }
-  .wsh { font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--dim); text-align:center; margin-bottom:6px; }
-  .wspm { display:flex; align-items:center; gap:6px; } .wspm button { flex:none; width:44px; height:44px; padding:0; margin:0; font-size:24px; font-weight:700; line-height:1; background:#2b3340; color:var(--fg); }
-  .wspm button:disabled { opacity:.35; } .wspm span { flex:1; min-width:0; text-align:center; font-size:13px; font-weight:600; font-variant-numeric:tabular-nums; }
+  /* the edit pad: a diamond. A square in the middle, a triangle on each side (base = the square's side, 45° edges), thin gaps between */
+  .wspad { position:relative; width:168px; height:182px; margin:12px auto 0; border-top:1px solid #2a303a; }
+  .wspad button { position:absolute; margin:0; padding:0; border:0; border-radius:0; background:#2b3340; color:var(--fg); font-size:12px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .wspad button:active { background:#3a4250; } .wspad button:disabled { opacity:.35; }
+  .wspad button span { position:absolute; white-space:nowrap; pointer-events:none; }
+  #wsUp { left:42px; top:14px; width:84px; height:42px; clip-path:polygon(50% 0, calc(100% - 3px) calc(100% - 2px), 3px calc(100% - 2px)); }
+  #wsDown { left:42px; top:140px; width:84px; height:42px; clip-path:polygon(50% 100%, 3px 2px, calc(100% - 3px) 2px); }
+  #wsLeft { left:0; top:56px; width:42px; height:84px; clip-path:polygon(0 50%, calc(100% - 2px) 3px, calc(100% - 2px) calc(100% - 3px)); }
+  #wsRight { left:126px; top:56px; width:42px; height:84px; clip-path:polygon(100% 50%, 2px calc(100% - 3px), 2px 3px); }
+  #wsUp span { left:0; right:0; bottom:5px; text-align:center; } #wsDown span { left:0; right:0; top:5px; text-align:center; }
+  #wsLeft span { right:5px; top:50%; transform:translateY(-50%); } #wsRight span { left:5px; top:50%; transform:translateY(-50%); }
+  #wsMid { left:44px; top:58px; width:80px; height:80px; display:flex; align-items:center; justify-content:center; cursor:default; }
+  #wsMid:active { background:#2b3340; } #wsMid.sel { cursor:pointer; } #wsMid.sel:active { background:#3a4250; }
+  #wsMid i { width:16px; height:16px; border-radius:50%; background:#1e242d; box-shadow:inset 0 1px 3px rgba(0,0,0,.6); }
+  #wsMid.sel i { background:var(--acc); box-shadow:none; }
+  #wsGraph { cursor:pointer; touch-action:manipulation; } #wsTapHint { font-size:12px; color:var(--dim); margin:-4px 0 6px; } #wsTapHint[hidden] { display:none; }
+  #wsModRow { display:flex; align-items:center; gap:8px; margin:2px 0 10px; min-height:18px; } #wsModRow #wsMod { flex:1; min-width:0; margin:0; }
+  #wsReset { flex:none; margin:0; padding:4px 10px; font-size:13px; background:#2b3340; color:var(--fg); border-radius:8px; } #wsReset[hidden] { display:none; }
   .dschedbtn { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; height:46px; font-size:16px; font-weight:600; margin:12px 0 0; background:#2b3340; color:var(--fg); }
   .dschedbtn span { font-size:16px; line-height:1; }
   .dvload { flex:1; min-width:0; height:44px; margin:0; display:flex; align-items:center; justify-content:center; gap:8px; background:#2b3340; color:var(--fg); font-weight:700; }
@@ -389,7 +403,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.28</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.29</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -631,7 +645,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">v1.0.28</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+  <span class="ver">v1.0.29</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
 </div>
 
 <div class="ctrl">
@@ -695,14 +709,18 @@ Cooldown
   <div class="wsbox">
     <div class="wshead"><div style="flex:1;min-width:0"><div id="wsName"></div><div id="wsFor" hidden></div></div><button id="wsFav" type="button" aria-label="Favorite" aria-pressed="false">&#9734;</button><button id="wsClose" type="button" aria-label="Close">&#10005;</button></div>
     <canvas id="wsGraph"></canvas>
+    <div id="wsTapHint">Tap an interval to edit just that one</div>
     <div id="wsInfo"></div>
     <div id="wsWork"></div>
-    <div id="wsMod"></div>
+    <div id="wsModRow"><div id="wsMod"></div><button id="wsReset" type="button" hidden>&#8634; As written</button></div>
     <button id="wsLoad" type="button" class="wsplay"><span aria-hidden="true">&#9654;</span>Load Workout</button>
     <div class="wsrow"><button id="wsSched" type="button"><span id="wsSchedIco" aria-hidden="true" style="font-size:15px;line-height:1;margin-right:6px">&#128197;</span><span id="wsSchedTxt">Schedule</span></button><button id="wsEdit" type="button">Edit</button></div>
-    <div class="wsadj">
-      <div><div class="wsh">Length</div><div class="wspm"><button id="wsLenM" type="button" aria-label="15 minutes shorter">&minus;</button><span id="wsLenV">As written</span><button id="wsLenP" type="button" aria-label="15 minutes longer">+</button></div></div>
-      <div><div class="wsh">Difficulty</div><div class="wspm"><button id="wsDifM" type="button" aria-label="Hard intervals 1% easier">&minus;</button><span id="wsDifV">As written</span><button id="wsDifP" type="button" aria-label="Hard intervals 1% harder">+</button></div></div>
+    <div class="wspad" role="group" aria-label="Edit workout">
+      <button id="wsUp" type="button" aria-label="Harder"><span id="wsUpL">+1%</span></button>
+      <button id="wsLeft" type="button" aria-label="Shorter"><span id="wsLeftL">&minus;15'</span></button>
+      <button id="wsMid" type="button" aria-label="Whole workout" tabindex="-1"><i></i></button>
+      <button id="wsRight" type="button" aria-label="Longer"><span id="wsRightL">+15'</span></button>
+      <button id="wsDown" type="button" aria-label="Easier"><span id="wsDownL">&minus;1%</span></button>
     </div>
   </div>
 </div>
@@ -2059,7 +2077,7 @@ function askLaunch(item, dur, tss) {
    Shorter (-15 min): about half from the hard intervals and half from the easy riding after the warm-up (recoveries included),
    each shrunk in proportion, nothing below a quarter of its length or 30 s.
    Difficulty: each tap moves every hard interval 1% of FTP. */
-const WS = { item: null, base: null, len: 0, dif: 0, steps: null, text: "", cal: null, day: null };   // cal: { ev, day } editing a planned workout; day: date when adding one
+const WS = { item: null, base: null, orig: null, len: 0, dif: 0, lenOff: 0, difOff: 0, sel: null, edited: new Set(), steps: null, text: "", cal: null, day: null };   // cal: { ev, day } editing a planned workout; day: date when adding one
 const stepLvl = st => st.free ? 0.5 : st.sim && st.lo != null ? (st.lo + st.hi) / 2 : (st.a + st.b) / 2;
 function hardIdx(steps) {                                         // the warm-up ends where its first long easy block (8 min+, before the main work) starts, else at 10 minutes
   const total = steps.reduce((a, q) => a + q.dur, 0), out = []; let t = 0, warm = total >= 1500 ? 600 : 0;
@@ -2113,7 +2131,7 @@ function wsBuild(len, dif) {                                      // the workout
 }
 function openWoSheet(item, cal, day) {
   let base; try { base = parseText(item.text, +$("ftp").value || 270); } catch (e) { toast("This workout's text can't be read.", true); return; }
-  Object.assign(WS, { item, base, len: 0, dif: 0, cal: cal || null, day: day || null });
+  Object.assign(WS, { item, base, orig: base.map(q => ({ ...q })), len: 0, dif: 0, lenOff: 0, difOff: 0, sel: null, edited: new Set(), cal: cal || null, day: day || null });
   $("wsEdit").hidden = !!cal; $("wsLoad").hidden = !!day; $("wsSched").disabled = false; $("wsSched").classList.toggle("wsbig", !!day);
   $("wsSchedTxt").textContent = cal ? "Save to Calendar" : "Schedule";
   $("wsFav").hidden = !!cal; wsFavShow();
@@ -2121,17 +2139,53 @@ function openWoSheet(item, cal, day) {
   renderWoSheet(); $("woSheet").style.display = "flex";
 }
 const WS_SAVE_ICO = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#8fb8ff" stroke-width="2" stroke-linejoin="round" style="display:block"><path d="M5 3h11l5 5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v6h9V3"/><rect x="7" y="13" width="10" height="8" rx="1"/></svg>';
+/* Editing: the 4-way pad. Nothing selected: left/right = 15 min shorter/longer, up/down = hard intervals 1% harder/easier.
+   Tap an interval on the graph to select it: left/right change its length (5 s under 1 min, 15 s under 5 min, 1 min under 20 min,
+   else 5 min), up/down its % FTP by 1. Tap it again (or the centre) to go back to the whole workout. Selecting folds the whole-workout
+   changes so far into the base, so the interval being edited keeps its place. */
+const wsChanged = () => !!(WS.len || WS.dif || WS.lenOff || WS.difOff || WS.edited.size);
+const durStep = d => d < 60 ? 5 : d < 300 ? 15 : d < 1200 ? 60 : 300;
+const dMin = s => { const a = Math.abs(Math.round(s)), m = Math.floor(a / 60), r = a % 60; return (s < 0 ? "\u2212" : "+") + (r ? (m ? m + "'" + String(r).padStart(2, "0") : r + "s") : m + " min"); };
+function wsBake() { if (!WS.len && !WS.dif) return; const st = wsBuild(WS.len, WS.dif); if (!st) return; WS.base = st; WS.lenOff += WS.len; WS.difOff += WS.dif; WS.len = 0; WS.dif = 0; }
+function wsSelect(i) { if (i == null || i === WS.sel) { WS.sel = null; renderWoSheet(); return; } wsBake(); WS.sel = i; renderWoSheet(); }
+function wsEditDur(dir) {
+  const q = WS.base[WS.sel]; if (!q) return; const step = durStep(dir > 0 ? q.dur : q.dur - 1), n = q.dur + dir * step;
+  if (n < 5) return; q.dur = n; WS.edited.add(WS.sel); renderWoSheet();
+}
+function wsEditInt(dir) {
+  const q = WS.base[WS.sel]; if (!q || (q.free && q.lo == null)) return; const f = dir * 0.01;
+  if (Math.min(q.a, q.b) + f < 0.2 || Math.max(q.a, q.b) + f > 2.5) return;
+  q.a = Math.round((q.a + f) * 100) / 100; q.b = Math.round((q.b + f) * 100) / 100;
+  if (q.lo != null) { q.lo = Math.round((q.lo + f) * 100) / 100; q.hi = Math.round((q.hi + f) * 100) / 100; }
+  WS.edited.add(WS.sel); renderWoSheet();
+}
+function wsReset() { WS.base = WS.orig.map(q => ({ ...q })); Object.assign(WS, { len: 0, dif: 0, lenOff: 0, difOff: 0, sel: null, edited: new Set() }); renderWoSheet(); }
 function renderWoSheet() {
   const st = wsBuild(WS.len, WS.dif); if (!st) return;
-  WS.steps = st; WS.text = WS.len || WS.dif ? stepsText(st) : WS.item.text;
-  const dur = st.reduce((a, q) => a + q.dur, 0), tss = Math.round(planStats(st).tss);
+  WS.steps = st; WS.text = wsChanged() ? stepsText(st) : WS.item.text;
+  const dur = st.reduce((a, q) => a + q.dur, 0), tss = Math.round(planStats(st).tss), dDur = dur - WS.orig.reduce((a, q) => a + q.dur, 0), dif = WS.difOff + WS.dif;
   $("wsName").textContent = WS.item.name; $("wsInfo").textContent = fmt(dur) + "  ·  TSS " + tss;
-  $("wsMod").textContent = [WS.len ? (WS.len > 0 ? "+" : "−") + Math.abs(WS.len) * 15 + " min" : "", WS.dif ? (WS.dif > 0 ? "+" : "−") + Math.abs(WS.dif) + "% on hard intervals" : ""].filter(Boolean).join("  ·  ");
-  $("wsLenV").textContent = WS.len ? (WS.len > 0 ? "+" : "−") + Math.abs(WS.len) * 15 + " min" : "As written";
-  $("wsDifV").textContent = WS.dif ? (WS.dif > 0 ? "+" : "−") + Math.abs(WS.dif) + "% FTP" : "As written";
-  $("wsLenM").disabled = !wsBuild(WS.len - 1, WS.dif); $("wsLenP").disabled = WS.len >= 8;
-  if (WS.cal) $("wsSched").disabled = !(WS.len || WS.dif);           // nothing to save until something changed
-  const hard = hardIdx(st).idx; $("wsDifM").disabled = !hard.length || WS.dif <= -20; $("wsDifP").disabled = !hard.length || WS.dif >= 20;
+  const modTxt = [Math.round(dDur) ? dMin(dDur) : "", dif ? (dif > 0 ? "+" : "\u2212") + Math.abs(dif) + "% on hard intervals" : "",
+    WS.edited.size ? WS.edited.size + (WS.edited.size === 1 ? " interval" : " intervals") + " edited" : ""].filter(Boolean).join("  ·  ");
+  $("wsMod").textContent = modTxt;
+  $("wsReset").hidden = !wsChanged();
+  if (WS.cal) $("wsSched").disabled = !wsChanged();                 // nothing to save until something changed
+  const hard = hardIdx(st).idx, sel = WS.sel != null && st[WS.sel] ? WS.sel : null;
+  if (sel == null) {
+    WS.sel = null; $("wsMid").classList.remove("sel"); $("wsMid").setAttribute("aria-label", "Whole workout");
+    $("wsLeftL").textContent = "\u221215'"; $("wsRightL").textContent = "+15'"; $("wsUpL").textContent = "+1%"; $("wsDownL").textContent = "\u22121%";
+    $("wsLeft").disabled = !wsBuild(WS.len - 1, WS.dif); $("wsRight").disabled = WS.lenOff + WS.len >= 8;
+    $("wsUp").disabled = !hard.length || dif >= 20; $("wsDown").disabled = !hard.length || dif <= -20;
+    $("wsTapHint").hidden = false;
+  } else {
+    const q = st[sel], noInt = q.free && q.lo == null;
+    $("wsMid").classList.add("sel"); $("wsMid").setAttribute("aria-label", "Back to the whole workout");
+    $("wsMod").textContent = "Interval " + (sel + 1) + " of " + st.length + "  \u00b7  " + durLbl(q.dur) + (noInt ? "" : "  \u00b7  " + pctLbl(q));
+    $("wsLeftL").textContent = "\u2212" + durLbl(durStep(q.dur - 1)); $("wsRightL").textContent = "+" + durLbl(durStep(q.dur));
+    $("wsUpL").textContent = "+1%"; $("wsDownL").textContent = "\u22121%";
+    $("wsLeft").disabled = q.dur - durStep(q.dur - 1) < 5; $("wsRight").disabled = false; $("wsUp").disabled = noInt; $("wsDown").disabled = noInt;
+    $("wsTapHint").hidden = true;
+  }
   requestAnimationFrame(() => drawWsGraph(st));
   const groups = []; hard.forEach(i => { const q = st[i], d = durLbl(q.dur), pc = pctLbl(q), g = groups.find(x => x.d === d && x.pc === pc);
     if (g) g.n++; else groups.push({ d, pc, n: 1 }); });
@@ -2162,6 +2216,11 @@ function drawWsGraph(st) {
     c.save(); c.translate(cx, top + 3 * dpr); c.rotate(Math.PI / 2); c.textAlign = "left"; c.textBaseline = "middle";   // narrow: one line reading down the bar
     c.fillStyle = "rgba(0,0,0,.55)"; c.fillText(one, dpr, -dpr); c.fillStyle = "#fff"; c.fillText(one, 0, 0); c.restore();
   });
+  if (WS.sel != null && st[WS.sel]) {                              // the selected interval: everything else dimmed, a frame around it
+    const q = st[WS.sel], x0 = starts[WS.sel] / total * W2, x1 = (starts[WS.sel] + q.dur) / total * W2, top = Y(Math.max(q.a, q.b, q.hi || 0)) - 3 * dpr;
+    c.fillStyle = "rgba(0,0,0,.55)"; c.fillRect(0, 0, x0, H2); c.fillRect(x1, 0, W2 - x1, H2);
+    c.strokeStyle = "#fff"; c.lineWidth = 2 * dpr; const L = Math.max(2 * dpr, x1 - x0); c.strokeRect(x0 + dpr, Math.max(dpr, top), L - 2 * dpr, H2 - Math.max(dpr, top) - dpr);
+  }
 }
 const wsItem = () => ({ ...WS.item, text: WS.text, custom: isHard(WS.item) ? "hard" : "none" });
 const closeWoSheet = () => { $("woSheet").style.display = "none"; };
@@ -2169,8 +2228,17 @@ function wsFavShow() { const on = !!(WS.item && isFav(WS.item)); $("wsFav").clas
 $("wsFav").onclick = () => { if (!WS.item) return; toggleFav(WS.item); wsFavShow(); toast(isFav(WS.item) ? "Added \u201c" + WS.item.name + "\u201d to Favorites." : "Removed from Favorites."); };
 $("wsClose").onclick = closeWoSheet;
 $("woSheet").addEventListener("click", e => { if (e.target === $("woSheet")) closeWoSheet(); });
-$("wsLenP").onclick = () => { WS.len++; renderWoSheet(); }; $("wsLenM").onclick = () => { WS.len--; renderWoSheet(); };
-$("wsDifP").onclick = () => { WS.dif++; renderWoSheet(); }; $("wsDifM").onclick = () => { WS.dif--; renderWoSheet(); };
+$("wsRight").onclick = () => { if (WS.sel != null) wsEditDur(1); else { WS.len++; renderWoSheet(); } };
+$("wsLeft").onclick = () => { if (WS.sel != null) wsEditDur(-1); else { WS.len--; renderWoSheet(); } };
+$("wsUp").onclick = () => { if (WS.sel != null) wsEditInt(1); else { WS.dif++; renderWoSheet(); } };
+$("wsDown").onclick = () => { if (WS.sel != null) wsEditInt(-1); else { WS.dif--; renderWoSheet(); } };
+$("wsReset").onclick = wsReset;
+$("wsMid").onclick = () => { if (WS.sel != null) wsSelect(null); };   // the centre: back to the whole workout
+$("wsGraph").addEventListener("click", e => {                        // tap an interval to select it (tap it again to deselect)
+  const st = WS.steps; if (!st || !st.length) return; const r = $("wsGraph").getBoundingClientRect(), total = st.reduce((a, q) => a + q.dur, 0);
+  const t = (e.clientX - r.left) / r.width * total; let acc = 0, i = 0; for (; i < st.length - 1; i++) { acc += st[i].dur; if (t < acc) break; }
+  wsSelect(i);
+});
 $("wsLoad").onclick = () => { const it = wsItem(), dur = WS.steps.reduce((a, q) => a + q.dur, 0); closeWoSheet(); if (WS.cal && dvOpen()) closeToday(); askLaunch(it, fmt(dur), "TSS " + Math.round(planStats(WS.steps).tss)); };
 $("wsSched").onclick = async () => { const it = wsItem(); if (WS.cal) { saveCalEdit(); return; }
   if (WS.day) { const ok = await daySchedule(it.name, it.text, $("wsSched")); if (ok) closeWoSheet(); return; }   // Add Calendar Entry: straight onto that day
