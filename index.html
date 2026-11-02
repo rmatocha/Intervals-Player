@@ -21,7 +21,7 @@
   #phSheet { background:#12161c; width:100%; max-width:520px; max-height:92vh; overflow:auto; border-radius:22px 22px 0 0; padding:18px 14px calc(22px + env(safe-area-inset-bottom)); }
   #phModal[style*="center"] #phSheet { border-radius:20px; margin:16px; }
   .phlvl { border:1px solid #2b3340; border-radius:12px; padding:12px; margin-top:8px; } .phlvl.sel { border-color:var(--acc); box-shadow:inset 0 0 0 1px var(--acc); }
-  .phdays { display:flex; gap:5px; margin-top:8px; } .phdays button { flex:1; padding:10px 0; font-size:13px; } .phdays .hard { background:var(--acc); color:#000; } .phdays .endu { background:#1e3a5c; color:#9cc8ff; } .phdays .off { background:#1a1e24; color:#4b5462; }
+  .phdays { display:flex; gap:5px; margin-top:8px; } .phdays button { flex:1; padding:10px 0; font-size:13px; } .phdays .hard { background:var(--acc); color:#000; } .phdays .long { background:#2f6db3; color:#fff; } .phdays .endu { background:#1e3a5c; color:#9cc8ff; } .phdays .off { background:#1a1e24; color:#4b5462; }
   .phwarn { background:#2a2216; border:1px solid #5a4520; border-radius:10px; padding:9px 10px; font-size:13px; color:#ffd58a; margin-top:8px; line-height:1.4; } .phwarn label { display:block; margin-top:4px; color:var(--fg); }
   .phrow { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; font-weight:600; font-size:15px; } .phrow input[type=date] { width:auto; } .phrow input[type=checkbox] { width:24px; height:24px; }
   .phcal { margin-top:6px; font-size:13px; } .phw { color:var(--dim); font-size:11px; text-transform:uppercase; letter-spacing:.06em; margin:10px 0 4px; font-weight:600; }
@@ -436,7 +436,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">b1.0.8</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">b1.0.9</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -683,7 +683,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">b1.0.8</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+  <span class="ver">b1.0.9</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
 </div>
 
 <div class="ctrl">
@@ -4479,12 +4479,13 @@ function phBuild(p, from, firstMin) {                       // the rest of the p
   for (let k = 0; i < p.seq.length && k < 200; k++, d = phAdd(d, 1)) {
     const w = phDow(d);
     if (p.hard.includes(w) && d >= firstMin && (!last || phDiff(last, d) >= 2)) { out.push({ date: d, kind: "sst", i, name: p.seq[i] }); last = d; i++; }
-    else if (p.enduOn && p.endu.includes(w)) out.push({ date: d, kind: "endu", name: "Endurance" });
+    else if (p.enduOn && (p.endu.includes(w) || p.long === w)) out.push(phEnduEntry(p, d));
   }
   if (p.enduOn && last) for (const end = phAdd(last, (7 - phDow(last)) % 7); d <= end; d = phAdd(d, 1))   // finish out the last week (through Sunday)
-    if (d > last && p.endu.includes(phDow(d))) out.push({ date: d, kind: "endu", name: "Endurance" });
+    if (d > last && (p.endu.includes(phDow(d)) || p.long === phDow(d))) out.push(phEnduEntry(p, d));
   return out;
 }
+const phEnduEntry = (p, d) => p.long === phDow(d) ? { date: d, kind: "endu", long: true, min: p.longMin || 120, name: "Long Endurance" } : { date: d, kind: "endu", name: "Endurance" };
 const phExt = (p, e) => "ipphase-" + p.run + "-" + e.kind + "-" + e.date;
 async function phEvents(from, to) {                         // planned workouts on the calendar between two days
   const auth = icuAuth(); if (!auth) throw new Error("not connected to intervals.icu");
@@ -4506,7 +4507,7 @@ const phDel = id => fetch("https://intervals.icu/api/v1/athlete/" + encodeURICom
 function phEvBody(p, e, over) {
   const it = e.kind === "sst" ? phItem(e.name) : null;
   return Object.assign({ category: "WORKOUT", start_date_local: e.date + "T00:00:00", type: "Ride", name: e.name, description: it ? it.text : "", external_id: phExt(p, e) },
-    e.kind === "endu" ? { moving_time: 3600, icu_training_load: 42 } : {}, over || {});
+    e.kind === "endu" ? { moving_time: (e.min || 60) * 60, icu_training_load: Math.round(42 * (e.min || 60) / 60) } : {}, over || {});
 }
 async function phClearFuture(p, from) {                     // delete the phase's own entries from a day on
   if (!icuAuth()) return 0; let n = 0;
@@ -4565,8 +4566,8 @@ const phOpt = (id, title, sub, pri) => '<button id="' + id + '" class="phopt' + 
 /* ---------- start / change the week ---------- */
 function phSetup(edit) {
   const p = edit ? phGet() : null;
-  const S = PH.setup = { lvl: p ? p.lvl : "beg", days: [0, 0, 0, 0, 0, 0, 0], start: localDay(), cal: p ? !!p.cal : true, endu: p ? !!p.enduOn : true, step: 1, edit: !!edit };
-  if (p) { p.hard.forEach(d => S.days[d] = 1); p.endu.forEach(d => S.days[d] = 2); } else { S.days[1] = 1; S.days[5] = 1; S.days[3] = S.days[6] = S.days[0] = 2; }
+  const S = PH.setup = { lvl: p ? p.lvl : "beg", days: [0, 0, 0, 0, 0, 0, 0], start: localDay(), cal: p ? !!p.cal : true, endu: p ? !!p.enduOn : true, longMin: p && p.longMin || 120, step: 1, edit: !!edit };
+  if (p) { p.hard.forEach(d => S.days[d] = 1); p.endu.forEach(d => S.days[d] = 2); if (p.long != null) S.days[p.long] = 3; } else { S.days[1] = 1; S.days[5] = 1; S.days[3] = S.days[0] = 2; S.days[6] = 3; }
   phSetupDraw();
 }
 function phSetupDraw() {
@@ -4576,17 +4577,21 @@ function phSetupDraw() {
   const lv = k => { const L = P.levels[k], s = phSeq("sst", k); return '<div class="phlvl' + (S.lvl === k ? " sel" : "") + '" data-l="' + k + '"><b>' + L.label + '</b><div class="hint">' + (s[0] || "").split(" ").slice(0, 2).join(" ") + " → " + (s[s.length - 1] || "").split(" ").slice(0, 2).join(" ") + " · " + s.length + " workouts · easy weeks " + L.easy.join(" & ") + "</div></div>"; };
   const el = phSheet('<div class="phlbl">Sweet Spot phase</div><div class="phh">' + (S.edit ? "Change your week" : "Set up your block") + "</div>"
     + (S.edit ? "" : lv("beg") + lv("int"))
-    + '<div class="hint" style="margin-top:12px">Tap a day: <b style="color:var(--acc)">Hard</b> → <b style="color:#9cc8ff">Endurance</b> → Rest</div>'
-    + '<div class="phdays">' + DOW.map((d, i) => ({ d, i })).slice(1).concat([{ d: "Sun", i: 0 }]).map(x => '<button class="' + ["off", "hard", "endu"][S.days[x.i]] + '" data-d="' + x.i + '">' + x.d + "</button>").join("") + "</div>"
-    + (warn ? '<div class="phwarn">' + warn + "</div>" : '<div class="hint" style="margin-top:6px">Hard: ' + hard.map(i => DOW[i]).join(" + ") + "</div>")
+    + '<div class="hint" style="margin-top:12px">Tap a day: <b style="color:var(--acc)">Hard</b> → <b style="color:#9cc8ff">Endurance</b> → <b style="color:#6fb0ff">Long</b> → Rest</div>'
+    + '<div class="phdays">' + DOW.map((d, i) => ({ d, i })).slice(1).concat([{ d: "Sun", i: 0 }]).map(x => '<button class="' + ["off", "hard", "endu", "long"][S.days[x.i]] + '" data-d="' + x.i + '">' + x.d + (S.days[x.i] === 3 ? '<small style="display:block;font-size:11px;font-weight:600;opacity:.9;margin-top:1px">' + (S.longMin % 60 ? hmm(S.longMin) : S.longMin / 60 + "h") + "</small>" : "") + "</button>").join("") + "</div>"
+    + (warn ? '<div class="phwarn">' + warn + "</div>" : '<div class="hint" style="margin-top:6px">Hard: ' + hard.map(i => DOW[i]).join(" + ") + (S.days.includes(3) ? " · Long: " + DOW[S.days.indexOf(3)] : "") + "</div>")
+    + (S.days.includes(3) ? '<div class="phrow"><span>Long ride</span><span style="display:flex;align-items:center;gap:8px"><button id="phLM" style="width:44px">−</button><b style="min-width:52px;text-align:center">' + hmm(S.longMin) + '</b><button id="phLP" style="width:44px">+</button></span></div>' : "")
     + '<label class="phrow"><span>' + (S.edit ? "From" : "Starts") + '</span><input id="phStartD" type="date" value="' + S.start + '"></label>'
     + '<label class="phrow"><span>Put the whole block on my calendar</span><input id="phCal" type="checkbox"' + (S.cal ? " checked" : "") + "></label>"
     + '<div class="hint">Off: you schedule each workout as you go.</div>'
     + '<label class="phrow"><span>Include endurance days</span><input id="phEndu" type="checkbox"' + (S.endu ? " checked" : "") + "></label>"
-    + '<div class="hint">On an endurance day the app asks how you want to ride (set time, free ride or outdoor). On the calendar it starts as a 1-hour placeholder.</div>'
+    + '<div class="hint">On an endurance day the app asks how you want to ride (set time, free ride or outdoor). On the calendar it starts as a placeholder: 1 hour, or your long ride\u2019s length.</div>'
     + '<div class="row" style="margin:14px 0 0"><button id="phSetNo" style="flex:1">Cancel</button><button id="phSetGo" class="primary" style="flex:1"' + (warn ? " disabled" : "") + ">Preview</button></div>");
   el.querySelectorAll(".phlvl").forEach(b => b.onclick = () => { S.lvl = b.dataset.l; phSetupDraw(); });
-  el.querySelectorAll(".phdays button").forEach(b => b.onclick = () => { const i = +b.dataset.d; S.days[i] = (S.days[i] + 1) % 3; phSetupDraw(); });
+  el.querySelectorAll(".phdays button").forEach(b => b.onclick = () => { const i = +b.dataset.d; S.days[i] = (S.days[i] + 1) % 4;   // Rest → Hard → Endurance → Long → Rest
+    if (S.days[i] === 3) S.days.forEach((v, k) => { if (v === 3 && k !== i) S.days[k] = 2; });                                           // one long day: the old one becomes endurance
+    phSetupDraw(); });
+  if ($("phLM")) { $("phLM").onclick = () => { S.longMin = Math.max(90, S.longMin - 15); phSetupDraw(); }; $("phLP").onclick = () => { S.longMin = Math.min(360, S.longMin + 15); phSetupDraw(); }; }
   $("phStartD").onchange = e => { if (/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)) S.start = e.target.value < localDay() ? localDay() : e.target.value; };
   $("phCal").onchange = e => { S.cal = e.target.checked; }; $("phEndu").onchange = e => { S.endu = e.target.checked; };
   $("phSetNo").onclick = phClose; $("phSetGo").onclick = () => phPreview();
@@ -4595,6 +4600,7 @@ async function phPreview() {
   const S = PH.setup, old = S.edit ? phGet() : null;
   const p = old ? { ...old } : { id: "sst", lvl: S.lvl, seq: phSeq("sst", S.lvl), done: 0, hist: [], plan: [], run: Date.now().toString(36), t: Date.now() };
   p.hard = S.days.map((v, i) => v === 1 ? i : -1).filter(i => i >= 0); p.endu = S.days.map((v, i) => v === 2 ? i : -1).filter(i => i >= 0);
+  const li = S.days.indexOf(3); p.long = li >= 0 ? li : null; p.longMin = S.longMin;
   p.cal = S.cal; p.enduOn = S.endu;
   const first = S.start < phMin(p) ? phMin(p) : S.start, plan = phBuild(p, S.start, first);
   if (!plan.length) { toast("Nothing left to plan in this phase.", true); return; }
@@ -4609,7 +4615,7 @@ async function phPreview() {
   } else if (p.cal) { toast("Connect intervals.icu to put the block on your calendar.", true); p.cal = false; }
   let wkN = 0, lastWk = null; const rows = [];
   plan.forEach(e => { const wkStart = phAdd(e.date, -((phDow(e.date) + 6) % 7)); if (wkStart !== lastWk) { lastWk = wkStart; wkN++; rows.push('<div class="phw">Week ' + wkN + " · " + phNice(wkStart) + "</div>"); }
-    rows.push('<div class="phr"><b>' + phNice(e.date) + '</b><i style="background:' + (e.kind === "sst" ? "#3ddc84" : "#3b9cff") + '"></i>' + e.name + (e.kind === "sst" ? ' <span class="hint">' + phInfo(e.name).split(" · ")[0] + "</span>" : ' <span class="hint">1 h placeholder</span>') + "</div>"); });
+    rows.push('<div class="phr"><b>' + phNice(e.date) + '</b><i style="background:' + (e.kind === "sst" ? "#3ddc84" : "#3b9cff") + '"></i>' + e.name + (e.kind === "sst" ? ' <span class="hint">' + phInfo(e.name).split(" · ")[0] + "</span>" : ' <span class="hint">' + hmm(e.min || 60).replace(/:00$/, "") + (e.min && e.min % 60 ? "" : " h") + " placeholder</span>") + "</div>"); });
   const draw = () => {
     const el = phSheet('<div style="display:flex;justify-content:flex-start;margin:-6px 0 4px"><button id="phPrevBack" style="padding:6px 12px">‹ Back</button></div><div class="phlbl">Sweet Spot · ' + PHASES.sst.levels[p.lvl].label + '</div><div class="phh">' + phNice(plan[0].date) + " – " + phNice(plan[plan.length - 1].date) + "</div>"
       + '<div class="phcal">' + rows.join("") + "</div>"
@@ -4728,10 +4734,10 @@ function phEnduText(min, mode, lvl) {
   return lvl === "low" ? "Endurance\n-" + min + "m " + pc + "%\n" : "Warmup\n-5m ramp 50%-" + pc + "%\n\nEndurance\n-" + (min - 5) + "m " + pc + "%\n";
 }
 function phEndurance(p) {
-  const ftp = +$("ftp").value || 270, S = { min: 60, mode: "erg", lvl: "mid", pick: "time" }, w = f => Math.round(f * ftp);
+  const isLong = p.long === phDow(localDay()), ftp = +$("ftp").value || 270, S = { min: isLong ? p.longMin || 120 : 60, mode: "erg", lvl: "mid", pick: "time" }, w = f => Math.round(f * ftp);
   const draw = () => {
     const lab = S.pick === "time" ? hmm(S.min) + " " + (S.mode === "free" ? "Free Ride" : S.lvl[0].toUpperCase() + S.lvl.slice(1)) : "";
-    const el = phSheet('<div class="phlbl" style="color:#3b9cff">Sweet Spot · Endurance day</div><div class="phh">How do you want to ride today?</div>'
+    const el = phSheet('<div class="phlbl" style="color:#3b9cff">Sweet Spot · ' + (isLong ? "Long endurance day" : "Endurance day") + '</div><div class="phh">How do you want to ride today?</div>'
       + '<button class="phbig' + (S.pick === "time" ? " on" : "") + '" data-p="time"><b>Set a time</b><small>Pick how long; ERG or Free Ride</small></button>'
       + (S.pick === "time" ? '<div class="phstp"><button id="peM">−</button><div>' + hmm(S.min) + '</div><button id="peP">+</button></div>'
         + '<div class="phsegs"><button data-m="erg" class="' + (S.mode === "erg" ? "on" : "") + '">ERG</button><button data-m="free" class="' + (S.mode === "free" ? "on" : "") + '">Free Ride</button></div>'
@@ -4804,7 +4810,7 @@ async function phaseCheck() {
     return;
   }
   const sstToday = (p.plan || []).some(e => e.kind === "sst" && e.date === today);
-  if (p.enduOn && p.endu.includes(phDow(today)) && !sstToday && !(p.enduDone || {})[today] && once("endu")) phEndurance(p);
+  if (p.enduOn && (p.endu.includes(phDow(today)) || p.long === phDow(today)) && !sstToday && !(p.enduDone || {})[today] && once("endu")) phEndurance(p);
 }
 document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - PH.lastCheck > 60000) { PH.lastCheck = Date.now(); setTimeout(phaseCheck, 2500); } });
 $("phModal").addEventListener("click", e => { if (e.target === $("phModal")) phClose(); });
