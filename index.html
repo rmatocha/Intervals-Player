@@ -13,6 +13,8 @@
   body { margin:0; background:var(--bg); color:var(--fg); font-family:-apple-system,system-ui,sans-serif; padding:env(safe-area-inset-top) 10px 4px; }
   button { background:#242a33; color:var(--fg); border:0; border-radius:10px; padding:10px 12px; font-size:14px; font-weight:600; }
   button.primary { background:var(--acc); color:#000; }
+  .lkrow { display:grid; grid-template-columns:minmax(0,1fr) 40px 48px 40px minmax(0,1fr); align-items:center; column-gap:8px; }   /* look back / ahead: same columns, so the − / + line up */
+  .lkrow > b { text-align:center; } .lkrow > span:last-child { justify-self:end; }
   button:disabled { opacity:.4; }
   .ctrl { display:flex; gap:6px; margin:4px 0; }
   .ctrl button { display:flex; align-items:center; justify-content:center; flex:1 1 0; min-width:0; height:calc(var(--u)*6.05); font-size:min(20px,calc(var(--u)*2.86)); padding:0 6px; border-radius:12px; }
@@ -55,6 +57,7 @@
   /* ride summary: metrics as two columns of "label value" text, then stacked power / 30 s power / HR / cadence graphs */
   .rsimg { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; height:44px; margin:8px 0 0; background:#2b3340; color:var(--fg); font-weight:600; border-radius:10px; }
   .rsimg:disabled { opacity:.45; }
+  .rsbtns { display:flex; gap:8px; } .rsbtns .rsimg { flex:1 1 0; min-width:0; }
   .rsm { display:grid; grid-template-columns:1fr 1fr; column-gap:12px; background:var(--card); border-radius:12px; padding:10px 8px 12px; font-variant-numeric:tabular-nums; }
   .rsm .col { display:grid; grid-template-columns:auto 1fr; column-gap:7px; row-gap:3px; align-content:start; min-width:0; }
   .rsm .k { text-align:right; color:#8b94a3; font-size:14px; white-space:nowrap; }
@@ -416,7 +419,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">b1.0.5</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">b1.0.6</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -508,12 +511,12 @@ Cooldown
       </div>
       <canvas id="cvLoad" style="width:100%;height:150px;display:block;border-radius:6px"></canvas>
       <canvas id="cvForm" style="width:100%;height:118px;display:block;margin-top:4px;border-radius:6px"></canvas>
-      <div class="row" style="margin:10px 0 0;justify-content:space-between;flex-wrap:nowrap">
+      <div class="lkrow" style="margin:10px 0 0">
         <span class="status">Look back</span>
         <button id="btnBackMinus" class="mini" style="width:40px;flex:none">−</button><b id="vBack" style="min-width:34px;text-align:center">42</b><button id="btnBackPlus" class="mini" style="width:40px;flex:none">+</button>
         <span class="status">days</span>
       </div>
-      <div class="row" style="margin:6px 0 0;justify-content:space-between;flex-wrap:nowrap">
+      <div class="lkrow" style="margin:6px 0 0">
         <span class="status">Look ahead</span>
         <button id="btnAheadMinus" class="mini" style="width:40px;flex:none">−</button><b id="vAhead" style="min-width:34px;text-align:center">7</b><button id="btnAheadPlus" class="mini" style="width:40px;flex:none">+</button>
         <span class="status">days</span>
@@ -646,7 +649,7 @@ Cooldown
     <div id="rsSrc" hidden style="margin:3px 0 0;font-size:13px;font-weight:600;color:#c3cad6"></div>
     <div style="height:12px"></div>
     <div id="rsStats" class="rsm"></div>
-    <button id="rsSaveImg" type="button" class="rsimg" disabled><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>Save image</button>
+    <div class="rsbtns"><button id="rsSaveImg" type="button" class="rsimg" disabled><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>Save Image</button><button id="rsSaveFit" type="button" class="rsimg" disabled><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 11v6"/><path d="M9 14l3 3 3-3"/></svg>Save .fit</button></div>
     <div id="rsChart" hidden class="rschart"></div>
     <div id="rsZones" hidden style="background:var(--card);border-radius:12px;padding:10px 12px;margin-top:10px"><div class="status" style="text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Time in zones</div><div id="rsZoneRows" class="zrows"></div></div>
     <div id="rsWo" hidden style="background:var(--card);border-radius:12px;padding:10px;margin-top:10px"><div class="status" style="text-transform:uppercase;letter-spacing:.05em">Workout</div><div id="rsWoName" style="font-weight:600;margin:2px 0 6px"></div><canvas id="rsWoGraph" style="width:100%;height:60px;display:block;border-radius:6px"></canvas><div id="rsWoInfo" class="status" style="margin-top:4px"></div></div>
@@ -662,7 +665,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">b1.0.5</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+  <span class="ver">b1.0.6</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
 </div>
 
 <div class="ctrl">
@@ -2908,7 +2911,7 @@ function calCurve(v) {                                     // the slope and base
 }
 function calPack() {
   const tr = { ...calMap() }; if (SIMC.tr && SIMC.tt) tr[SIMC.tr] = { A0: SIMC.A0, B0: SIMC.B0, A: SIMC.A, B: SIMC.B, S: SIMC.S, t: SIMC.tt };
-  return { rider: SIMC.tc ? { cad: SIMC.cad, t: SIMC.tc } : null, bias: biasT() ? { sim: BIAS.sim, stand: BIAS.stand, t: biasT() } : null, trainers: tr };
+  return { rider: SIMC.tc ? { cad: SIMC.cad, t: SIMC.tc } : null, bias: biasT() ? { sim: BIAS.sim, stand: BIAS.stand, t: biasT() } : null, trainers: tr, ...setPack() };
 }
 function calApply(c) {                                     // take whatever the account has that is newer than this phone's
   if (!c || typeof c !== "object") return; let ch = false;
@@ -2929,10 +2932,11 @@ function calApply(c) {                                     // take whatever the 
   }
   if (mc) calMapSave(map);
   if (ch) simSave(false);
+  setApply(c);
 }
 function calLocalNewer(c) {
   c = c || {}; const T = c.trainers || {}, t = x => +(x && x.t) || 0;
-  if ((SIMC.tc || 0) > t(c.rider) || biasT() > t(c.bias)) return true;
+  if ((SIMC.tc || 0) > t(c.rider) || biasT() > t(c.bias) || setLocalNewer(c)) return true;
   if (SIMC.tr && (SIMC.tt || 0) > t(T[SIMC.tr])) return true;
   return Object.entries(calMap()).some(([n, v]) => t(v) > t(T[n]));
 }
@@ -2951,18 +2955,98 @@ async function calCall(method, body) {
 }
 async function calPull() {
   if (!icuAuth() || W.running) { calShow(); return; }
-  CAL.pulledAt = Date.now();
+  CAL.pulledAt = Date.now(); setScan();
   try { const c = await calCall("GET"); if (W.running) return; calApply(c); if (calLocalNewer(c)) await calPush(); else { CAL.state = "ok"; CAL.at = Date.now(); } }
   catch (e) { CAL.state = "fail"; log("Calibration sync: " + e.message); }
   calShow();
 }
 async function calPush() {
-  clearTimeout(CAL.timer); if (!icuAuth()) { calShow(); return; }
+  clearTimeout(CAL.timer); if (!icuAuth()) { calShow(); return; } setScan();
   try { const c = await calCall("PUT", calPack()); if (!W.running) calApply(c); CAL.state = "ok"; CAL.at = Date.now(); }
   catch (e) { CAL.state = "fail"; log("Calibration sync: " + e.message); }
   calShow();
 }
 function calPushSoon() { clearTimeout(CAL.timer); CAL.timer = setTimeout(calPush, 3000); }
+/* Settings and the workout library ride along with the calibration. Nothing in the app has to report a change:
+   every 15 s (and before every pull or push, and when the app goes to the background) setScan() compares what is
+   stored now with what it saw last, and stamps anything different with the time. Each setting, each saved workout
+   (by name; a deletion is kept as a dated tombstone so it reaches the other phones), each favourite and the folder
+   renames carry their own time, so the newest change wins item by item and two phones' libraries merge instead of
+   one replacing the other. Kept per phone on purpose: paired Bluetooth devices, sign-ins, open folders, ride recovery. */
+const SYNC_PREFS = {                                       // setting -> how to show a value that arrived from another phone
+  ipScheme: v => { if (window.Appearance) Appearance.set(v || "graphite"); try { $("appScheme").value = Appearance.get().scheme; loadToday(); loadNext7(); } catch (e) {} },
+  kickrCues: v => { $("cueOn").checked = v !== "0"; },
+  kickrCueVol: v => { const n = +v; if (n >= 1 && n <= 3) { cueLvl = n; $("cueVol").value = String(n); if (AC) AC._out.gain.value = CUE_GAIN[n]; } },
+  kickrAutoPause: v => { $("apOn").checked = v !== "0"; },
+  kickrGov2: v => { try { const g = JSON.parse(v || "null"); if (g) { $("govOn").checked = !!g.on; if (g.rpm) $("govCad").value = g.rpm; } } catch (e) {} },
+  kickrDist: v => { if (v) $("distMph").value = v; },
+  kickrLaunchMode: v => { launchMode = v === "erg" ? "erg" : "sim"; },
+  kickrFitRange: v => { try { const f = JSON.parse(v || "null"); if (f) { FIT.back = f.back || 42; FIT.ahead = f.ahead != null ? f.ahead : 7; renderFit(); } } catch (e) {} }
+};
+const LS = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+const syncMeta = () => { try { return JSON.parse(localStorage.getItem("ipSync") || "null"); } catch (e) { return null; } };
+const syncMetaSave = m => { try { localStorage.setItem("ipSync", JSON.stringify(m)); } catch (e) {} };
+const libKey = n => String(n || "").trim().toLowerCase();
+const libSig = it => JSON.stringify([it.name, it.text, it.folder || ""]);
+function setScan() {                                       // stamp whatever changed since the last look; returns true if anything did
+  let m = syncMeta(); const first = !m, now = Date.now(), t0 = first ? 1 : now;   // first run: what's already here counts, but loses to any real change
+  if (first) m = { prefs: {}, lib: {}, favs: {}, alias: { sig: "{}", t: 0 } };
+  let ch = false;
+  for (const k of Object.keys(SYNC_PREFS)) { const v = LS(k), e = m.prefs[k];
+    if (v == null && !e) continue;
+    if (!e || e.sig !== v) { m.prefs[k] = { sig: v, t: v == null && !e ? 0 : t0 }; ch = true; } }
+  const seen = new Set();
+  for (const it of userLib) { const k = libKey(it.name), sig = libSig(it), e = m.lib[k]; seen.add(k);
+    if (!e || e.del || e.sig !== sig) { m.lib[k] = { sig, t: t0 }; ch = true; } }
+  for (const [k, e] of Object.entries(m.lib)) if (!seen.has(k) && !e.del) { m.lib[k] = { del: true, t: now }; ch = true; }
+  for (const n of FAVS) { const e = m.favs[n]; if (!e || !e.on) { m.favs[n] = { on: true, t: t0 }; ch = true; } }
+  for (const [n, e] of Object.entries(m.favs)) if (e.on && !FAVS.has(n)) { m.favs[n] = { on: false, t: now }; ch = true; }
+  const as = JSON.stringify(FOLDER_ALIAS || {}); if (m.alias.sig !== as) { m.alias = { sig: as, t: as === "{}" && first ? 0 : t0 }; ch = true; }
+  if (ch || first) syncMetaSave(m);
+  return ch && !first;
+}
+function setPack() {
+  const m = syncMeta(); if (!m) return {};
+  const prefs = {}, lib = {}, favs = {};
+  for (const [k, e] of Object.entries(m.prefs)) if (e.t > 0) prefs[k] = { v: e.sig, t: e.t };
+  for (const [k, e] of Object.entries(m.lib)) { if (e.del) { lib[k] = { del: true, t: e.t }; continue; }
+    const it = userLib.find(x => libKey(x.name) === k); if (it) lib[k] = { name: it.name, text: it.text, folder: it.folder || "", t: e.t }; }
+  for (const [n, e] of Object.entries(m.favs)) favs[n] = { on: !!e.on, t: e.t };
+  return { prefs, lib, favs, alias: m.alias.t > 0 ? { map: FOLDER_ALIAS || {}, t: m.alias.t } : null };
+}
+function setApply(c) {                                     // take what's newer on the account, item by item
+  const m = syncMeta(); if (!m || !c) return; let libCh = false, favCh = false, aliasCh = false;
+  for (const [k, x] of Object.entries(c.prefs || {})) {
+    if (!(k in SYNC_PREFS) || !x || !(+x.t > ((m.prefs[k] || {}).t || 0))) continue;
+    const v = x.v == null ? null : String(x.v);
+    try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {}
+    m.prefs[k] = { sig: v, t: +x.t }; try { SYNC_PREFS[k](v); } catch (e) {} }
+  for (const [k, x] of Object.entries(c.lib || {})) {
+    if (!x || !(+x.t > ((m.lib[k] || {}).t || 0))) continue;
+    const i = userLib.findIndex(it => libKey(it.name) === k);
+    if (x.del) { if (i >= 0) userLib.splice(i, 1); m.lib[k] = { del: true, t: +x.t }; libCh = true; continue; }
+    if (!x.name || !x.text || libKey(x.name) !== k) continue;
+    const it = { name: String(x.name), text: String(x.text), folder: String(x.folder || "") };
+    if (i >= 0) userLib[i] = it; else userLib.push(it);
+    m.lib[k] = { sig: libSig(it), t: +x.t }; libCh = true; }
+  for (const [n, x] of Object.entries(c.favs || {})) {
+    if (!x || !(+x.t > ((m.favs[n] || {}).t || 0))) continue;
+    if (x.on) FAVS.add(n); else FAVS.delete(n); m.favs[n] = { on: !!x.on, t: +x.t }; favCh = true; }
+  const A = c.alias;
+  if (A && A.map && typeof A.map === "object" && +A.t > (m.alias.t || 0)) { FOLDER_ALIAS = { ...A.map }; m.alias = { sig: JSON.stringify(FOLDER_ALIAS), t: +A.t }; aliasCh = true; }
+  if (libCh) persistLib();
+  if (favCh) try { localStorage.setItem("kickrFavs", JSON.stringify([...FAVS])); } catch (e) {}
+  if (aliasCh) try { localStorage.setItem("kickrFolderAlias", JSON.stringify(FOLDER_ALIAS)); } catch (e) {}
+  syncMetaSave(m);
+  if (libCh || favCh || aliasCh) { try { renderLibrary(); refreshFolderSelect(); if (dayDate) renderDayLib(); } catch (e) {} }
+}
+function setLocalNewer(c) {
+  const m = syncMeta(); if (!m) return false; const t = x => +(x && x.t) || 0;
+  return Object.entries(m.prefs).some(([k, e]) => e.t > t((c.prefs || {})[k])) || Object.entries(m.lib).some(([k, e]) => e.t > t((c.lib || {})[k]))
+    || Object.entries(m.favs).some(([k, e]) => e.t > t((c.favs || {})[k])) || (m.alias.t || 0) > t(c.alias);
+}
+setInterval(() => { if (!W.running && icuAuth() && setScan()) calPushSoon(); }, 15000);
+document.addEventListener("visibilitychange", () => { if (document.hidden && !W.running && icuAuth() && setScan()) calPush(); });
 document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - CAL.pulledAt > 60000) calPull(); });
 setTimeout(calPull, 1500);
 function icuShow() {
@@ -3419,10 +3503,31 @@ function openRide(a) {
   if (wo) { $("rsWoName").textContent = wo.name; try { const st = parseText(wo.text, a.ftp || +$("ftp").value || 270); drawMini($("rsWoGraph"), st, { h: 80, ftpLine: true }); $("rsWoInfo").textContent = fmt(st.reduce((t, q) => t + q.dur, 0)) + "  ·  planned TSS " + Math.round(planStats(st).tss); } catch (e) { $("rsWo").hidden = true; } }
   $("rsDesc").hidden = !a.desc; $("rsDesc").textContent = a.desc || "";
   const link = $("rsLink"); link.hidden = !a.id || histSrc === "demo" && !icuAuth(); if (a.id) link.href = "https://intervals.icu/activities/" + encodeURIComponent(a.id);
-  RS.a = a; RS.blob = null; RS.d = rideTiles(a); $("rsSaveImg").disabled = true; rsMakeImage(null);   // the image is ready at once; it gets the power graph when the streams arrive
+  RS.a = a; RS.blob = null; RS.d = rideTiles(a); $("rsSaveImg").disabled = true; rsMakeImage(null); rsLoadFit(a);   // the image is ready at once; it gets the power graph when the streams arrive
   rideStreams(a);
 }
 const RS = { a: null, blob: null, d: null };
+/* A history ride's .fit, fetched from intervals.icu as soon as its summary opens, so Save .fit can hand it straight to the
+   share sheet (iPhone only allows that right after the tap). The original upload comes first: for rides recorded here,
+   that's this app's own file. If the original isn't a .fit (a GPX or TCX upload), intervals.icu's generated .fit is used.
+   Both come gzipped. */
+const rsFileBase = a => "ride-" + String(a.start || a.date || "").slice(0, 10) + "-" + (a.name || "ride").replace(/[^a-z0-9]+/gi, "-").slice(0, 40).replace(/-+$/, "");
+async function rsLoadFit(a) {
+  RS.fit = null; const btn = $("rsSaveFit"); btn.disabled = true; btn.title = "";
+  const auth = icuAuth(); if (!a || !a.id || !auth) { btn.title = "Connect intervals.icu to save this ride's .fit file"; return; }
+  const get = async path => { const r = await fetch("https://intervals.icu/api/v1/activity/" + encodeURIComponent(a.id) + path, { headers: { Authorization: auth } });
+    if (!r.ok) throw new Error("intervals.icu replied " + r.status); return new Uint8Array(await r.arrayBuffer()); };
+  const unzip = async u => { if (u[0] !== 0x1f || u[1] !== 0x8b) return u;
+    if (typeof DecompressionStream === "undefined") throw new Error("this browser can't unpack it");
+    return new Uint8Array(await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer()); };
+  const isFit = u => u.length > 12 && String.fromCharCode(u[8], u[9], u[10], u[11]) === ".FIT";
+  try {
+    let u = null; try { u = await unzip(await get("/file")); } catch (e) { u = null; }
+    if (!u || !isFit(u)) u = await unzip(await get("/fit-file"));
+    if (!isFit(u)) throw new Error("no .fit file");
+    if (RS.a !== a) return; RS.fit = new Blob([u], { type: "application/octet-stream" }); btn.disabled = false;
+  } catch (e) { if (RS.a === a) { btn.title = "Couldn't get the .fit file (" + e.message + ")"; log("Save .fit: " + e.message); } }
+}
 function rideTiles(a) {                                    // the same eight tiles as the end-of-ride image, from intervals.icu's numbers
   const f = (v, k) => v == null || !isFinite(v) ? "--" : k ? (+v).toFixed(k) : String(Math.round(v));
   return [{ l: "Time", v: a.el || a.sec ? fmt(a.el || a.sec) : "--", u: "" },
@@ -3966,6 +4071,7 @@ $("btnDoneSave").onclick = doneSave; $("btnDoneFree").onclick = doneFree;
 $("btnSaveRide").onclick = () => { $("saveModal").style.display = "none"; showSummary(true); };
 $("btnDiscardRide").onclick = () => { $("saveModal").style.display = "none"; showSummary(false); };
 $("btnSaveImg").onclick = saveSummaryImage;
+$("rsSaveFit").onclick = () => { const a = RS.a; if (a && RS.fit) saveFit(RS.fit, rsFileBase(a) + ".fit"); };
 $("rsSaveImg").onclick = () => { const a = RS.a; if (!a) return; shareImage(RS.blob, "ride-" + String(a.start || a.date || "").slice(0, 10) + "-" + (a.name || "ride").replace(/[^a-z0-9]+/gi, "-").slice(0, 40) + ".png", a.name || "Ride Summary"); }; $("btnSaveFit").onclick = saveFit; $("btnSaveLog").onclick = saveRideLog; $("btnSumClose").onclick = closeSummary; $("btnImgClose").onclick = () => { $("imgModal").style.display = "none"; };
 /* One Devices pop-up for both: each row is its own tap, because the phone opens only one device picker per tap. */
 let devAutoClosed = false;
