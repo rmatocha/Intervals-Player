@@ -13,6 +13,23 @@
   body { margin:0; background:var(--bg); color:var(--fg); font-family:-apple-system,system-ui,sans-serif; padding:env(safe-area-inset-top) 10px 4px; }
   button { background:#242a33; color:var(--fg); border:0; border-radius:10px; padding:10px 12px; font-size:14px; font-weight:600; }
   button.primary { background:var(--acc); color:#000; }
+  .phlbl { font-size:12px; color:var(--dim); text-transform:uppercase; letter-spacing:.06em; font-weight:600; margin:4px 4px 6px; }
+  .phcard { padding:12px; } .phh { font-size:18px; font-weight:700; margin:4px 0 2px; } .phbar { width:4px; height:40px; border-radius:2px; flex:none; }
+  .phdots { display:flex; gap:4px; margin:10px 0 4px; } .phdots i { flex:1; height:8px; border-radius:4px; background:#2b3340; } .phdots i.d { background:#3ddc84; } .phdots i.n { background:var(--acc); } .phdots i.e { outline:1px dashed #5b6575; outline-offset:1px; }
+  .phwk { display:flex; justify-content:space-between; font-size:11px; color:var(--dim); }
+  .phnext { background:#0f1216; border-radius:12px; padding:10px; margin-top:10px; } .phnote { font-size:13px; color:#ffd58a; margin-top:8px; }
+  #phSheet { background:#12161c; width:100%; max-width:520px; max-height:92vh; overflow:auto; border-radius:22px 22px 0 0; padding:18px 14px calc(22px + env(safe-area-inset-bottom)); }
+  #phModal[style*="center"] #phSheet { border-radius:20px; margin:16px; }
+  .phlvl { border:1px solid #2b3340; border-radius:12px; padding:12px; margin-top:8px; } .phlvl.sel { border-color:var(--acc); box-shadow:inset 0 0 0 1px var(--acc); }
+  .phdays { display:flex; gap:5px; margin-top:8px; } .phdays button { flex:1; padding:10px 0; font-size:13px; } .phdays .hard { background:var(--acc); color:#000; } .phdays .endu { background:#1e3a5c; color:#9cc8ff; } .phdays .off { background:#1a1e24; color:#4b5462; }
+  .phwarn { background:#2a2216; border:1px solid #5a4520; border-radius:10px; padding:9px 10px; font-size:13px; color:#ffd58a; margin-top:8px; line-height:1.4; } .phwarn label { display:block; margin-top:4px; color:var(--fg); }
+  .phrow { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; font-weight:600; font-size:15px; } .phrow input[type=date] { width:auto; } .phrow input[type=checkbox] { width:24px; height:24px; }
+  .phcal { margin-top:6px; font-size:13px; } .phw { color:var(--dim); font-size:11px; text-transform:uppercase; letter-spacing:.06em; margin:10px 0 4px; font-weight:600; }
+  .phr { display:flex; gap:8px; align-items:center; padding:6px 8px; border-radius:8px; background:#0f1216; margin-bottom:3px; } .phr b { width:92px; flex:none; font-weight:600; color:var(--dim); } .phr i { width:4px; height:16px; border-radius:2px; flex:none; } .phr .hint { margin-left:auto; }
+  .phopt { display:block; width:100%; text-align:left; margin-top:8px; padding:12px; } .phopt small { display:block; color:var(--dim); font-weight:400; font-size:12px; margin-top:2px; } .phopt.primary small { color:#3a2a00; }
+  .phbig { display:block; width:100%; text-align:left; margin-top:8px; padding:12px; border-radius:12px; } .phbig b { font-size:16px; } .phbig small { display:block; color:var(--dim); font-size:12px; margin-top:2px; font-weight:400; } .phbig.on { box-shadow:inset 0 0 0 2px var(--acc); }
+  .phstp { display:flex; align-items:center; gap:8px; margin-top:10px; } .phstp button { width:56px; font-size:20px; } .phstp div { flex:1; text-align:center; font-size:26px; font-weight:700; }
+  .phsegs { display:flex; gap:6px; margin-top:8px; } .phsegs button { flex:1; padding:10px 0; } .phsegs button.on { background:var(--acc); color:#000; } .phsegs small { display:block; font-weight:400; font-size:12px; }
   .lkrow { display:grid; grid-template-columns:minmax(0,1fr) 40px 48px 40px minmax(0,1fr); align-items:center; column-gap:8px; }   /* look back / ahead: same columns, so the − / + line up */
   .lkrow > b { text-align:center; } .lkrow > span:last-child { justify-self:end; }
   button:disabled { opacity:.4; }
@@ -419,7 +436,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">b1.0.6</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">b1.0.7</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -464,6 +481,7 @@
   </div>
 
   <div id="libTab" style="display:none">
+  <div id="phaseBox"></div>
   <div id="switchBanner" style="display:none;background:#2a2f38;border-radius:10px;padding:10px 12px;margin:0 0 8px;font-size:14px">
     Changing workout. Pick one below, then tap <b>Switch to this workout</b>. The ride carries on from where you are.
     <div class="row" style="margin:8px 0 0"><button id="btnSwitchCancel" style="flex:1">Cancel</button></div>
@@ -665,7 +683,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">b1.0.6</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+  <span class="ver">b1.0.7</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
 </div>
 
 <div class="ctrl">
@@ -832,6 +850,7 @@ Cooldown
   </div>
 </div>
 
+<div id="phModal" role="dialog" aria-modal="true" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:56;align-items:flex-end;justify-content:center"><div id="phSheet"></div></div>
 <div id="askModal" role="dialog" aria-modal="true" aria-labelledby="askTitle" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:57;align-items:center;justify-content:center;padding:24px">
   <div style="background:#161a20;border-radius:16px;padding:20px;max-width:340px;width:100%;text-align:center">
     <div id="askTitle" style="font-size:18px;font-weight:600;margin-bottom:8px"></div>
@@ -1795,6 +1814,7 @@ function showSummary(save = true) {
     else { $("sumUp").textContent = "Discarded. Not uploaded."; $("sumUp").style.color = ""; $("sumStrava").textContent = ""; }
     drawProfile($("sumProfile"), { noCursor: true, actual: true }); drawHR($("sumHR"), { noCursor: true }); prepareSummaryImage(d);
     setTimeout(calPush, 3000);
+    try { phAfterRide(save); } catch (e) { log("Phase: " + e.message); }
   }, 40);
 }
 
@@ -2126,18 +2146,30 @@ const LIBRARY = [
   {"name": "END+ 90", "folder": "Endurance", "text": "-10m ramp 50%-75%\nMain Set 3x\n-3m 71%\n-1m 82%\n\nMain Set 3x\n-3m 71%\n-1m 82%\n\nMain Set 3x\n-3m 71%\n-1m 82%\n\nMain Set 3x\n-3m 71%\n-1m 82%\n\nMain Set 3x\n-3m 71%\n-1m 82%\n\nMain Set 3x\n-3m 65%\n-1m 75%\n\nMain Set 2x\n-3m 65%\n-1m 75%\n"},
   {"name": "Slow Burn 120", "folder": "Endurance", "text": "-10m ramp 50%-83%\n-1m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-4m 50%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-5m ramp 63%-42%\n"},
   {"name": "Slow Burn 90", "folder": "Endurance", "text": "-10m ramp 50%-83%\n-1m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-4m 50%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-3m 71%\n-2m 63%\n-5m ramp 63%-42%\n"},
-  {"name": "SST 1.1 3x15", "folder": "Sweet Spot", "text": "-8m ramp 45%-65%\n-2m 88%\n-15m 70%\n-5m 60%\n-15m 88%\n-5m 60%\n-15m 88%\n-5m 60%\n-15m 88%\n-5m ramp 60%-40%\n"},
-  {"name": "SST 1.2 2x22", "folder": "Sweet Spot", "text": "-8m ramp 45%-65%\n-2m 88%\n-10m 70%\n-5m 60%\n-22m 85%\n-10m 60%\n-22m 85%\n-6m 60%\n-5m ramp 60%-40%\n"},
-  {"name": "SST 2.1 4x12", "folder": "Sweet Spot", "text": "-8m ramp 45%-65%\n-2m 90%\n-10m 65%\n-2m 50%\n-12m 90%\n-5m 60%\n-12m 90%\n-5m 60%\n-12m 90%\n-5m 60%\n-12m 90%\n-5m ramp 70%-40%\n"},
-  {"name": "SST 2.2 2x22", "folder": "Sweet Spot", "text": "-8m ramp 45%-65%\n-2m 90%\n-18m 65%\n-2m 50%\n-22m 86%\n-5m 60%\n-22m 86%\n-6m 65%\n-5m ramp 70%-40%\n"},
-  {"name": "SST 3.1 4x15", "folder": "Sweet Spot", "text": "-5m ramp 45%-65%\n-2m 90%\n-3m 50%\n-15m 90%\n-5m 60%\n-15m 90%\n-5m 60%\n-15m 90%\n-5m 60%\n-15m 90%\n-5m ramp 60%-40%\n"},
-  {"name": "SST 3.2 2x30", "folder": "Sweet Spot", "text": "-8m ramp 45%-65%\n-2m 88%\n-7m 65%\n-3m 50%\n-30m 86%\n-5m 60%\n-30m 86%\n-5m ramp 70%-40%\n"},
-  {"name": "SST 4.1 3x20", "folder": "Sweet Spot", "text": "-5m ramp 45%-65%\n-2m 90%\n-3m 50%\n-20m 90%\n-5m 60%\n-20m 90%\n-5m 60%\n-20m 90%\n-5m 60%\n-5m ramp 60%-40%\n"},
-  {"name": "SST 4.2 2x30", "folder": "Sweet Spot", "text": "-8m ramp 45%-65%\n-2m 88%\n-7m 65%\n-3m 50%\n-30m 90%\n-5m 60%\n-30m 90%\n-5m ramp 70%-40%\n"},
-  {"name": "SST 5.1 3x25", "folder": "Sweet Spot", "text": "-5m ramp 45%-65%\n-2m 90%\n-8m 50%\n-25m 90%\n-5m 60%\n-25m 90%\n-5m 60%\n-25m 90%\n-5m ramp 60%-40%\n"},
-  {"name": "SST 5.2 2x35", "folder": "Sweet Spot", "text": "-8m ramp 45%-65%\n-2m 88%\n-7m 65%\n-3m 50%\n-35m 92%\n-5m 60%\n-35m 92%\n-5m ramp 70%-40%\n"},
-  {"name": "SST 6.1 3x30", "folder": "Sweet Spot", "text": "-5m ramp 45%-65%\n-2m 88%\n-3m 50%\n-30m 86%\n-5m 60%\n-30m 86%\n-10m 60%\n-30m 86%\n-5m ramp 60%-45%\n"},
-  {"name": "SST 6.2 3x20", "folder": "Sweet Spot", "text": "-5m ramp 45%-65%\n-2m 90%\n-3m 50%\n-20m 90%\n-5m 60%\n-20m 90%\n-5m 60%\n-20m 90%\n-5m 60%\n-5m ramp 60%-40%\n"},
+  {"name": "SST 1.1 3x8", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-5m 65%\n-2m 86%\n-5m 60%\n\nSweet Spot 3x\n-8m 86%\n-3m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 1.2 2x10", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-3m 65%\n-2m 86%\n-2m 60%\n\nSweet Spot 2x\n-10m 86%\n-4m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 2.1 3x10", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-3m 65%\n-2m 86%\n-3m 60%\n\nSweet Spot 3x\n-10m 86%\n-4m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 2.2 2x12", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-3m 65%\n-2m 86%\n-3m 60%\n\nSweet Spot 2x\n-12m 86%\n-4m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 3.1 2x15", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-5m 65%\n-2m 87%\n-3m 60%\n\nSweet Spot 2x\n-15m 87%\n-5m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 3.2 2x12", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-3m 65%\n-2m 87%\n-3m 60%\n\nSweet Spot 2x\n-12m 87%\n-4m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 4.1 2x8", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-3m 65%\n-2m 86%\n-3m 60%\n\nSweet Spot 2x\n-8m 86%\n-3m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 4.2 2x6", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-2m 65%\n-2m 86%\n-3m 60%\n\nSweet Spot 2x\n-6m 86%\n-3m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 5.1 3x15", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-10m 70%\n-2m 88%\n-8m 60%\n\nSweet Spot 3x\n-15m 88%\n-5m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 5.2 2x22", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-10m 70%\n-2m 88%\n-8m 60%\n\nIntervals\n-22m 88%\n-10m 60%\n-22m 88%\n-6m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 6.1 4x12", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-5m 65%\n-2m 88%\n-5m 60%\n\nSweet Spot 4x\n-12m 88%\n-5m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 6.2 2x22", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-8m 65%\n-2m 88%\n-6m 60%\n\nSweet Spot 2x\n-22m 88%\n-5m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 7.1 3x20", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-5m 65%\n-2m 89%\n-3m 60%\n\nSweet Spot 3x\n-20m 89%\n-5m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 7.2 2x30", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-5m 65%\n-2m 88%\n-3m 60%\n\nSweet Spot 2x\n-30m 88%\n-5m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 8.1 3x10", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-3m 65%\n-2m 88%\n-3m 60%\n\nSweet Spot 3x\n-10m 88%\n-4m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 8.2 2x15", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-5m 65%\n-2m 88%\n-3m 60%\n\nSweet Spot 2x\n-15m 88%\n-5m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 9.1 2x30", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-10m 65%\n-2m 89%\n-3m 60%\n\nSweet Spot 2x\n-30m 89%\n-5m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 9.2 3x20", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-5m 65%\n-2m 89%\n-3m 60%\n\nSweet Spot 3x\n-20m 89%\n-5m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 10.1 3x25", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-5m 65%\n-2m 90%\n-3m 60%\n\nSweet Spot 3x\n-25m 90%\n-5m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 10.2 2x35", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-5m 65%\n-2m 89%\n-3m 60%\n\nSweet Spot 2x\n-35m 89%\n-5m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 11.1 3x30", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-5m 65%\n-2m 90%\n-3m 60%\n\nIntervals\n-30m 90%\n-5m 60%\n-30m 90%\n-5m 60%\n-30m 90%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 11.2 3x20", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-2m 90%\n-3m 60%\n\nSweet Spot 3x\n-20m 90%\n-5m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 12.1 3x15", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-5m 65%\n-2m 88%\n-3m 60%\n\nSweet Spot 3x\n-15m 88%\n-5m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
+  {"name": "SST 12.2 2x15", "folder": "Sweet Spot", "text": "Warmup\n-5m ramp 50%-65%\n-5m 65%\n-2m 88%\n-3m 60%\n\nSweet Spot 2x\n-15m 88%\n-5m 60%\n\nCooldown\n-5m ramp 60%-40%\n"},
   {"name": "Threshold 1.1 - O/U 3x12", "folder": "Threshold", "text": "-5m ramp 50%-60%\n-10m 65%\n-30s 105%\n-30s 50%\n-30s 105%\n-30s 50%\n-30s 105%\n-150s 50%\n-2m 105%\n-2m 90%\n-2m 105%\n-2m 90%\n-2m 105%\n-2m 90%\n-5m 50%\n-2m 105%\n-2m 90%\n-2m 105%\n-2m 90%\n-2m 105%\n-2m 90%\n-5m 50%\n-2m 105%\n-2m 90%\n-2m 105%\n-2m 90%\n-2m 105%\n-2m 90%\n-2m 50%\n-20m 65%\n-2m ramp 65%-50%\n"},
   {"name": "Threshold 1.2 - O/U 3x15", "folder": "Threshold", "text": "-5m ramp 50%-60%\n-10m 65%\n-30s 105%\n-30s 50%\n-30s 105%\n-30s 50%\n-30s 105%\n-150s 50%\n-2m 105%\n-3m 90%\n-2m 105%\n-3m 90%\n-2m 105%\n-3m 90%\n-5m 50%\n-2m 105%\n-3m 90%\n-2m 105%\n-3m 90%\n-2m 105%\n-3m 90%\n-5m 50%\n-2m 105%\n-3m 90%\n-2m 105%\n-3m 90%\n-2m 105%\n-3m 90%\n-2m 50%\n-12m 65%\n-1m ramp 60%-50%\n"},
   {"name": "Threshold 2.1 - O/U 3x12", "folder": "Threshold", "text": "-5m ramp 50%-60%\n-10m 65%\n-30s 105%\n-30s 50%\n-30s 105%\n-30s 50%\n-30s 105%\n-150s 50%\n-90s 108%\n-90s 92%\n-90s 108%\n-90s 92%\n-90s 108%\n-90s 92%\n-90s 108%\n-90s 92%\n-5m 50%\n-90s 108%\n-90s 92%\n-90s 108%\n-90s 92%\n-90s 108%\n-90s 92%\n-90s 108%\n-90s 92%\n-5m 50%\n-90s 108%\n-90s 92%\n-90s 108%\n-90s 92%\n-90s 108%\n-90s 92%\n-90s 108%\n-90s 92%\n-2m 50%\n-20m 65%\n-2m ramp 60%-50%\n"},
@@ -2981,6 +3013,7 @@ const SYNC_PREFS = {                                       // setting -> how to 
   kickrGov2: v => { try { const g = JSON.parse(v || "null"); if (g) { $("govOn").checked = !!g.on; if (g.rpm) $("govCad").value = g.rpm; } } catch (e) {} },
   kickrDist: v => { if (v) $("distMph").value = v; },
   kickrLaunchMode: v => { launchMode = v === "erg" ? "erg" : "sim"; },
+  ipPhase: () => { try { renderPhase(); } catch (e) {} },
   kickrFitRange: v => { try { const f = JSON.parse(v || "null"); if (f) { FIT.back = f.back || 42; FIT.ahead = f.ahead != null ? f.ahead : 7; renderFit(); } } catch (e) {} }
 };
 const LS = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
@@ -4409,6 +4442,372 @@ loadToday();
 loadNext7();
 loadFtp(true);
 setTimeout(recOffer, 300);                             // an unfinished ride from last time? offer Resume / Save / Discard
+/* ---------------- Training phases (Sweet Spot first) ----------------
+   A phase is a fixed run of library workouts (Sweet Spot: Beginner SST 1.1 -> 8.2, Intermediate/Advanced SST 5.1 -> 12.2),
+   two hard days a week chosen by the rider (never back to back), optional endurance days. The state lives in localStorage
+   "ipPhase" and syncs with the account like any setting. Calendar entries the phase makes carry external_id
+   "ipphase-<run>-..." and are the only ones it ever moves or deletes (others only when the rider taps Replace).
+   Rules: the next SST is never earlier than two calendar days after the last one (one day between at least); the suggested
+   day is the next chosen hard day after that. Endurance days ask on the day: a set time (ERG Low/Mid/High at 59 / 65.5 / 72%,
+   Mid and High with a 5-minute ramp in; or Free Ride over all of Zone 2), just ride, or outdoor / group ride. */
+const PHASES = { sst: { name: "Sweet Spot", color: "#3ddc84", prefix: "SST", levels: {
+  beg: { label: "Beginner", from: 1, weeks: 8, easy: [4, 8] }, int: { label: "Intermediate / Advanced", from: 5, weeks: 8, easy: [8, 12] } } } };
+const hmm = m => Math.floor(m / 60) + ":" + String(m % 60).padStart(2, "0");
+const DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], ENDU_LVL = { low: 0.59, mid: 0.655, high: 0.72 };
+const phDate = ds => { const [y, m, d] = ds.split("-").map(Number); return new Date(y, m - 1, d); };
+const phAdd = (ds, n) => { const d = phDate(ds); d.setDate(d.getDate() + n); return ymd(d); };
+const phDiff = (a, b) => Math.round((phDate(b) - phDate(a)) / 864e5);        // days from a to b
+const phDow = ds => phDate(ds).getDay();
+const phNice = ds => phDate(ds).toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
+const phGet = () => { try { const p = JSON.parse(localStorage.getItem("ipPhase") || "null"); return p && p.seq ? p : null; } catch (e) { return null; } };
+const phSave = p => { try { if (p) localStorage.setItem("ipPhase", JSON.stringify(p)); else localStorage.removeItem("ipPhase"); } catch (e) {} renderPhase(); };
+function phSeq(id, lvl) {                                    // the phase's workouts, in order, from the library
+  const P = PHASES[id], L = P.levels[lvl], out = [];
+  for (let w = L.from; w < L.from + L.weeks; w++) for (const n of [1, 2]) {
+    const it = LIBRARY.find(x => x.name.startsWith(P.prefix + " " + w + "." + n + " ")); if (it) out.push(it.name); }
+  return out;
+}
+const phItem = name => LIBRARY.find(x => x.name === name) || userLib.find(x => x.name === name) || null;
+const phInfo = name => { const it = phItem(name); if (!it) return ""; try { const st = parseText(it.text, +$("ftp").value || 270), tot = st.reduce((a, q) => a + q.dur, 0);
+  const hard = st.filter(q => !q.free && Math.min(q.a, q.b) >= 0.84 && q.dur >= 180), tiz = hard.reduce((a, q) => a + q.dur, 0), pct = hard.length ? Math.round(Math.max(...hard.map(q => q.a)) * 100) : 0;
+  return Math.round(tot / 60) + " min" + (tiz ? " · " + Math.round(tiz / 60) + " min at " + pct + "%" : ""); } catch (e) { return ""; } };
+const phLast = p => { const h = (p.hist || []).filter(x => x.ok !== false); return h.length ? h[h.length - 1].date : null; };
+const phMin = p => { const l = phLast(p), t = localDay(); return l ? (phDiff(l, t) >= 2 ? t : phAdd(l, 2)) : t; };   // earliest day for the next SST
+function phNextHard(p, from) { let d = from; for (let k = 0; k < 14; k++, d = phAdd(d, 1)) if (p.hard.includes(phDow(d))) return d; return from; }
+function phBuild(p, from, firstMin) {                       // the rest of the phase from a day on: SST on hard days, endurance on endurance days
+  const out = []; let d = from, i = p.done, last = phLast(p);
+  for (let k = 0; i < p.seq.length && k < 200; k++, d = phAdd(d, 1)) {
+    const w = phDow(d);
+    if (p.hard.includes(w) && d >= firstMin && (!last || phDiff(last, d) >= 2)) { out.push({ date: d, kind: "sst", i, name: p.seq[i] }); last = d; i++; }
+    else if (p.enduOn && p.endu.includes(w)) out.push({ date: d, kind: "endu", name: "Endurance" });
+  }
+  return out;
+}
+const phExt = (p, e) => "ipphase-" + p.run + "-" + e.kind + "-" + e.date;
+async function phEvents(from, to) {                         // planned workouts on the calendar between two days
+  const auth = icuAuth(); if (!auth) throw new Error("not connected to intervals.icu");
+  const r = await fetch("https://intervals.icu/api/v1/athlete/" + encodeURIComponent(icuId()) + "/events?category=WORKOUT&oldest=" + from + "&newest=" + to, { headers: { Authorization: auth, Accept: "application/json" } });
+  if (!r.ok) throw new Error("intervals.icu replied " + r.status); const a = await r.json(); return Array.isArray(a) ? a : [];
+}
+const phMine = (p, ev) => String(ev.external_id || "").startsWith("ipphase-" + p.run + "-") || (p.plan || []).some(e => e.date === String(ev.start_date_local || "").slice(0, 10) && e.name === ev.name);
+function phHardEv(ev) {                                     // a planned day with intervals above endurance
+  if (!ev || !ev.description) return false;
+  try { return parseText(ev.description, +$("ftp").value || 270).some(q => !q.free && stepLvl(q) >= 0.76 && q.dur >= 60); } catch (e) { return false; }
+}
+async function phPost(list) {                               // add or update (same external_id) calendar entries
+  if (!list.length) return true;
+  const r = await fetch("https://intervals.icu/api/v1/athlete/" + encodeURIComponent(icuId()) + "/events/bulk?upsert=true", { method: "POST",
+    headers: { Authorization: icuAuth(), "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(list) });
+  if (!r.ok) throw new Error("intervals.icu replied " + r.status); return true;
+}
+const phDel = id => fetch("https://intervals.icu/api/v1/athlete/" + encodeURIComponent(icuId()) + "/events/" + encodeURIComponent(id), { method: "DELETE", headers: { Authorization: icuAuth(), Accept: "application/json" } });
+function phEvBody(p, e, over) {
+  const it = e.kind === "sst" ? phItem(e.name) : null;
+  return Object.assign({ category: "WORKOUT", start_date_local: e.date + "T00:00:00", type: "Ride", name: e.name, description: it ? it.text : "", external_id: phExt(p, e) },
+    e.kind === "endu" ? { moving_time: 3600, icu_training_load: 42 } : {}, over || {});
+}
+async function phClearFuture(p, from) {                     // delete the phase's own entries from a day on
+  if (!icuAuth()) return 0; let n = 0;
+  const evs = await phEvents(from, phAdd(from, 150));
+  for (const ev of evs) if (String(ev.external_id || "").startsWith("ipphase-" + p.run + "-") && ev.id != null) { try { await phDel(ev.id); n++; } catch (e) {} }
+  return n;
+}
+async function phReplan(p, from, firstMin, msg) {           // rebuild the rest: calendar entries from a day on are replaced
+  const plan = phBuild(p, from, firstMin), keep = (p.plan || []).filter(e => e.date < from);
+  p.plan = keep.concat(p.cal ? plan : []); phSave(p);          // saved at once; the calendar catches up below
+  if (msg) toast(msg);
+  if (p.cal && icuAuth()) {
+    const old = { ...p, plan: (p.plan || []) };
+    try { await phClearFuture(old, from); await phPost(plan.map(e => phEvBody(p, e))); }
+    catch (e) { toast("Couldn't update the calendar (" + e.message + ").", true); }
+  }
+  try { loadToday(); loadNext7(); } catch (e) {}
+}
+const phNextPlan = p => (p.plan || []).find(e => e.kind === "sst" && e.i === p.done && e.date >= localDay()) || null;
+/* ---------- the card at the top of the Library tab ---------- */
+function renderPhase() {
+  const box = $("phaseBox"); if (!box) return; const p = phGet();
+  if (!icuAuth()) {                                          // phases live on the intervals.icu calendar: no account, no phase
+    box.innerHTML = '<div class="phlbl">Training phases</div><div class="card phcard"><div style="display:flex;gap:10px;align-items:center"><i class="phbar" style="background:#3ddc84"></i><div style="flex:1"><div class="phh">Sweet Spot</div><div class="hint">'
+      + (p ? "Your phase is paused. " : "") + 'Training phases plan your workouts on your intervals.icu calendar. Connect intervals.icu to use them.</div></div></div><div class="row" style="margin:10px 0 0"><button id="phConn" class="primary" style="flex:1">Connect intervals.icu</button></div></div>';
+    $("phConn").onclick = () => { location.href = STRAVA_HELPER + "/icu-auth"; }; return;
+  }
+  if (!p) {
+    box.innerHTML = '<div class="phlbl">Training phases</div><div class="card phcard"><div style="display:flex;gap:10px;align-items:center"><i class="phbar" style="background:#3ddc84"></i><div style="flex:1"><div class="phh">Sweet Spot</div><div class="hint">8 weeks · 2 workouts a week · Beginner or Intermediate / Advanced</div></div></div><div class="row" style="margin:10px 0 0"><button id="phStart" class="primary" style="flex:1">Start a Phase</button></div></div>';
+    $("phStart").onclick = () => phSetup(); return;
+  }
+  const P = PHASES[p.id], L = P.levels[p.lvl], n = p.seq.length, next = p.done < n ? p.seq[p.done] : null, wk = Math.min(L.weeks, Math.floor(p.done / 2) + 1);
+  const dots = p.seq.map((nm, i) => { const w = +(nm.match(/ (\d+)\./) || [])[1]; return '<i class="' + (i < p.done ? "d" : i === p.done ? "n" : "") + (L.easy.includes(w) ? " e" : "") + '"></i>'; }).join("");
+  const np = phNextPlan(p);
+  box.innerHTML = '<div class="phlbl">Training phases</div><div class="card phcard"><div class="phlbl" style="color:' + P.color + ';margin:0">' + P.name + " · " + L.label + '</div>'
+    + (next ? '<div class="phh">Week ' + wk + " of " + L.weeks + '</div><div class="hint">' + p.done + " of " + n + " done</div>" : '<div class="phh">Phase complete</div><div class="hint">All ' + n + " workouts done. Nice work.</div>")
+    + '<div class="phdots">' + dots + '</div><div class="phwk"><span>wk ' + L.from + "</span><span>easy wk " + L.easy.join(" & ") + "</span><span>wk " + (L.from + L.weeks - 1) + "</span></div>"
+    + (p.pendingEarly ? '<div class="phnote">' + p.pendingEarly.name + ' ended early. <u id="phEarlyAsk">Decide now</u></div>' : "")
+    + (next ? '<div class="phnext"><div class="phlbl" style="margin:0">Next</div><div style="font-weight:700;font-size:16px;margin-top:2px">' + next + '</div><div class="hint">' + phInfo(next) + '</div><canvas id="phMini" style="width:100%;height:52px;display:block;margin-top:6px;border-radius:6px"></canvas>'
+      + '<div class="row" style="margin:8px 0 0"><button id="phRide" class="primary" style="flex:1">Ride Now</button><button id="phSched" style="flex:1">' + (np ? "✓ " + phNice(np.date) : "Schedule") + "</button></div></div>" : "")
+    + '<div class="row" style="margin:8px 0 0"><button id="phOpts" style="flex:1">Phase Options</button></div></div>';
+  if (next) { const it = phItem(next); if (it) try { drawMini($("phMini"), parseText(it.text, +$("ftp").value || 270), { h: 52 }); } catch (e) {}
+    $("phRide").onclick = () => { const it2 = phItem(next); if (it2) { PH.launch = { kind: "sst", name: next }; askLaunch({ ...it2, built: true }); } };
+    $("phSched").onclick = () => phAskSchedule(p, null); }
+  if (p.pendingEarly) $("phEarlyAsk").onclick = () => phEarly(phGet());
+  $("phOpts").onclick = () => phOptions();
+}
+const PH = { launch: null, lastCheck: 0, setup: null };
+/* ---------- sheet (one modal reused for every phase screen) ---------- */
+function phSheet(html, center) {
+  const m = $("phModal"); $("phSheet").innerHTML = html; m.style.alignItems = center ? "center" : "flex-end"; m.style.display = "flex";
+  $("phSheet").scrollTop = 0; return $("phSheet");
+}
+const phClose = () => { $("phModal").style.display = "none"; };
+const phOpt = (id, title, sub, pri) => '<button id="' + id + '" class="phopt' + (pri ? " primary" : "") + '">' + title + (sub ? "<small>" + sub + "</small>" : "") + "</button>";
+/* ---------- start / change the week ---------- */
+function phSetup(edit) {
+  const p = edit ? phGet() : null;
+  const S = PH.setup = { lvl: p ? p.lvl : "beg", days: [0, 0, 0, 0, 0, 0, 0], start: localDay(), cal: p ? !!p.cal : true, endu: p ? !!p.enduOn : true, step: 1, edit: !!edit };
+  if (p) { p.hard.forEach(d => S.days[d] = 1); p.endu.forEach(d => S.days[d] = 2); } else { S.days[1] = 1; S.days[5] = 1; S.days[3] = S.days[6] = S.days[0] = 2; }
+  phSetupDraw();
+}
+function phSetupDraw() {
+  const S = PH.setup, P = PHASES.sst, hard = S.days.map((v, i) => v === 1 ? i : -1).filter(i => i >= 0);
+  let warn = ""; if (hard.length !== 2) warn = "Pick exactly 2 hard days.";
+  else { const g = (hard[1] - hard[0] + 7) % 7, g2 = 7 - g; if (Math.min(g, g2) < 2) warn = "Hard days can't be back to back: leave at least one day between them."; }
+  const lv = k => { const L = P.levels[k], s = phSeq("sst", k); return '<div class="phlvl' + (S.lvl === k ? " sel" : "") + '" data-l="' + k + '"><b>' + L.label + '</b><div class="hint">' + (s[0] || "").split(" ").slice(0, 2).join(" ") + " → " + (s[s.length - 1] || "").split(" ").slice(0, 2).join(" ") + " · " + s.length + " workouts · easy weeks " + L.easy.join(" & ") + "</div></div>"; };
+  const el = phSheet('<div class="phlbl">Sweet Spot phase</div><div class="phh">' + (S.edit ? "Change your week" : "Set up your block") + "</div>"
+    + (S.edit ? "" : lv("beg") + lv("int"))
+    + '<div class="hint" style="margin-top:12px">Tap a day: <b style="color:var(--acc)">Hard</b> → <b style="color:#9cc8ff">Endurance</b> → Rest</div>'
+    + '<div class="phdays">' + DOW.map((d, i) => ({ d, i })).slice(1).concat([{ d: "Sun", i: 0 }]).map(x => '<button class="' + ["off", "hard", "endu"][S.days[x.i]] + '" data-d="' + x.i + '">' + x.d + "</button>").join("") + "</div>"
+    + (warn ? '<div class="phwarn">' + warn + "</div>" : '<div class="hint" style="margin-top:6px">Hard: ' + hard.map(i => DOW[i]).join(" + ") + "</div>")
+    + '<label class="phrow"><span>' + (S.edit ? "From" : "Starts") + '</span><input id="phStartD" type="date" value="' + S.start + '"></label>'
+    + '<label class="phrow"><span>Put the whole block on my calendar</span><input id="phCal" type="checkbox"' + (S.cal ? " checked" : "") + "></label>"
+    + '<div class="hint">Off: you schedule each workout as you go.</div>'
+    + '<label class="phrow"><span>Include endurance days</span><input id="phEndu" type="checkbox"' + (S.endu ? " checked" : "") + "></label>"
+    + '<div class="hint">On an endurance day the app asks how you want to ride (set time, free ride or outdoor). On the calendar it starts as a 1-hour placeholder.</div>'
+    + '<div class="row" style="margin:14px 0 0"><button id="phSetNo" style="flex:1">Cancel</button><button id="phSetGo" class="primary" style="flex:1"' + (warn ? " disabled" : "") + ">Preview</button></div>");
+  el.querySelectorAll(".phlvl").forEach(b => b.onclick = () => { S.lvl = b.dataset.l; phSetupDraw(); });
+  el.querySelectorAll(".phdays button").forEach(b => b.onclick = () => { const i = +b.dataset.d; S.days[i] = (S.days[i] + 1) % 3; phSetupDraw(); });
+  $("phStartD").onchange = e => { if (/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)) S.start = e.target.value < localDay() ? localDay() : e.target.value; };
+  $("phCal").onchange = e => { S.cal = e.target.checked; }; $("phEndu").onchange = e => { S.endu = e.target.checked; };
+  $("phSetNo").onclick = phClose; $("phSetGo").onclick = () => phPreview();
+}
+async function phPreview() {
+  const S = PH.setup, old = S.edit ? phGet() : null;
+  const p = old ? { ...old } : { id: "sst", lvl: S.lvl, seq: phSeq("sst", S.lvl), done: 0, hist: [], plan: [], run: Date.now().toString(36), t: Date.now() };
+  p.hard = S.days.map((v, i) => v === 1 ? i : -1).filter(i => i >= 0); p.endu = S.days.map((v, i) => v === 2 ? i : -1).filter(i => i >= 0);
+  p.cal = S.cal; p.enduOn = S.endu;
+  const first = S.start < phMin(p) ? phMin(p) : S.start, plan = phBuild(p, S.start, first);
+  if (!plan.length) { toast("Nothing left to plan in this phase.", true); return; }
+  let conf = [];
+  if (p.cal && icuAuth()) {
+    phSheet('<div class="phh">Checking your calendar…</div>', true);
+    try { const evs = await phEvents(plan[0].date, plan[plan.length - 1].date);
+      conf = plan.filter(e => e.kind === "sst").map(e => ({ e, ev: evs.find(v => String(v.start_date_local || "").slice(0, 10) === e.date && !phMine(old || p, v) && phHardEv(v)), rep: true })).filter(x => x.ev);
+      const busy = new Set(evs.filter(v => !phMine(old || p, v)).map(v => String(v.start_date_local || "").slice(0, 10)));
+      for (let k = plan.length - 1; k >= 0; k--) if (plan[k].kind === "endu" && busy.has(plan[k].date)) plan.splice(k, 1);   // an endurance placeholder never lands on a day that already has something
+    } catch (e) { toast("Couldn't check the calendar (" + e.message + ").", true); }
+  } else if (p.cal) { toast("Connect intervals.icu to put the block on your calendar.", true); p.cal = false; }
+  let wkN = 0, lastWk = null; const rows = [];
+  plan.forEach(e => { const wkStart = phAdd(e.date, -((phDow(e.date) + 6) % 7)); if (wkStart !== lastWk) { lastWk = wkStart; wkN++; rows.push('<div class="phw">Week ' + wkN + " · " + phNice(wkStart) + "</div>"); }
+    rows.push('<div class="phr"><b>' + phNice(e.date) + '</b><i style="background:' + (e.kind === "sst" ? "#3ddc84" : "#3b9cff") + '"></i>' + e.name + (e.kind === "sst" ? ' <span class="hint">' + phInfo(e.name).split(" · ")[0] + "</span>" : ' <span class="hint">1 h placeholder</span>') + "</div>"); });
+  const draw = () => {
+    const el = phSheet('<div class="phlbl">Sweet Spot · ' + PHASES.sst.levels[p.lvl].label + '</div><div class="phh">' + phNice(plan[0].date) + " – " + phNice(plan[plan.length - 1].date) + "</div>"
+      + '<div class="phcal">' + rows.join("") + "</div>"
+      + conf.map((c, k) => '<div class="phwarn">' + phNice(c.e.date) + " already has <b>" + (c.ev.name || "a workout") + "</b>. " + '<label><input type="checkbox" data-k="' + k + '"' + (c.rep ? " checked" : "") + "> Replace it with " + c.e.name.split(" ").slice(0, 2).join(" ") + "</label></div>").join("")
+      + '<div class="row" style="margin:12px 0 0"><button id="phPrevNo" style="flex:1">Back</button><button id="phPrevGo" class="primary" style="flex:1">' + (p.cal ? "Add " + plan.length + " to Calendar" : old ? "Save" : "Start Phase") + "</button></div>");
+    el.querySelectorAll("input[data-k]").forEach(b => b.onchange = () => { conf[+b.dataset.k].rep = b.checked; });
+    $("phPrevNo").onclick = () => phSetupDraw();
+    $("phPrevGo").onclick = async () => {
+      $("phPrevGo").disabled = true; $("phPrevGo").textContent = "Saving…";
+      if (p.cal) {
+        try {
+          for (const c of conf) if (c.rep && c.ev.id != null) await phDel(c.ev.id);
+          if (old) await phClearFuture(old, S.start);
+          await phPost(plan.map(e => phEvBody(p, e)));
+          p.plan = (old ? (old.plan || []).filter(e => e.date < S.start) : []).concat(plan);
+        } catch (e) { toast("Couldn't add everything to the calendar (" + e.message + ").", true); }
+      } else { if (old && old.cal) try { await phClearFuture(old, S.start); } catch (e) {} p.plan = (old ? (old.plan || []).filter(e => e.date < S.start) : []); }
+      p.t = Date.now(); phSave(p); phClose(); try { loadToday(); loadNext7(); } catch (e) {}
+      toast(old ? "Your week is updated." : "Sweet Spot phase started." + (p.cal ? " It's on your calendar." : ""));
+    };
+  };
+  draw();
+}
+/* ---------- options: change week, repeat, skip, cancel ---------- */
+function phOptions() {
+  const p = phGet(); if (!p) return;
+  const fut = (p.plan || []).filter(e => e.date >= localDay()).length;
+  phSheet('<div class="phlbl" style="color:#3ddc84">Sweet Spot · ' + PHASES.sst.levels[p.lvl].label + '</div><div class="phh">Phase options</div>'
+    + phOpt("phoWeek", "Change my week", "Hard: " + p.hard.map(i => DOW[i]).join(", ") + (p.enduOn && p.endu.length ? " · Endurance: " + p.endu.map(i => DOW[i]).join(", ") : ""))
+    + (p.done > 0 ? phOpt("phoRep", "Repeat the last workout", p.seq[p.done - 1] + " comes up again next") : "")
+    + (p.done < p.seq.length ? phOpt("phoSkip", "Skip the next workout", p.seq[p.done] + " is skipped") : "")
+    + phOpt("phoCancel", '<span style="color:#ff8a8a">Cancel this phase</span>', fut ? "You can remove its " + fut + " future calendar entries" : "")
+    + '<div class="row" style="margin:12px 0 0"><button id="phoClose" style="flex:1">Close</button></div>');
+  $("phoClose").onclick = phClose;
+  $("phoWeek").onclick = () => phSetup(true);
+  if ($("phoRep")) $("phoRep").onclick = () => { p.done--; (p.hist || []).pop(); p.pendingEarly = null; phClose(); phReplan(p, localDay(), phMin(p), p.seq[p.done] + " is next again."); };
+  if ($("phoSkip")) $("phoSkip").onclick = () => { p.done++; p.pendingEarly = null; phClose(); phReplan(p, localDay(), phMin(p), "Skipped. Next: " + (p.seq[p.done] || "done")); };
+  $("phoCancel").onclick = async () => {
+    phClose(); if (!await askYes("Cancel the Sweet Spot Phase?", "Your progress in this phase is cleared. Workouts stay in the library.", "Cancel Phase")) return;
+    if (fut && icuAuth() && await askYes("Remove From Calendar?", "Remove the phase's " + fut + " future entries from your intervals.icu calendar? Anything you added yourself stays.", "Remove")) {
+      try { const n = await phClearFuture(p, localDay()); toast("Removed " + n + " calendar entries."); } catch (e) { toast("Couldn't remove them (" + e.message + ").", true); }
+    }
+    phSave(null); try { loadToday(); loadNext7(); } catch (e) {}
+  };
+}
+/* ---------- schedule the next workout (suggested day) ---------- */
+function phAskSchedule(p, head) {
+  p = p || phGet(); if (!p || p.done >= p.seq.length) return;
+  const next = p.seq[p.done], min = phMin(p), sug = phNextHard(p, min), np = phNextPlan(p);
+  const el = phSheet((head || "") + '<div class="phlbl" style="color:#3ddc84">Sweet Spot · ' + p.done + " of " + p.seq.length + ' done</div><div class="phh">Schedule ' + next + "?</div>"
+    + '<div class="hint">Next in your phase · ' + phInfo(next) + "</div>"
+    + '<label class="phrow"><span>' + (np ? "Planned" : "Suggested") + '</span><input id="phSD" type="date" min="' + min + '" value="' + (np ? np.date : sug) + '"></label>'
+    + '<div class="hint">Earliest is ' + phNice(min) + " (at least one day between sweet spot workouts). " + phNice(sug) + " is your next hard day.</div>"
+    + '<div class="row" style="margin:12px 0 0"><button id="phSY" class="primary" style="flex:1">Schedule</button></div>'
+    + '<div class="row" style="margin:8px 0 0"><button id="phSN" style="flex:1">Not now</button></div>');
+  const upd = () => { const v = $("phSD").value; $("phSY").textContent = "Schedule " + (/^\d{4}-\d{2}-\d{2}$/.test(v) ? phNice(v) : ""); }; upd(); $("phSD").oninput = upd;
+  $("phSN").onclick = phClose;
+  $("phSY").onclick = async () => { let d = $("phSD").value; if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return; if (d < min) d = min; phClose(); await phScheduleNext(phGet(), d); };
+  return el;
+}
+async function phScheduleNext(p, d, replaceEv) {
+  if (!p) return false;
+  if (p.cal) { await phReplan(p, d, d, "Scheduled " + p.seq[p.done] + " for " + phNice(d) + "."); return true; }   // the whole block moves with it
+  if (!icuAuth()) { toast("Connect intervals.icu first (Settings).", true); return false; }
+  const e = { date: d, kind: "sst", i: p.done, name: p.seq[p.done] };
+  const old = (p.plan || []).filter(x => x.kind === "sst" && x.i === p.done && x.date >= localDay());
+  p.plan = (p.plan || []).filter(x => !(x.kind === "sst" && x.i === p.done)).concat([e]); phSave(p);
+  try { if (replaceEv && replaceEv.id != null) await phDel(replaceEv.id);
+    if (old.length) { const evs = await phEvents(old[0].date, old[old.length - 1].date); for (const ev of evs) if (String(ev.external_id || "") === phExt(p, old.find(o => o.date === String(ev.start_date_local).slice(0, 10)) || { kind: "x", date: "" }) && ev.id != null) await phDel(ev.id); }
+    await phPost([phEvBody(p, e)]);
+    toast("Scheduled " + e.name + " for " + phNice(d) + "."); try { loadToday(); loadNext7(); } catch (x) {} return true;
+  } catch (x) { toast("Couldn't schedule (" + x.message + ").", true); return false; }
+}
+/* ---------- after a ride ---------- */
+function phAfterRide(saved) {
+  const L = PH.launch; PH.launch = null; const p = phGet(); if (!p || !saved) return;
+  const today = localDay();
+  if (L && L.kind === "endu") { p.enduDone = p.enduDone || {}; p.enduDone[today] = L.label || "ridden"; phSave(p); return; }
+  const name = W.partial ? W.partial.name : W.name, idx = p.seq.indexOf(name);
+  if (idx < 0 || idx < p.done) return;                       // not the phase's next workout (or one already done)
+  const hard = hardIdx(W.steps).idx, last = hard.length ? hard[hard.length - 1] : -1;   // every hard interval ridden counts as complete, even if the cooldown was cut
+  const complete = W.partial ? !!W.partial.complete || W.partial.done >= W.partial.total : !W.endedEarly || last < 0 || W.idx > last || (W.idx === last && W.stepT >= 0.8 * W.steps[last].dur);
+  if (idx > p.done) p.done = idx;                            // rode a later one from the folder: jump to it
+  if (!complete) { p.pendingEarly = { name, i: idx, date: today }; phSave(p); setTimeout(() => phEarly(phGet()), 1500); return; }
+  phDone(p, idx, today, true);
+}
+function phDone(p, idx, day, ask) {
+  p.hist = (p.hist || []).concat([{ i: idx, date: day, ok: true }]); p.done = idx + 1; p.pendingEarly = null;
+  const stale = (p.plan || []).filter(e => e.kind === "sst" && e.i <= idx && e.date !== day && e.date >= localDay() && !e.ridden);   // ridden on another day: its planned entry goes
+  p.plan = (p.plan || []).filter(e => !stale.includes(e));
+  (p.plan || []).forEach(e => { if (e.kind === "sst" && e.i === idx) e.ridden = day; });
+  phSave(p);
+  if (stale.length && p.cal && icuAuth()) phEvents(stale[0].date, stale[stale.length - 1].date).then(evs => Promise.all(evs
+    .filter(ev => ev.id != null && stale.some(e => String(ev.external_id || "") === phExt(p, e))).map(ev => phDel(ev.id)))).then(() => { try { loadToday(); loadNext7(); } catch (x) {} }).catch(x => log("Phase: " + x.message));
+  if (p.done >= p.seq.length) { setTimeout(() => toast("Sweet Spot phase complete. Nice work!"), 1500); return; }
+  const np = phNextPlan(p), min = phMin(p);
+  if (p.cal && np && np.date >= min) { setTimeout(() => toast("Next: " + np.name + " on " + phNice(np.date) + "."), 1500); return; }
+  if (p.cal && icuAuth()) { phReplan(p, phAdd(day, 1), min, "Your block moved: next " + p.seq[p.done] + " on " + phNice(phNextHard(p, min)) + "."); return; }
+  if (ask) setTimeout(() => phAskSchedule(phGet()), 1500);
+}
+function phEarly(p) {
+  if (!p || !p.pendingEarly) return; const E = p.pendingEarly, nxt = p.seq[E.i + 1], np = (p.plan || []).find(e => e.kind === "sst" && e.i === E.i + 1 && e.date >= localDay());
+  phSheet('<div class="phlbl" style="color:#3ddc84">Sweet Spot · Week ' + (Math.floor(E.i / 2) + 1) + '</div><div class="phh">' + E.name + " ended early</div>"
+    + '<div class="hint">You make the call: carry on, or ride it again.</div>'
+    + phOpt("phEk", "Count it, keep going", nxt ? "Next up: " + nxt + (np ? " on " + phNice(np.date) : "") : "That was the last one", true)
+    + phOpt("phEr", "Repeat " + E.name.split(" ").slice(0, 2).join(" ") + " next", p.cal ? "It takes the next slot; everything after moves back one slot" : "It stays as your next workout")
+    + phOpt("phEl", "Decide later", "The phase card will ask again"), false);
+  $("phEk").onclick = () => { phClose(); const q = phGet(); phDone(q, E.i, E.date, true); };
+  $("phEr").onclick = () => { phClose(); const q = phGet(); q.pendingEarly = null; q.hist = (q.hist || []).concat([{ i: E.i, date: E.date, ok: false }]); q.done = E.i; if (q.cal) phReplan(q, phAdd(localDay(), 1), phAdd(E.date, 2), E.name + " is next again."); else { phSave(q); setTimeout(() => phAskSchedule(phGet()), 400); } };
+  $("phEl").onclick = phClose;
+}
+/* ---------- endurance day ---------- */
+function phEnduText(min, mode, lvl) {
+  if (mode === "free") return "Endurance\n-" + min + "m freeride 56-75%\n";
+  const f = ENDU_LVL[lvl], pc = Math.round(f * 1000) / 10;
+  return lvl === "low" ? "Endurance\n-" + min + "m " + pc + "%\n" : "Warmup\n-5m ramp 50%-" + pc + "%\n\nEndurance\n-" + (min - 5) + "m " + pc + "%\n";
+}
+function phEndurance(p) {
+  const ftp = +$("ftp").value || 270, S = { min: 60, mode: "erg", lvl: "mid", pick: "time" }, w = f => Math.round(f * ftp);
+  const draw = () => {
+    const lab = S.pick === "time" ? hmm(S.min) + " " + (S.mode === "free" ? "Free Ride" : S.lvl[0].toUpperCase() + S.lvl.slice(1)) : "";
+    const el = phSheet('<div class="phlbl" style="color:#3b9cff">Sweet Spot · Endurance day</div><div class="phh">How do you want to ride today?</div>'
+      + '<button class="phbig' + (S.pick === "time" ? " on" : "") + '" data-p="time"><b>Set a time</b><small>Pick how long; ERG or Free Ride</small></button>'
+      + (S.pick === "time" ? '<div class="phstp"><button id="peM">−</button><div>' + hmm(S.min) + '</div><button id="peP">+</button></div>'
+        + '<div class="phsegs"><button data-m="erg" class="' + (S.mode === "erg" ? "on" : "") + '">ERG</button><button data-m="free" class="' + (S.mode === "free" ? "on" : "") + '">Free Ride</button></div>'
+        + (S.mode === "erg" ? '<div class="phsegs">' + ["low", "mid", "high"].map(k => '<button data-v="' + k + '" class="' + (S.lvl === k ? "on" : "") + '">' + k[0].toUpperCase() + k.slice(1) + "<small>" + w(ENDU_LVL[k]) + " w</small></button>").join("") + "</div>"
+          + '<div class="hint">Zone 2 is ' + w(0.56) + "–" + w(0.75) + " w. Low / Mid / High hold the middle of each third" + (S.lvl !== "low" ? "; Mid and High start with a 5-minute ramp" : "") + ".</div>"
+          : '<div class="hint">Target band: all of Zone 2, ' + w(0.56) + "–" + w(0.75) + " w. The trainer starts you mid-band; shift or tap + / − to move within it.</div>") : "")
+      + '<button class="phbig' + (S.pick === "free" ? " on" : "") + '" data-p="free"><b>Just ride</b><small>Free Ride, no time; end whenever you like</small></button>'
+      + '<button class="phbig' + (S.pick === "out" ? " on" : "") + '" data-p="out"><b>Outdoor or group ride</b><small>Nothing to load; it stays on your calendar as an endurance day</small></button>'
+      + '<div class="row" style="margin:12px 0 0"><button id="peNo" style="flex:1">Not now</button><button id="peGo" class="primary" style="flex:1.4">' + (S.pick === "time" ? "Start · " + lab : S.pick === "free" ? "Start Free Ride" : "Mark as Outdoor") + "</button></div>");
+    el.querySelectorAll("[data-p]").forEach(b => b.onclick = () => { S.pick = b.dataset.p; draw(); });
+    el.querySelectorAll("[data-m]").forEach(b => b.onclick = () => { S.mode = b.dataset.m; draw(); });
+    el.querySelectorAll("[data-v]").forEach(b => b.onclick = () => { S.lvl = b.dataset.v; draw(); });
+    if ($("peM")) { $("peM").onclick = () => { S.min = Math.max(30, S.min - 15); draw(); }; $("peP").onclick = () => { S.min = Math.min(300, S.min + 15); draw(); }; }
+    $("peNo").onclick = phClose;
+    $("peGo").onclick = () => { phClose(); phEnduGo(phGet(), S, lab); };
+  };
+  draw();
+}
+async function phEnduGo(p, S, lab) {
+  if (!p) return; const today = localDay(), e = (p.plan || []).find(x => x.kind === "endu" && x.date === today);
+  const name = S.pick === "time" ? "Endurance " + lab : S.pick === "free" ? "Endurance · free ride" : "Endurance · outdoor/group ride";
+  const text = S.pick === "time" ? phEnduText(S.min, S.mode, S.lvl) : "";
+  p.enduDone = p.enduDone || {}; p.enduDone[today] = S.pick; if (e) e.name = name; phSave(p);
+  if (e && icuAuth()) phPost([phEvBody(p, e, { name, description: text, moving_time: S.pick === "time" ? S.min * 60 : 3600 })]).then(() => { try { loadToday(); loadNext7(); } catch (x) {} })
+    .catch(x => log("Phase: couldn't update today's endurance entry (" + x.message + ")"));
+  if (S.pick === "out") { toast("Marked as an outdoor / group ride. Enjoy it."); return; }
+  PH.launch = { kind: "endu", label: S.pick };
+  if (S.pick === "free") { startFreeRide(); return; }
+  $("wo").value = text; $("woName").value = name; updateWoInfo();
+  const prev = launchMode; launchMode = S.mode === "erg" ? "erg" : "sim"; const ok = loadWorkout(); launchMode = prev;
+  if (ok) showScreen("run");
+}
+/* ---------- the check when the app opens or comes back ---------- */
+async function phaseCheck() {
+  const p = phGet(); if (!p || !icuAuth() || W.running || W.loaded && document.body.dataset.screen === "run") return;
+  if ($("phModal").style.display === "flex" || ["askModal", "launchModal", "summary"].some(id => { const e = $(id); return e && (e.style.display === "flex" || e.classList.contains("show")); })) return;
+  const today = localDay(); p.asked = p.asked && p.asked.day === today ? p.asked : { day: today, k: [] };
+  const once = k => { if (p.asked.k.includes(k)) return false; p.asked.k.push(k); phSave(p); return true; };
+  if (p.pendingEarly) { if (once("early")) phEarly(p); return; }
+  if (p.done >= p.seq.length) return;
+  const next = p.seq[p.done], min = phMin(p), np = (p.plan || []).find(e => e.kind === "sst" && e.i === p.done && !e.ridden);
+  if (np && np.date < today) {                               // a planned sweet spot day went by without the ride
+    if (!once("missed")) return;
+    phSheet('<div class="phlbl" style="color:#3ddc84">Sweet Spot · Week ' + (Math.floor(p.done / 2) + 1) + '</div><div class="phh">' + next + " was planned for " + phNice(np.date) + "</div><div class=\"hint\">No ride of it yet.</div>"
+      + (today >= min ? phOpt("phMt", "Ride it today", "The rest of the block fits around it", true) : "")
+      + phOpt("phMb", "Move everything back a slot", "It goes on your next hard day; the block ends a few days later")
+      + phOpt("phMs", "Skip it", "Carry on with " + (p.seq[p.done + 1] || "the end of the phase"))
+      + '<div class="row" style="margin:10px 0 0"><button id="phMn" style="flex:1">Not now</button></div>', true);
+    if ($("phMt")) $("phMt").onclick = () => { phClose(); const q = phGet(); if (q.cal) phReplan(q, today, today, next + " is on today."); else phScheduleNext(q, today); };
+    $("phMb").onclick = () => { phClose(); const q = phGet(); const d = phNextHard(q, phAdd(today, 1) < min ? min : phAdd(today, 1)); if (q.cal) phReplan(q, today, d, next + " moved to " + phNice(d) + "."); else phScheduleNext(q, d); };
+    $("phMs").onclick = () => { phClose(); const q = phGet(); q.done++; if (q.cal) phReplan(q, today, phMin(q), "Skipped. Next: " + (q.seq[q.done] || "done")); else phSave(q); };
+    $("phMn").onclick = phClose; return;
+  }
+  const scheduled = (p.plan || []).some(e => e.kind === "sst" && e.i === p.done && e.date >= today);
+  if (!scheduled && today >= min && icuAuth()) {               // nothing planned for the next one: offer today
+    let evs = []; try { evs = await phEvents(today, today); } catch (e) {}
+    const hardEv = evs.find(v => !phMine(p, v) && phHardEv(v));
+    if (!once("today")) return;
+    if (hardEv) {
+      phSheet('<div class="phlbl" style="color:#3ddc84">Sweet Spot · Week ' + (Math.floor(p.done / 2) + 1) + '</div><div class="phh">Replace today\'s workout?</div><div class="hint">Today has <b>' + (hardEv.name || "a workout") + "</b> on your calendar. Next in your phase is <b>" + next + "</b>.</div>"
+        + '<div class="row" style="margin:12px 0 0"><button id="phRy" class="primary" style="flex:1">Replace with ' + next.split(" ").slice(0, 2).join(" ") + '</button></div><div class="row" style="margin:8px 0 0"><button id="phRk" style="flex:1">Keep it</button><button id="phRp" style="flex:1">Pick a day</button></div>', true);
+      $("phRy").onclick = async () => { phClose(); const q = phGet(); if (q.cal) { try { await phDel(hardEv.id); } catch (e) {} phReplan(q, today, today, next + " is on today."); } else phScheduleNext(q, today, hardEv); };
+      $("phRk").onclick = phClose; $("phRp").onclick = () => phAskSchedule(phGet());
+    } else {
+      phSheet('<div class="phlbl" style="color:#3ddc84">Sweet Spot · Week ' + (Math.floor(p.done / 2) + 1) + '</div><div class="phh">Ride ' + next + " today?</div><div class=\"hint\">" + phInfo(next) + (phLast(p) ? " · " + phDiff(phLast(p), today) + " days since your last one" : "") + ". Nothing hard is on your calendar today.</div>"
+        + '<div class="row" style="margin:12px 0 0"><button id="phTy" class="primary" style="flex:1">Ride Today</button></div><div class="row" style="margin:8px 0 0"><button id="phTp" style="flex:1">Pick a day</button><button id="phTn" style="flex:1">Not now</button></div>', true);
+      $("phTy").onclick = async () => { phClose(); const q = phGet(); await phScheduleNext(q, today); const it = phItem(next); if (it) { PH.launch = { kind: "sst", name: next }; askLaunch({ ...it, built: true }); } };
+      $("phTp").onclick = () => phAskSchedule(phGet()); $("phTn").onclick = phClose;
+    }
+    return;
+  }
+  const sstToday = (p.plan || []).some(e => e.kind === "sst" && e.date === today);
+  if (p.enduOn && p.endu.includes(phDow(today)) && !sstToday && !(p.enduDone || {})[today] && once("endu")) phEndurance(p);
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - PH.lastCheck > 60000) { PH.lastCheck = Date.now(); setTimeout(phaseCheck, 2500); } });
+$("phModal").addEventListener("click", e => { if (e.target === $("phModal")) phClose(); });
+renderPhase(); setTimeout(() => { PH.lastCheck = Date.now(); phaseCheck(); }, 4500);
+
 { const fm = v => (v > 0 ? "+" : v < 0 ? "\u2212" : "") + Math.abs(v * 100).toFixed(2) + "%";
   const show = () => { $("sbV").textContent = fm(BIAS.sim); $("stV").textContent = fm(BIAS.stand); $("sbM").disabled = BIAS.sim <= -0.05; $("sbP").disabled = BIAS.sim >= 0.05; $("stM").disabled = BIAS.stand <= 0.0025; $("stP").disabled = BIAS.stand >= 0.06; };
   biasShow = show;
