@@ -53,6 +53,8 @@
   .hgrp .ht { font-size:16px; font-weight:700; white-space:nowrap; } .hgrp .hm { font-size:12px; color:var(--dim); font-weight:400; font-variant-numeric:tabular-nums; text-align:right; }
   .hgrp.yr .ht { font-size:18px; } .hyear { padding-left:12px; } .hrides { padding:8px 0 4px; }
   /* ride summary: metrics as two columns of "label value" text, then stacked power / 30 s power / HR / cadence graphs */
+  .rsimg { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; height:44px; margin:8px 0 0; background:#2b3340; color:var(--fg); font-weight:600; border-radius:10px; }
+  .rsimg:disabled { opacity:.45; }
   .rsm { display:grid; grid-template-columns:1fr 1fr; column-gap:12px; background:var(--card); border-radius:12px; padding:10px 8px 12px; font-variant-numeric:tabular-nums; }
   .rsm .col { display:grid; grid-template-columns:auto 1fr; column-gap:7px; row-gap:3px; align-content:start; min-width:0; }
   .rsm .k { text-align:right; color:#8b94a3; font-size:14px; white-space:nowrap; }
@@ -81,6 +83,8 @@
   .stack .clk { font-size:calc(var(--u)*4.4); font-weight:700; font-variant-numeric:tabular-nums; line-height:1.05; white-space:nowrap; }
   .stack .nxt { font-size:min(calc(var(--u)*2.7),4.2vw); font-weight:600; line-height:1.2; white-space:nowrap; font-variant-numeric:tabular-nums; }
   .stack .nxt.long { font-size:min(calc(var(--u)*1.9),3.2vw); }
+  .stack .nxt { height:min(calc(var(--u)*3.24),5.04vw); display:flex; align-items:flex-end; overflow:visible; }   /* fixed height: the big countdown number can't shift the tile */
+  .stack .nxt.soon { font-size:min(calc(var(--u)*3.6),6vw); font-weight:700; line-height:.9; color:var(--acc); }   /* last 10 s: the next target, big */
   .stack .bar { height:4px; margin-top:2px; }
   .split .v { font-size:min(calc(var(--u)*6.49),12vw); }
   #iavg { font-size:.76em; }                          /* a touch smaller so a freeride band beside it never collides */
@@ -255,7 +259,11 @@
   .obs { font-size:12px; color:var(--dim); } .obbtn { flex:none; background:#2b3340; color:var(--fg); padding:8px 12px; border-radius:10px; font-size:14px; } #obRetry span { color:var(--ok); }
   .svbtns { display:flex; flex-direction:column; gap:10px; }   /* Save This Ride?: Save on top, Discard (red) underneath */
   .svbtns button { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; height:56px; margin:0; font-size:18px; font-weight:700; border-radius:12px; }
-  #btnSaveRide { background:#1f6feb; color:#fff; } #btnDiscardRide { background:#7a2a30; color:#fff; height:48px; font-size:16px; }
+  #btnSaveRide, #btnDoneSave { background:#1f6feb; color:#fff; } #btnDoneFree { background:#2b3340; color:var(--fg); } #btnDiscardRide { background:#7a2a30; color:#fff; height:48px; font-size:16px; }
+  .biasrow { display:flex; align-items:center; gap:8px; margin:10px 0 0; } .biasrow span { flex:1; color:var(--fg); font-size:15px; }
+  .biasrow button { width:40px; height:36px; margin:0; padding:0; font-size:20px; font-weight:700; background:#2b3340; color:var(--fg); border-radius:10px; }
+  .biasrow b { min-width:64px; text-align:center; font-variant-numeric:tabular-nums; }
+  #btnStart.standing { background:#2b3340; color:var(--acc); box-shadow:inset 0 0 0 2px var(--acc); }
   .todaybtns { display:flex; gap:8px; margin:10px 0 0; }   /* a small refresh icon and a grey Free Ride with a green play mark, same height */
   .todaybtns button { height:48px; margin:0; border-radius:12px; }
   #btnToday { flex:none; width:56px; padding:0; font-size:24px; line-height:1; }
@@ -306,8 +314,9 @@
   .ctrl .p1wrap { flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:4px; }   /* +1 min, with Undo under it for 10 s */
   .ctrl .p1wrap button { flex:none; width:100%; }
   .ctrl .p1wrap.undo button { height:calc(var(--u)*3.025 - 2px) !important; font-size:14px !important; border-radius:10px; }
-  #btnUndo1 { background:#2a2f37; color:#3ddc84; font-weight:700; }
-  #btnUndo1[hidden] { display:none !important; }
+  #btnUndo1, #btnUndoSk { background:#2a2f37; color:#3ddc84; font-weight:700; }
+  #btnUndo1[hidden], #btnUndoSk[hidden] { display:none !important; }
+  .ctrl .p1wrap.undo #btnSkip svg { width:20px; height:20px; }
   .devrows { display:flex; flex-direction:column; gap:10px; }
   .devrow { display:grid; grid-template-columns:1fr auto; grid-template-rows:auto auto; column-gap:10px; align-items:center; text-align:left; width:100%; margin:0; padding:12px 14px; border-radius:12px; background:#222833; border:2px solid #d93b3b; }
   .devrow .dn { font-size:16px; font-weight:700; color:#e8ebef; }
@@ -406,7 +415,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.30</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">b1.0.1</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -606,6 +615,8 @@ Cooldown
     <div class="seth">Simulation mode</div>
     <div class="hint" id="simCalTxt" style="line-height:1.5"></div>
     <div class="row"><button id="btnSimReset" type="button" style="background:#2b3340;border-color:#2b3340;color:#fff">Reset calibration</button></div>
+    <div class="biasrow"><span>Default bias</span><button type="button" id="sbM" aria-label="Default bias lower">&minus;</button><b id="sbV">0.00%</b><button type="button" id="sbP" aria-label="Default bias higher">+</button></div>
+    <div class="biasrow"><span>Stand bias</span><button type="button" id="stM" aria-label="Stand bias lower">&minus;</button><b id="stV">+2.50%</b><button type="button" id="stP" aria-label="Stand bias higher">+</button></div>
   </div>
 
   <div class="setsec">
@@ -633,6 +644,7 @@ Cooldown
     <div id="rsSrc" hidden style="margin:3px 0 0;font-size:13px;font-weight:600;color:#c3cad6"></div>
     <div style="height:12px"></div>
     <div id="rsStats" class="rsm"></div>
+    <button id="rsSaveImg" type="button" class="rsimg" disabled><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>Save image</button>
     <div id="rsChart" hidden class="rschart"></div>
     <div id="rsZones" hidden style="background:var(--card);border-radius:12px;padding:10px 12px;margin-top:10px"><div class="status" style="text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Time in zones</div><div id="rsZoneRows" class="zrows"></div></div>
     <div id="rsWo" hidden style="background:var(--card);border-radius:12px;padding:10px;margin-top:10px"><div class="status" style="text-transform:uppercase;letter-spacing:.05em">Workout</div><div id="rsWoName" style="font-weight:600;margin:2px 0 6px"></div><canvas id="rsWoGraph" style="width:100%;height:60px;display:block;border-radius:6px"></canvas><div id="rsWoInfo" class="status" style="margin-top:4px"></div></div>
@@ -648,7 +660,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">v1.0.30</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+  <span class="ver">b1.0.1</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
 </div>
 
 <div class="ctrl">
@@ -662,7 +674,7 @@ Cooldown
   <button id="btnDn" disabled>−</button>
   <button id="btnUp" disabled>+</button>
   <div class="p1wrap" id="p1wrap"><button id="btnPlus1" disabled style="font-size:16px;padding:0 2px">+1 min</button><button id="btnUndo1" type="button" hidden>Undo</button></div>
-  <button id="btnSkip" disabled aria-label="Skip to next interval"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true"><path d="M5 5l10 7-10 7z"/><rect x="17" y="5" width="3" height="14" rx="1.2"/></svg></button>
+  <div class="p1wrap" id="skwrap"><button id="btnSkip" disabled aria-label="Skip to next interval"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor" aria-hidden="true"><path d="M5 5l10 7-10 7z"/><rect x="17" y="5" width="3" height="14" rx="1.2"/></svg></button><button id="btnUndoSk" type="button" hidden>Undo</button></div>
 </div>
 
 <div class="grid">
@@ -769,6 +781,16 @@ Cooldown
   </div>
 </div>
 
+<div id="doneModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:50;align-items:center;justify-content:center;padding:24px">
+  <div style="background:#161a20;border-radius:16px;padding:20px;max-width:340px;width:100%;text-align:center">
+    <div style="font-size:20px;font-weight:700;margin-bottom:4px">Workout Complete</div>
+    <div id="doneSub" class="hint" style="margin-bottom:16px;font-size:14px"></div>
+    <div class="svbtns">
+      <button id="btnDoneSave" type="button"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h11l5 5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v6h9V3"/><rect x="7" y="13" width="10" height="8" rx="1"/></svg>Save Ride</button>
+      <button id="btnDoneFree" type="button"><span aria-hidden="true" style="color:var(--ok);font-size:20px">&#9654;</span>Continue in Free Ride</button>
+    </div>
+  </div>
+</div>
 <div id="saveModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:50;align-items:center;justify-content:center;padding:24px">
   <div style="background:#161a20;border-radius:16px;padding:20px;max-width:340px;width:100%;text-align:center">
     <div style="font-size:18px;font-weight:600;margin-bottom:8px">Save This Ride?</div>
@@ -1240,7 +1262,7 @@ function parseZwo(src) {
 }
 
 /* ---------------- workout engine ---------------- */
-const W = { tgtHist: [], hrHist: [], cadHist: [], cadRaw: [], startMs: 0, steps: [], loaded: false, running: false, paused: false, idx: 0, stepT: 0, t: 0, adj: 1, adjPct: 100, erg: true, ramp: null, fast: null, gov: 1,
+const W = { tgtHist: [], planHist: [], hrHist: [], cadHist: [], cadRaw: [], startMs: 0, steps: [], loaded: false, running: false, paused: false, idx: 0, stepT: 0, t: 0, adj: 1, adjPct: 100, erg: true, ramp: null, fast: null, gov: 1,
   ftp: 270, kj: 0, pw: [], sum4: 0, n4: 0, iSum: 0, iN: 0, lastTarget: null, timer: null };
 
 function readPlan() {                                   // parses the builder box; throws on a bad line
@@ -1266,7 +1288,7 @@ function loadWorkout() {
   return true;
 }
 function resetWorkout() {
-  clearInterval(W.timer); clearInterval(W.fast); Object.assign(W, { simOff: 0, simBase: null, simGrade: null, simMem: {}, simIdx: -1, simSentT: null, tgtHist: [], hrHist: [], cadHist: [], cadRaw: [], running: false, paused: false, idx: 0, stepT: 0, t: 0, adj: 1, adjPct: 100, erg: true, ramp: null, fast: null, gov: 1, kj: 0, pw: [], sum4: 0, n4: 0, iSum: 0, iN: 0, lastTarget: null, timer: null, partial: null, laps: [] });
+  clearInterval(W.timer); clearInterval(W.fast); Object.assign(W, { donePrompt: false, stand: false, standPrev: 0, simOff: 0, simBase: null, simGrade: null, simMem: {}, simIdx: -1, simSentT: null, tgtHist: [], planHist: [], hrHist: [], cadHist: [], cadRaw: [], running: false, paused: false, idx: 0, stepT: 0, t: 0, adj: 1, adjPct: 100, erg: true, ramp: null, fast: null, gov: 1, kj: 0, pw: [], sum4: 0, n4: 0, iSum: 0, iN: 0, lastTarget: null, timer: null, partial: null, laps: [] });
 }
 // A step rides in road simulation when it is a freeride band, or when the workout was launched in Simulation mode
 // (every step converted, "conv") and the ERG button hasn't switched it back to ERG.
@@ -1331,6 +1353,11 @@ function govStep(dt) {
 }
 // The watts actually sent to the trainer: planned/ramped target x governor factor.
 function sentTarget() { const t = commandedTarget(); return t == null ? null : Math.round(t * W.gov); }
+function planTarget() {                                     // what the plan asks for this second: a band's middle, an ERG target (ramps and +/- included), 0 when there's none
+  const s = W.steps[W.idx]; if (!s || W.freeRide || (s.free && !isSim(s))) return 0;
+  if (isSim(s)) { const [lo, hi] = bandW(s); return Math.round((lo + hi) / 2); }
+  return commandedTarget() ?? 0;
+}
 
 async function startWorkout() {
   ensureAudio();
@@ -1401,18 +1428,24 @@ function simCadHint() {                                            // the cadenc
   const st = W.steps[W.idx]; if (!simShort(st) || W.simIdx !== W.idx || W.simGrade == null) return null;
   const [lo, hi] = bandW(st), d = SIMC.A * W.simGrade + SIMC.B + (W.simLoc || 0); return d > 0.3 ? Math.round((lo + hi) / 2 / d) : null;
 }
-function simGradeFor(st) {                                         // grade (fraction) that puts the middle of the band at this interval's cadence
-  const [lo, hi] = bandW(st), y = (lo + hi) / 2 / (W.simC || SIM.CAD0);
+const SIM_AIM = [0.5, 0.5, 0.25, 0.25, 0.25];                     // where in the band the grade aims at the learned cadence (0 = bottom, 1 = top): Threshold and up aim a
+                                                                   // quarter of the way up, so the rider spins up (or taps +) to reach the middle rather than grinding down to it
+function simGradeFor(st) {                                         // grade (fraction) that puts the aim point of the band at this interval's cadence
+  const [lo, hi] = bandW(st), y = (lo + (hi - lo) * SIM_AIM[W.simB ?? simBucket(st)]) / (W.simC || SIM.CAD0);
   return Math.max(0, Math.min(0.2, (y - SIMC.B - (W.simLoc || 0)) / SIMC.A));
 }
-function simSend(g) {                                              // g = the computed grade; the rider's +/- resistance offset rides on top
-  const gs = Math.max(-0.05, Math.min(0.25, g + (W.simOff || 0))), G = Math.round(gs * 10000); W.simBase = g; W.simGrade = gs; W.simSentT = W.t; W.simPtT = W.t; W.lastTarget = "sim:" + G;
+/* Settings: a default bias added to every Simulation interval's grade without showing (the rider's +/- reads 0.0% on top of it),
+   and the stand bias the Stand button adds. Both in 0.25% steps. */
+const BIAS = (() => { let b = 0, s = 0.025; try { const x = parseFloat(localStorage.getItem("kickrSimBias")), y = parseFloat(localStorage.getItem("kickrStandBias")); if (isFinite(x)) b = x; if (isFinite(y)) s = y; } catch (e) {} return { sim: b, stand: s }; })();
+function simSend(g) {                                              // g = the computed grade; the default bias and the rider's +/- offset ride on top
+  const gs = Math.max(-0.05, Math.min(0.25, g + (BIAS.sim || 0) + (W.simOff || 0) + (W.t < (W.simKickT ?? -1) ? SIM_KICK : 0))), G = Math.round(gs * 10000); W.simBase = g; W.simGrade = gs; W.simSentT = W.t; W.simPtT = W.t; W.lastTarget = "sim:" + G;
   return cpWrite([0x11, 0, 0, G & 0xff, (G >> 8) & 0xff, 40, 0]);
 }
 const simKey = st => Math.round(bandW(st)[1]);                    // bands are matched by their top in watts
 function simWindow(from) {                                         // steady seconds since `from` on the current grade: [mean P/cad, n, in-band cadences]
   const st = W.steps[W.idx], [lo, hi] = bandW(st), P = W.pw.slice(from, W.t), C = W.cadRaw.slice(from, W.t), ys = [], inb = [];
-  P.forEach((p, i) => { const c = C[i]; if (c > 50 && p > 30) { ys.push(p / c); if (p >= lo - 5 && p <= hi + 5 && c >= 65 && c <= 110) inb.push(c); } });
+  const aimW = lo + (hi - lo) * SIM_AIM[W.simB ?? simBucket(st)];  // in-band cadences are scaled to the aim point (the cadence that would give the aim power on this grade),
+  P.forEach((p, i) => { const c = C[i]; if (c > 50 && p > 30) { ys.push(p / c); if (p >= lo - 5 && p <= hi + 5 && c >= 65 && c <= 110) inb.push(c * aimW / p); } });   // so spinning up to the middle doesn't creep the grade down
   return [ys.length ? ys.reduce((a, b) => a + b, 0) / ys.length : null, ys.length, inb];
 }
 function simPoint(st) {                                            // every ~10 s on a steady grade: one data point for the trainer model and the cadence
@@ -1430,12 +1463,18 @@ function simPoint(st) {                                            // every ~10 
   }
   simSave();
 }
+/* Stepping down to an easier band, the trainer's flywheel and the rider's momentum keep the power high for several seconds (Nov 2 log:
+   ~20-40 W over the under band for 3-6 s). So a big step down starts 1 s early, and the first 4 s of the easier band are sent a little lower. */
+const SIM_KICK = -0.005;
+const simMid = st => { const [lo, hi] = bandW(st); return (lo + hi) / 2; };
+const simDrop = (a, b) => !!a && !!b && isSim(a) && isSim(b) && !simShort(b) && simMid(a) - simMid(b) >= 0.08 * (W.ftp || 270) * (W.adj || 1);
 function simStart(st) {                                            // a new Simulation interval: pick the cadence, start from what this band showed before
-  W.simIdx = W.idx; W.simOff = 0; W.simCal = 0; W.simB = simBucket(st); W.simC = simCad(W.simB); W.simLoc = 0;
+  W.simKickT = simDrop(W.steps[W.idx - 1], st) ? W.t + 4 : -1;
+  W.simIdx = W.idx; W.simOff = W.stand ? BIAS.stand : 0; if (W.stand) W.standPrev = 0; W.simCal = 0; W.simB = simBucket(st); W.simC = simCad(W.simB); W.simLoc = 0;
   const m = W.simMem[simKey(st)]; W.simRep = !!(m && typeof m === "object");
   if (W.simRep) W.simLoc = Math.max(-0.6, Math.min(0.6, m.y - (SIMC.A * m.g + SIMC.B)));   // what the model still misses at this band's grade
   const g = simGradeFor(st);
-  W.simLog = { ev: "start", band: bandW(st), zone: SIM_BK[W.simB], cad: Math.round(W.simC), A: +SIMC.A.toFixed(1), B: +SIMC.B.toFixed(3), loc: +W.simLoc.toFixed(3), rep: W.simRep, to: +(g * 100).toFixed(2) };
+  W.simLog = { ev: "start", band: bandW(st), zone: SIM_BK[W.simB], aim: SIM_AIM[W.simB], cad: Math.round(W.simC), A: +SIMC.A.toFixed(1), B: +SIMC.B.toFixed(3), loc: +W.simLoc.toFixed(3), rep: W.simRep, to: +(g * 100).toFixed(2) };
   return simSend(g);
 }
 function simCalibrate(st, ck) {                                    // one check: compare what the trainer gave with the model, correct this band's grade
@@ -1453,13 +1492,15 @@ function pushTarget(force) {
     if (!W.simMem) W.simMem = {};
     if (W.simIdx !== W.idx) return simStart(st);                    // a new interval: the +/- bias goes back to zero
     if (force || !String(W.lastTarget).startsWith("sim:")) return simSend(W.simBase ?? simGradeFor(st));
+    if (W.simKickT > 0 && W.t >= W.simKickT) { W.simKickT = -1; const pt = W.simPtT; simSend(W.simBase); W.simPtT = pt; return; }   // the step-down push is over
+    if (W.simKickT !== -2 && W.stepT === st.dur - 1 && simDrop(st, W.steps[W.idx + 1]) && W.simBase != null) { W.simKickT = W.t + 2; const pt = W.simPtT; simSend(W.simBase); W.simPtT = pt; return; }   // 1 s early
     const plan = simShort(st) ? [] : W.simRep ? SIM_REP : SIM_NEW, ck = plan[W.simCal];
     if (ck && W.stepT >= ck[0]) { W.simCal++; simCalibrate(st, ck); }
     simPoint(st);
     return;
   }
   if (st.free) {                                      // freeride: leave ERG, flat-road simulation; + and - tilt the road 0.5% a tap
-    if (W.freeIdx !== W.idx) { W.freeIdx = W.idx; if (!W.freeRide) W.simOff = 0; }
+    if (W.freeIdx !== W.idx) { W.freeIdx = W.idx; if (!W.freeRide) { W.simOff = W.stand ? BIAS.stand : 0; if (W.stand) W.standPrev = 0; } }
     const G = Math.round((W.simOff || 0) * 10000), key = "free:" + G;
     if (force || W.lastTarget !== key) { W.lastTarget = key; return cpWrite([0x11, 0, 0, G & 0xff, (G >> 8) & 0xff, 40, 51]); }
     return;
@@ -1504,10 +1545,13 @@ function beep(freq, dur, vol, type, delay) {
 const cueBell = (d = 0) =>                                                       // 10 s left
   cueLvl === 3 ? (beep(1320, 1.4, 0.25, "triangle", d), beep(2640, 0.9, 0.12, "sine", d), beep(3300, 0.5, 0.05, "square", d), beep(1320, 1.0, 0.2, "triangle", d + 0.35), beep(2640, 0.7, 0.1, "sine", d + 0.35))
   : (beep(1320, 1.2, 0.22, "sine", d), beep(2640, 0.7, 0.06, "sine", d));
+/* Ticks: a short bright "pip" near 2.7 kHz (where hearing is most sensitive and fan noise is thinnest), square-wave for a hard edge.
+   New interval: two rising pips. Max makes them longer and adds a second tone. */
 const cueTick = (d = 0) =>                                                       // last 5 s
-  cueLvl === 3 ? (beep(2000, 0.12, 0.3, "triangle", d), beep(3000, 0.08, 0.06, "square", d)) : beep(1000, 0.05, 0.25, "triangle", d);
+  cueLvl === 3 ? (beep(2700, 0.13, 0.4, "square", d), beep(3400, 0.1, 0.14, "square", d)) : (beep(2700, 0.09, 0.32, "square", d), beep(5400, 0.05, 0.06, "sine", d));
 const cueStart = (d = 0) =>                                                       // new interval
-  cueLvl === 3 ? (beep(2400, 0.2, 0.3, "triangle", d), beep(3600, 0.12, 0.06, "square", d)) : beep(1500, 0.08, 0.3, "triangle", d);
+  cueLvl === 3 ? (beep(2700, 0.1, 0.4, "square", d), beep(3600, 0.24, 0.4, "square", d + 0.11), beep(4500, 0.18, 0.12, "square", d + 0.11))
+  : (beep(2700, 0.08, 0.32, "square", d), beep(3600, 0.18, 0.32, "square", d + 0.09));
 function cues() {                                        // called once a second, and after a skip
   if (!W.running || W.paused || W.idx >= W.steps.length) return;
   if (cueIdx !== W.idx) { cueIdx = W.idx; cueStart(); return; }   // the new interval has started
@@ -1520,6 +1564,7 @@ function tick() {
   rlRow();
   if (autoPauseCheck()) return;
   W.tgtHist.push(sentTarget() ?? stepTarget() ?? Math.round(live.power ?? 0));
+  W.planHist.push(planTarget());                          // the plan as written (band middle, ERG target incl. +/-; 0 = no target), for the summary graph
   W.t++; W.stepT++;
   W.hrHist.push(live.hr ?? null);
   W.cadHist.push(cad3s());
@@ -1536,7 +1581,9 @@ function tick() {
   }
   if (W.stepT >= W.steps[W.idx].dur) {
     W.idx++; W.stepT = 0; W.iSum = 0; W.iN = 0; if (plus1) hideUndo1();
-    if (W.idx >= W.steps.length) { finishWorkout(); return; }
+    if (W.idx >= W.steps.length) { workoutDone(); return; }
+    if (W.stand && !canStand()) { W.stand = false; W.standPrev = 0; }   // an ERG interval: nothing to stand on
+    refreshButtons();                                                   // Stand is only offered where a grade is ridden
   }
   cues();
   pushTarget(false); render();
@@ -1551,11 +1598,45 @@ function finishWorkout(reason, quiet) {
   if (quiet) return;
   if (W.t > 0) { if (reason === "Workout ended by user.") askSaveRide(); else showSummary(true); } else closeSummary();
 }
+/* The last interval is done: the ride waits (nothing recorded) while the rider picks Save Ride, or Continue in Free Ride, which carries on
+   on a flat road and is saved as "<workout> + <zone> Free Ride". */
+function workoutDone() {
+  if (!W.running) return;
+  W.idx = W.steps.length - 1; W.stepT = W.steps[W.idx].dur; W.ramp = null; W.paused = true; W.donePrompt = true; W.stand = false; hideUndoSk();
+  $("doneSub").textContent = (W.name || autoName(W.steps)) + "  \u00b7  " + fmt(W.t); $("doneModal").style.display = "flex";
+  rlEv("done prompt", {}); refreshButtons(); render(); recSave(true);
+}
+function doneSave() { $("doneModal").style.display = "none"; W.donePrompt = false; finishWorkout(); }
+function doneFree() {
+  $("doneModal").style.display = "none"; W.donePrompt = false;
+  const name = W.name || autoName(W.steps), total = hardIdx(W.steps).idx.length;
+  W.partial = { name, done: total, total, at: W.pw.length, complete: true }; W.laps = [W.pw.length];
+  W.steps = W.steps.concat([{ dur: 24 * 3600, a: 0, b: 0, free: true }]); W.idx = W.steps.length - 1; W.stepT = 0;
+  W.freeRide = true; W.ramp = null; W.gov = 1; W.simOff = 0; W.freeIdx = -1; W.lastTarget = null; W.iSum = 0; W.iN = 0;
+  W.paused = false; apZero = 0; cueIdx = W.idx; rlEv("continue free ride", {});
+  pushTarget(true); refreshButtons(); render(); recSave(); toast("Free Ride: + and \u2212 tilt the road.");
+}
+/* Skip: for 10 s an Undo sits under the button; it puts the ride back in the skipped interval at the second Skip was tapped. */
+let skipUndo = null;
+function hideUndoSk() { if (skipUndo) clearTimeout(skipUndo.timer); skipUndo = null; $("btnUndoSk").hidden = true; $("skwrap").classList.remove("undo"); }
+function undoSkip() {
+  const s = skipUndo; hideUndoSk(); if (!s || !W.running || W.idx !== s.idx + 1) return;
+  Object.assign(W, s.state); W.ramp = null; W.lastTarget = null; cueIdx = W.idx;
+  rlEv("undo skip", { idx: W.idx, stepT: W.stepT });
+  pushTarget(true); refreshButtons(); render(); toast("Back in the interval");
+}
 function skipStep() {
   if (!W.running) return;
+  if (W.idx < W.steps.length - 1) {                    // the state to come back to (not on the last interval: that ends the workout)
+    if (skipUndo) clearTimeout(skipUndo.timer);
+    skipUndo = { idx: W.idx, state: { idx: W.idx, stepT: W.stepT, iSum: W.iSum, iN: W.iN, simIdx: W.simIdx, simOff: W.simOff, simBase: W.simBase, simGrade: W.simGrade, simCal: W.simCal,
+      simC: W.simC, simB: W.simB, simLoc: W.simLoc, simRep: W.simRep, simSentT: W.simSentT, simPtT: W.simPtT, stand: W.stand, standPrev: W.standPrev }, timer: setTimeout(hideUndoSk, 10000) };
+    $("btnUndoSk").hidden = false; $("skwrap").classList.add("undo");
+  }
   const A = commandedTarget();                         // what the trainer is being held at right now
   W.idx++; W.stepT = 0; W.iSum = 0; W.iN = 0; W.ramp = null; if (typeof plus1 !== "undefined" && plus1) hideUndo1();
-  if (W.idx >= W.steps.length) return finishWorkout();
+  if (W.idx < W.steps.length && W.stand && !canStand()) { W.stand = false; W.standPrev = 0; }
+  if (W.idx >= W.steps.length) return workoutDone();
   if (A != null && rampOK(W.idx - 1, W.idx)) W.ramp = { A, t0: Date.now() - 1000, to: W.idx, D: rampLen(W.idx - 1, W.idx) };
   cues();
   pushTarget(true); render();
@@ -1634,7 +1715,7 @@ function summaryData() {
    Every 5 s (and on pause, and when the page is hidden) the whole ride so far is written to localStorage. It is cleared
    only when the ride is saved or discarded, so if the app is closed mid-ride, the next launch offers Resume / Save / Discard. */
 const REC_KEY = "kickrRecover";
-const REC_F = ["freeRide", "steps", "ftp", "name", "startMs", "t", "idx", "stepT", "adj", "adjPct", "erg", "kj", "pw", "hrHist", "cadHist", "cadRaw", "tgtHist", "sum4", "n4", "iSum", "iN", "simMode", "simMem", "partial", "laps"];
+const REC_F = ["freeRide", "steps", "ftp", "name", "startMs", "t", "idx", "stepT", "adj", "adjPct", "erg", "kj", "pw", "hrHist", "cadHist", "cadRaw", "tgtHist", "planHist", "sum4", "n4", "iSum", "iN", "simMode", "simMem", "partial", "laps"];
 const REC_LOG = "kickrRecoverLog";
 function recSave(force) {
   if (!W.running || !W.t) return;
@@ -1655,6 +1736,7 @@ function recLoad() { try { const o = JSON.parse(localStorage.getItem(REC_KEY) ||
 addEventListener("pagehide", () => recSave(true)); document.addEventListener("visibilitychange", () => { if (document.hidden) recSave(true); });
 function recRestore(o) {                                  // put the saved ride back into W, paused at the second it was last saved
   resetWorkout(); REC_F.forEach(k => { if (o[k] !== undefined) W[k] = o[k]; });
+  if (W.planHist.length < W.tgtHist.length) W.planHist = Array(W.tgtHist.length - W.planHist.length).fill(0).concat(W.planHist);   // saved before the plan was recorded
   W.simMem = W.simMem || {}; W.loaded = true; W.running = true; W.paused = true; W.recovered = true; W.lastTarget = null; W.simIdx = -1; cueIdx = W.idx;
   recLogRestore(o);
   if (W.idx >= W.steps.length) { W.idx = W.steps.length - 1; W.stepT = W.steps[W.idx].dur - 1; }
@@ -1714,13 +1796,14 @@ function drawBarsLogo(c, x, y, k) {                          // the five bars fr
     c.fillStyle = col; rrect(c, x + bx * k, y + (750 - bh) * k, 130 * k, bh * k, 18 * k); c.fill();
   });
 }
-function prepareSummaryImage(d) {                       // square (1080x1080) so Strava and other feeds don't crop it
+function buildSummaryImage(d, title, dateTxt, D) {      // square-ish (1080 wide) so Strava and other feeds don't crop it; resolves to a PNG blob
   d = d.filter(m => m.l !== "Distance" && m.l !== "Avg speed");   // modelled indoor speed and distance stay off the image: 8 tiles, 4 x 2
   const S = 1080, H = 814, cv = document.createElement("canvas"); cv.width = S; cv.height = H;
   const c = cv.getContext("2d"), F = "-apple-system,system-ui,sans-serif";
   c.fillStyle = "#0b0d10"; c.fillRect(0, 0, S, H);
-  c.fillStyle = "#f2f4f7"; c.font = "700 54px " + F; c.fillText("Workout Summary", 48, 82);
-  c.fillStyle = "#8b94a3"; c.font = "400 26px " + F; c.fillText($("sumDate").textContent, 48, 122);
+  let ts = 54; c.font = "700 " + ts + "px " + F; while (ts > 30 && c.measureText(title).width > S - 96 - 110) { ts -= 2; c.font = "700 " + ts + "px " + F; }
+  c.fillStyle = "#f2f4f7"; c.fillText(title, 48, 82);
+  c.fillStyle = "#8b94a3"; c.font = "400 26px " + F; c.fillText(dateTxt, 48, 122);
   c.fillStyle = "rgba(255,210,63,.55)"; c.fillRect(48, 136, 984, 2);      // thin accent rule
   drawBarsLogo(c, 1080 - 48 - 91, 33, 0.1);
   const cols = 4, gap = 12, tw = (S - 96 - gap * (cols - 1)) / cols, th = 150;
@@ -1733,20 +1816,23 @@ function prepareSummaryImage(d) {                       // square (1080x1080) so
     c.font = "700 " + vs + "px " + F; c.fillStyle = "#f2f4f7"; c.fillText(m.v, x + 14, y + 114);
     if (hasU) { const vw = c.measureText(m.v).width; c.fillStyle = "#8b94a3"; c.font = "600 22px " + F; c.fillText(m.u, x + 14 + vw + 6, y + 114); }
   });
-  const g1 = document.createElement("canvas");
-  drawProfile(g1, { w: 484, h: 132, dpr: 2, noCursor: true, actual: true });
   c.fillStyle = "#161a20"; rrect(c, 48, 484, 984, 280, 20); c.fill();
   c.strokeStyle = "rgba(255,210,63,.35)"; c.lineWidth = 1; rrect(c, 48.5, 484.5, 983, 279, 20); c.stroke();
-  if (g1.width) c.drawImage(g1, 56, 492);
-  cv.toBlob(b => { sumBlob = b; $("btnSaveImg").disabled = !b; }, "image/png");
+  if (D && D.pw && D.pw.length > 1) { const g1 = document.createElement("canvas"); g1.width = 968; g1.height = 264; const gc = g1.getContext("2d"); gc.setTransform(2, 0, 0, 2, 0, 0); drawActual(gc, 484, 132, D); c.drawImage(g1, 56, 492); }
+  return new Promise(res => cv.toBlob(b => res(b), "image/png"));
 }
-function saveSummaryImage() {
-  if (!sumBlob) return;
-  const file = new File([sumBlob], "workout-" + new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-") + ".png", { type: "image/png" });
-  const fallback = () => { $("imgView").src = URL.createObjectURL(sumBlob); $("imgModal").style.display = "flex"; };
-  if (navigator.canShare && navigator.canShare({ files: [file] })) navigator.share({ files: [file], title: "Workout Summary" }).catch(e => { if (!e || e.name !== "AbortError") fallback(); });
+function prepareSummaryImage(d) {                       // the ride just finished
+  buildSummaryImage(d, "Workout Summary", $("sumDate").textContent, { pw: W.pw, plan: W.planHist && W.planHist.length ? W.planHist : null, ftp: W.ftp })
+    .then(b => { sumBlob = b; $("btnSaveImg").disabled = !b; });
+}
+function shareImage(blob, name, title) {
+  if (!blob) return;
+  const file = new File([blob], name, { type: "image/png" });
+  const fallback = () => { $("imgView").src = URL.createObjectURL(blob); $("imgModal").style.display = "flex"; };
+  if (navigator.canShare && navigator.canShare({ files: [file] })) navigator.share({ files: [file], title }).catch(e => { if (!e || e.name !== "AbortError") fallback(); });
   else fallback();
 }
+function saveSummaryImage() { shareImage(sumBlob, "workout-" + new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-") + ".png", "Workout Summary"); }
 /* ---------------- .fit export ---------------- */
 let fitBlob = null, fitName = "";
 function buildFit() {
@@ -1815,7 +1901,7 @@ function npOf(pw) {                                               // normalized 
 }
 // A workout that was switched to Free Ride part-way: "Intervals - SST 1.1 3x15 (2/3) + Tempo Free Ride" (zone of the free-ride part's NP)
 function rideTitle() {
-  if (W.partial) return "Intervals - " + W.partial.name + " (" + W.partial.done + "/" + W.partial.total + ") + " + npZone(npOf(W.pw.slice(W.partial.at)) / (W.ftp || 270)) + " Free Ride";
+  if (W.partial) return "Intervals - " + W.partial.name + (W.partial.complete ? "" : " (" + W.partial.done + "/" + W.partial.total + ")") + " + " + npZone(npOf(W.pw.slice(W.partial.at)) / (W.ftp || 270)) + " Free Ride";
   if (!W.freeRide) return "Intervals - " + (W.name || autoName(W.steps));
   const ap = W.pw.length ? W.pw.reduce((a, b) => a + b, 0) / W.pw.length : 0, np = W.n4 > 0 ? (W.sum4 / W.n4) ** 0.25 : ap;
   return "Intervals - " + npZone(np / (W.ftp || 270)) + " Free Ride";
@@ -2391,6 +2477,7 @@ function saveToLibrary() {
   libMsg((i >= 0 ? (moved ? "Moved & updated “" : "Updated “") : "Saved “") + name + "”" + (folder ? " in " + folder : ""));
 }
 function adjust(d) {                                   // d in percentage points; on a simulation step it moves the grade instead
+  if (W.stand && d < 0) { exitStand(); return; }        // standing: − (or the Click's −) sits back down, the grade back to where it was
   if (W.running && W.erg && W.steps[W.idx] && W.steps[W.idx].free) {   // free riding: tilt the road, -5% to +15%
     W.simOff = Math.max(-0.05, Math.min(0.15, Math.round(((W.simOff || 0) + d * 0.005) * 1000) / 1000));
     if (!W.paused) pushTarget(false); render(); return;
@@ -2401,6 +2488,19 @@ function adjust(d) {                                   // d in percentage points
   }
   W.adjPct = Math.min(200, Math.max(50, W.adjPct + d)); W.adj = W.adjPct / 100;
   if (W.running && !W.paused) pushTarget(true); render();
+}
+/* Stand / Sit: the Start button (Running during a ride) becomes Stand. Standing adds the stand bias to the grade; Sit, − or the Click's −
+   goes back to the offset there was before. Only where a grade is being ridden (Simulation intervals, freeride steps, Free Ride). */
+const canStand = () => { const s = W.steps[W.idx]; return W.running && !W.paused && W.erg && !pmOnly() && !!s && (isSim(s) || !!s.free || W.freeRide); };
+function regrade() { const s = W.steps[W.idx]; if (W.paused || !s) return; if (isSim(s) && W.simBase != null) simSend(W.simBase); else pushTarget(false); }
+function enterStand() {
+  if (!canStand() || W.stand) return; const free = W.freeRide || W.steps[W.idx].free && !isSim(W.steps[W.idx]);
+  W.standPrev = W.simOff || 0; W.stand = true; W.simOff = Math.max(-0.05, Math.min(free ? 0.15 : 0.1, Math.round((W.standPrev + BIAS.stand) * 10000) / 10000));
+  rlEv("stand", { off: W.simOff }); regrade(); refreshButtons(); render();
+}
+function exitStand() {
+  if (!W.stand) return; W.stand = false; W.simOff = W.standPrev || 0; W.standPrev = 0;
+  rlEv("sit", { off: W.simOff }); regrade(); refreshButtons(); render();
 }
 const simOffTxt = () => { const v = (W.simOff || 0) * 100; return (v >= 0 ? "+" : "") + v.toFixed(Math.abs(v * 2 - Math.round(v * 2)) > 1e-6 ? 2 : 1) + "%"; };   // 0.25% steps show two decimals
 function toggleErg() {
@@ -2475,11 +2575,14 @@ function render() {
   $("ileft").textContent = W.running && W.freeRide ? fmt(W.t - lap0) : W.running ? fmt(s.dur - W.stepT) : "--:--";
   $("ileft").style.fontSize = (s.dur - W.stepT) >= 3600 ? "calc(var(--u)*3.3)" : "";
   const nx = W.steps[W.idx + 1], nxt = !W.running || W.freeRide ? "--" : !nx ? "Finish" : fmt(nx.dur) + (wRange(nx).includes("-") ? " " : " \u00b7 ") + wRange(nx);
-  $("nextStep").textContent = nxt; $("nextStep").className = "nxt" + (nxt.length > 12 ? " long" : "");
+  const soon = W.running && !W.freeRide && nx && s.dur - W.stepT <= 10;   // last 10 s: just the next interval's target power, big (a band: its middle; a ramp: where it starts)
+  if (soon) { const nw = nx.free && !isSim(nx) ? "Free" : (isSim(nx) ? Math.round(bandW(nx).reduce((a, b) => a + b, 0) / 2) : Math.round(nx.a * W.ftp * W.adj)) + "w";
+    $("nextStep").textContent = nw; $("nextStep").className = "nxt soon"; }
+  else { $("nextStep").textContent = nxt; $("nextStep").className = "nxt" + (nxt.length > 12 ? " long" : ""); }
   $("ibar").style.width = W.running && !W.freeRide ? (W.stepT / s.dur * 100) + "%" : "0";
   const ia = W.iN ? W.iSum / W.iN : null;
   $("iavg").textContent = ia == null ? "--" : Math.round(ia);
-  { const zone = band || (tgt ? [tgt * 0.97, tgt * 1.03] : null), ref = band ? band[1] : tgt, iv = ia == null ? null : Math.round(ia);   // a band (shown as % of its top), or within 3% of an ERG target, counts as on target
+  { const zone = band || (tgt ? [tgt * 0.97, tgt * 1.03] : null), ref = band ? (band[0] + band[1]) / 2 : tgt, iv = ia == null ? null : Math.round(ia);   // a band's middle counts as 100%; inside the band (or within 3% of an ERG target) is on target
     $("iavgPct").textContent = ia == null || !ref ? "--" : Math.round(ia / ref * 100);
     $("iavgS").style.color = W.freeRide || iv == null || !zone ? "" : iv < zone[0] ? "#8b94a3" : iv > zone[1] ? "var(--bad)" : "var(--ok)";
     $("iavgP").hidden = !!W.freeRide; $("iavgW").hidden = !W.freeRide; $("iavgW").textContent = "Lap " + lapN; }
@@ -2527,12 +2630,16 @@ function autoName(steps) {
 function zoneColor(f) {
   return f < 0.56 ? "#7a8594" : f < 0.76 ? "#3b9cff" : f < 0.91 ? "#3ddc84" : f < 1.06 ? "#ffd23f" : f < 1.21 ? "#ff8a3d" : "#ff4d5e";
 }
-function drawActual(c, w, h) {                           // summary view: colour fill follows the smoothed power trace itself
-  const n = W.pw.length, ftp = W.ftp; if (n < 2) return;
-  const R = 5, sm = W.pw.map((_, i) => { let a = 0, k = 0; for (let j = Math.max(0, i - R); j <= Math.min(n - 1, i + R); j++) { a += W.pw[j]; k++; } return a / k; });
-  const maxF = Math.max(1.3, Math.max(...sm) / ftp * 1.08), X = t => t / n * w, Y = f => h - 2 - (f / maxF) * (h - 6);
+function drawActual(c, w, h, D) {                        // summary view: the plan's targets as the zone-coloured fill, actual power as the red line on top
+  D = D || { pw: W.pw, plan: W.planHist && W.planHist.length ? W.planHist : null, ftp: W.ftp };
+  const pw = D.pw, n = pw.length, ftp = D.ftp || 270; if (n < 2) return;
+  const R = 5, sm = pw.map((_, i) => { let a = 0, k = 0; for (let j = Math.max(0, i - R); j <= Math.min(n - 1, i + R); j++) { a += pw[j] || 0; k++; } return a / k; });
+  const plan = D.plan && D.plan.some(v => v > 0) ? D.plan : null;   // a free ride (or an old saved ride) has no targets: fill by power, as before
+  const maxF = Math.max(1.3, Math.max(...sm) / ftp * 1.08, plan ? Math.max(...plan) / ftp * 1.08 : 0), X = t => t / n * w, Y = f => h - 2 - (f / maxF) * (h - 6);
   const pts = sm.map((v, i) => [X(i + 0.5), Y(v / ftp), v / ftp]); pts.unshift([0, pts[0][1], pts[0][2]]); pts.push([w, pts[pts.length - 1][1], pts[pts.length - 1][2]]);
-  for (let i = 0; i < pts.length - 1; i++) {
+  if (plan) {
+    for (let i = 0; i < n; i++) { const v = plan[i] || 0; if (v <= 0) continue; const f = v / ftp; c.fillStyle = zoneColor(f); c.fillRect(X(i), Y(f), Math.max(1, X(1)) + 0.6, h - Y(f)); }
+  } else for (let i = 0; i < pts.length - 1; i++) {
     const a = pts[i], b = pts[i + 1]; c.fillStyle = zoneColor((a[2] + b[2]) / 2);
     c.beginPath(); c.moveTo(a[0], h); c.lineTo(a[0], a[1]); c.lineTo(b[0] + 0.6, b[1]); c.lineTo(b[0] + 0.6, h); c.closePath(); c.fill();
   }
@@ -2643,7 +2750,7 @@ function refreshDevBtns() {                                  // red Connect butt
   } catch (e) {}
 }
 function syncPauseOv() {                                     // the pause pop-up: Resume and Change Workout big, End smaller at the bottom
-  const show = W.running && W.paused && document.body.dataset.screen === "run" && $("devModal").style.display !== "flex";
+  const show = W.running && W.paused && !W.donePrompt && document.body.dataset.screen === "run" && $("devModal").style.display !== "flex";
   if ($("pauseOv").hidden === !show) { if (show) { $("pvDevices").hidden = !!cp || pmOn; $("pvFree").hidden = !!W.freeRide; $("pvChangeTxt").textContent = W.freeRide ? "Select Workout" : "Change Workout"; $("pauseSub").textContent = fmt(W.t) + " ridden"; } return; }
   $("pauseOv").hidden = !show;
   if (show) { $("pvDevices").hidden = !!cp || pmOn; $("pvFree").hidden = !!W.freeRide; $("pvChangeTxt").textContent = W.freeRide ? "Select Workout" : "Change Workout"; $("pauseSub").textContent = fmt(W.t) + " ridden"; }
@@ -2658,14 +2765,15 @@ function syncPauseBtn() {                                    // while paused, Ru
 function refreshButtons() {
   refreshDevBtns(); syncPauseBtn(); syncPauseOv();
   const ready = (!!cp || pmOn) && W.loaded;
-  $("btnStart").disabled = !ready || W.running;
+  if (W.stand && !canStand() && !W.paused) { W.stand = false; W.standPrev = 0; }   // e.g. an ERG interval came up
+  $("btnStart").disabled = W.running ? !canStand() : !ready;
   ["btnPause", "btnSkip", "btnUp", "btnDn", "btnErg", "btnPlus1"].forEach(id => $(id).disabled = !W.running);
   if (W.freeRide || pmOnly()) $("btnErg").disabled = true;                       // nothing for ERG to hold
   if (pmOnly()) { $("btnUp").disabled = true; $("btnDn").disabled = true; }      // power meter only: no resistance to adjust
   if (W.freeRide) { $("btnSkip").disabled = true; }   // nothing to skip or hold; +1 min becomes Lap
   $("btnPlus1").textContent = W.freeRide ? "Lap" : "+1 min";
   $("btnErg").classList.toggle("on", W.running && W.erg && !W.freeRide && !(W.simMode && W.steps.some(s => s.conv)));
-  $("btnStart").textContent = W.running ? "Running" : "Start";
+  $("btnStart").textContent = W.running ? (W.stand ? "Sit" : "Stand") : "Start"; $("btnStart").classList.toggle("standing", !!(W.running && W.stand));
   $("btnEnd").style.display = (W.running && W.paused) ? "" : "none";     // End only appears while paused
   $("btnChange").style.display = (W.running && W.paused) ? "" : "none";  // Change workout also only while paused
   $("btnEdit").style.visibility = W.running ? "hidden" : "visible";       // back to the builder only while not riding
@@ -3204,7 +3312,22 @@ function openRide(a) {
   if (wo) { $("rsWoName").textContent = wo.name; try { const st = parseText(wo.text, a.ftp || +$("ftp").value || 270); drawMini($("rsWoGraph"), st, { h: 80, ftpLine: true }); $("rsWoInfo").textContent = fmt(st.reduce((t, q) => t + q.dur, 0)) + "  ·  planned TSS " + Math.round(planStats(st).tss); } catch (e) { $("rsWo").hidden = true; } }
   $("rsDesc").hidden = !a.desc; $("rsDesc").textContent = a.desc || "";
   const link = $("rsLink"); link.hidden = !a.id || histSrc === "demo" && !icuAuth(); if (a.id) link.href = "https://intervals.icu/activities/" + encodeURIComponent(a.id);
+  RS.a = a; RS.blob = null; RS.d = rideTiles(a); $("rsSaveImg").disabled = true; rsMakeImage(null);   // the image is ready at once; it gets the power graph when the streams arrive
   rideStreams(a);
+}
+const RS = { a: null, blob: null, d: null };
+function rideTiles(a) {                                    // the same eight tiles as the end-of-ride image, from intervals.icu's numbers
+  const f = (v, k) => v == null || !isFinite(v) ? "--" : k ? (+v).toFixed(k) : String(Math.round(v));
+  return [{ l: "Time", v: a.el || a.sec ? fmt(a.el || a.sec) : "--", u: "" },
+    { l: "Avg power", v: f(a.avgW), u: "w" }, { l: "Norm. power", v: f(a.np), u: "w" },
+    { l: "IF", v: f(a.ifx, 2), u: "" }, { l: "TSS", v: f(a.load), u: "" },
+    { l: "Avg HR", v: f(a.hr), u: "bpm" }, { l: "Avg cadence", v: f(a.cad), u: "rpm" },
+    { l: "Energy", v: f(a.kj), u: "kJ" }];
+}
+function rsMakeImage(watts) {
+  const a = RS.a; if (!a) return;
+  buildSummaryImage(RS.d, a.name || "Ride", rideWhen(a, true), watts ? { pw: watts.map(v => v || 0), plan: null, ftp: a.ftp || +$("ftp").value || 270 } : null)
+    .then(b => { if (RS.a !== a) return; RS.blob = b; $("rsSaveImg").disabled = !b; });
 }
 /* Where a ride came from. Garmin requires "Garmin [device model]" next to anything shown from its devices (title,
    charts, maps, derived numbers); intervals.icu marks those rides with "Garmin" in device_name. Zwift rides get a
@@ -3293,7 +3416,7 @@ async function rideStreams(a) {                                // power and hear
     if (wantMap) rideMap(a, routePts((Array.isArray(js) ? js : []).find(x => x.type === "latlng")));
     if (!w && !h && !cd) return;
     const ftp = a.ftp || +$("ftp").value || 270;
-    if (w) zoneRows(w, ftp);
+    if (w) { zoneRows(w, ftp); rsMakeImage(w); }
     let w30 = null; if (w) { w30 = []; let run = 0; for (let i = 0; i < w.length; i++) { run += w[i] || 0; if (i >= 30) run -= w[i - 30] || 0; w30.push(run / Math.min(30, i + 1)); } }
     box.innerHTML = ""; box.hidden = false;
     const graph = (name, d, col, fill, zoneCol) => {
@@ -3720,9 +3843,11 @@ $("btnCalDelYes").onclick = async () => {
 $("btnRenameNo").onclick = () => { $("renameModal").style.display = "none"; renameFrom = null; };
 $("btnRenameYes").onclick = applyRename; $("renameInput").onkeydown = e => { if (e.key === "Enter") applyRename(); };
 function askSaveRide() { $("saveModal").style.display = "flex"; }
+$("btnDoneSave").onclick = doneSave; $("btnDoneFree").onclick = doneFree;
 $("btnSaveRide").onclick = () => { $("saveModal").style.display = "none"; showSummary(true); };
 $("btnDiscardRide").onclick = () => { $("saveModal").style.display = "none"; showSummary(false); };
-$("btnSaveImg").onclick = saveSummaryImage; $("btnSaveFit").onclick = saveFit; $("btnSaveLog").onclick = saveRideLog; $("btnSumClose").onclick = closeSummary; $("btnImgClose").onclick = () => { $("imgModal").style.display = "none"; };
+$("btnSaveImg").onclick = saveSummaryImage;
+$("rsSaveImg").onclick = () => { const a = RS.a; if (!a) return; shareImage(RS.blob, "ride-" + String(a.start || a.date || "").slice(0, 10) + "-" + (a.name || "ride").replace(/[^a-z0-9]+/gi, "-").slice(0, 40) + ".png", a.name || "Ride summary"); }; $("btnSaveFit").onclick = saveFit; $("btnSaveLog").onclick = saveRideLog; $("btnSumClose").onclick = closeSummary; $("btnImgClose").onclick = () => { $("imgModal").style.display = "none"; };
 /* One Devices pop-up for both: each row is its own tap, because the phone opens only one device picker per tap. */
 let devAutoClosed = false;
 function openDevices() { devAutoClosed = !!cp && hrOn && (clickOn || !hasRemembered("kickrClickId")); refreshDevBtns(); $("devModal").style.display = "flex"; }
@@ -3732,7 +3857,7 @@ $("devRowH").onclick = async () => { if (hrOn) return; const p = connectHR(); re
 $("devDone").onclick = () => { $("devModal").style.display = "none"; syncPauseOv(); };
 $("devRowP").onclick = () => { if (!pmOn) connectPM(); };
 $("devRowC").onclick = async () => { if (clickOn || clickBusy) return; const p = connectClick(); refreshDevBtns(); await p; refreshDevBtns(); };
-$("btnStart").onclick = startWorkout;
+$("btnStart").onclick = () => { if (W.running) { if (W.stand) exitStand(); else enterStand(); } else startWorkout(); };
 /* ---------------- Schedule a workout onto the intervals.icu calendar ---------------- */
 let pendingSched = null, toastTimer = null;
 function toast(t, bad) {
@@ -4022,7 +4147,7 @@ $("pvFree").onclick = switchToFree;
 $("pvEnd").onclick = () => { $("endModal").style.display = "flex"; };          // still asks once more
 $("pvDevices").onclick = () => { openDevices(); syncPauseOv(); }; $("btnEnd").onclick = () => { $("endModal").style.display = "flex"; };
 $("btnEndNo").onclick = () => { $("endModal").style.display = "none"; };
-$("btnEndYes").onclick = () => { $("endModal").style.display = "none"; finishWorkout("Workout ended by user."); }; $("btnSkip").onclick = skipStep;
+$("btnEndYes").onclick = () => { $("endModal").style.display = "none"; finishWorkout("Workout ended by user."); }; $("btnSkip").onclick = skipStep; $("btnUndoSk").onclick = undoSkip;
 /* +1 min adds a minute to the current interval. For 10 s an Undo sits under it (the two share the button's space);
    Undo takes back every minute added in that window, as long as the interval is still running. */
 let plus1 = null;                                               // { idx, n, timer }
@@ -4059,6 +4184,11 @@ loadToday();
 loadNext7();
 loadFtp(true);
 setTimeout(recOffer, 300);                             // an unfinished ride from last time? offer Resume / Save / Discard
+{ const fm = v => (v > 0 ? "+" : v < 0 ? "\u2212" : "") + Math.abs(v * 100).toFixed(2) + "%";
+  const show = () => { $("sbV").textContent = fm(BIAS.sim); $("stV").textContent = fm(BIAS.stand); $("sbM").disabled = BIAS.sim <= -0.05; $("sbP").disabled = BIAS.sim >= 0.05; $("stM").disabled = BIAS.stand <= 0.0025; $("stP").disabled = BIAS.stand >= 0.06; };
+  const set = (k, d) => { BIAS[k] = Math.round((BIAS[k] + d) * 10000) / 10000; try { localStorage.setItem(k === "sim" ? "kickrSimBias" : "kickrStandBias", String(BIAS[k])); } catch (e) {} show();
+    if (W.running && k === "sim" && isSim(W.steps[W.idx])) regrade(); };
+  $("sbM").onclick = () => set("sim", -0.0025); $("sbP").onclick = () => set("sim", 0.0025); $("stM").onclick = () => set("stand", -0.0025); $("stP").onclick = () => set("stand", 0.0025); show(); }
 $("obRetry").onclick = () => { if (navigator.onLine === false) toast("No connection right now."); obFlush(); };
 renderOutbox(); setTimeout(obFlush, 4000);                // rides still waiting from last time: try again
 window.addEventListener("online", () => setTimeout(obFlush, 2000));
