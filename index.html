@@ -236,6 +236,9 @@
   .wobtns .wbp { color:var(--ok); font-size:18px; flex:none; } .wobtns .wbc { font-size:15px; line-height:1; flex:none; }
   .wobtns .wbi { width:18px; height:18px; flex:none; color:#8fb8ff; }
   .wobtns button { width:auto; min-width:0; height:52px; margin:0; padding:0 6px; font-size:15px; line-height:1.15; border-radius:12px; white-space:normal; }
+  #obCard { border:1px solid #6b5a1e; } .obtop { display:flex; align-items:center; justify-content:space-between; gap:8px; } .obtop h2 { margin:0; color:var(--acc); }
+  .obrow { display:flex; align-items:center; gap:10px; padding:10px 0 0; } .obt { flex:1; min-width:0; } .obn { font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .obs { font-size:12px; color:var(--dim); } .obbtn { flex:none; background:#2b3340; color:var(--fg); padding:8px 12px; border-radius:10px; font-size:14px; } #obRetry span { color:var(--ok); }
   .todaybtns { display:flex; gap:8px; margin:10px 0 0; }   /* a small refresh icon and a grey Free Ride with a green play mark, same height */
   .todaybtns button { height:48px; margin:0; border-radius:12px; }
   #btnToday { flex:none; width:56px; padding:0; font-size:24px; line-height:1; }
@@ -386,7 +389,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.27</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">v1.0.28</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -402,6 +405,10 @@
   </div>
 
   <div id="planTab">
+  <div class="card" id="obCard" hidden>
+    <div class="obtop"><h2 id="obHead">Waiting to upload</h2><button type="button" id="obRetry" class="obbtn"><span aria-hidden="true">&#8635;</span> Retry</button></div>
+    <div id="obList"></div>
+  </div>
   <div class="card" id="todayCard">
     <h2>Today</h2>
     <div id="todayList" class="hint" style="font-size:14px">Connect intervals.icu in Settings to see today's planned workout.</div>
@@ -624,7 +631,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">v1.0.27</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+  <span class="ver">v1.0.28</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
 </div>
 
 <div class="ctrl">
@@ -1668,13 +1675,13 @@ $("recYes").onclick = () => {
   recData = null;
 };
 function showSummary(save = true) {
-  recClear();                                            // saved or discarded: nothing left to recover
+  if (!save) recClear();                                 // discarded: nothing left to recover (a saved ride's crash copy goes once it's in the outbox)
   const d = summaryData();
   $("sumDate").textContent = new Date(W.startMs || Date.now()).toLocaleString([], { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) + "  \u00b7  FTP " + W.ftp + " w";
   $("sumGrid").innerHTML = d.map(m => '<div class="tile"><div class="l">' + m.l + '</div><div class="v">' + m.v + (m.u && m.v !== "--" ? "<small>" + m.u + "</small>" : "") + "</div></div>").join("");
   $("summary").classList.add("show"); sumBlob = null; fitBlob = null; $("btnSaveImg").disabled = true; $("btnSaveFit").disabled = true;
   setTimeout(() => {
-    if (save) { try { prepareFit(); } catch (e) { log("FIT failed: " + e.message); } uploadRide(); stravaUpload(); }
+    if (save) { try { prepareFit(); } catch (e) { log("FIT failed: " + e.message); } obSaveCurrent(); }
     else { $("sumUp").textContent = "Discarded. Not uploaded."; $("sumUp").style.color = ""; $("sumStrava").textContent = ""; }
     drawProfile($("sumProfile"), { noCursor: true, actual: true }); drawHR($("sumHR"), { noCursor: true }); prepareSummaryImage(d);
   }, 40);
@@ -1766,11 +1773,12 @@ function prepareFit() {
   fitName = "intervals-player-" + ld.getFullYear() + "-" + p2(ld.getMonth() + 1) + "-" + p2(ld.getDate()) + "-" + p2(ld.getHours()) + "-" + p2(ld.getMinutes()) + ".fit";
   $("btnSaveFit").disabled = false;
 }
-function saveFit() {
-  if (!fitBlob) return;
-  const file = new File([fitBlob], fitName, { type: "application/octet-stream" });
-  const dl = () => { const a = document.createElement("a"); a.href = URL.createObjectURL(fitBlob); a.download = fitName; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 1000); };
-  if (navigator.canShare && navigator.canShare({ files: [file] })) navigator.share({ files: [file], title: fitName }).catch(e => { if (!e || e.name !== "AbortError") dl(); });
+function saveFit(blob, name) {
+  if (!(blob instanceof Blob)) { blob = fitBlob; name = fitName; }
+  if (!blob) return;
+  const file = new File([blob], name, { type: "application/octet-stream" });
+  const dl = () => { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 1000); };
+  if (navigator.canShare && navigator.canShare({ files: [file] })) navigator.share({ files: [file], title: name }).catch(e => { if (!e || e.name !== "AbortError") dl(); });
   else dl();
 }
 // Upload the finished ride's .fit file to intervals.icu (uses the key saved in the connection panel).
@@ -1805,25 +1813,25 @@ async function switchToFree() {
   $("pauseOv").hidden = true; refreshButtons(); if (W.paused) togglePause(); else pushTarget(true);
   render(); recSave && recSave(); toast("Free Ride: + and \u2212 tilt the road.");
 }
-async function uploadRide() {
-  const box = $("sumUp"); box.style.color = ""; box.textContent = ""; rideUploaded = false;
+async function uploadRide(it, ui) {                         // returns true once intervals.icu has the ride (a duplicate counts)
+  const box = ui ? $("sumUp") : null, show = (t, col) => { if (box) { box.textContent = t; box.style.color = col || ""; } };
+  if (ui) rideUploaded = false;
   const auth = icuAuth(), id = icuId();
-  if (!auth) { box.textContent = "Not uploaded: not connected to intervals.icu."; return; }
-  if (!fitBlob) { box.textContent = "Not uploaded: no .fit file was made."; box.style.color = "var(--bad, #ff6b6b)"; return; }
-  box.textContent = "Uploading to intervals.icu\u2026";
-  const name = rideTitle();                               // same title as on Strava (the file keeps its date-stamped name)
-  const url = "https://intervals.icu/api/v1/athlete/" + encodeURIComponent(id) + "/activities?name=" + encodeURIComponent(name) + "&external_id=" + encodeURIComponent("kickr-" + W.startMs);
-  const form = new FormData(); form.append("file", new File([fitBlob], fitName, { type: "application/octet-stream" }));
+  if (!auth) { show("Not uploaded: not connected to intervals.icu."); return false; }
+  show("Uploading to intervals.icu\u2026");
+  const url = "https://intervals.icu/api/v1/athlete/" + encodeURIComponent(id) + "/activities?name=" + encodeURIComponent(it.name) + "&external_id=" + encodeURIComponent(it.id);
+  const form = new FormData(); form.append("file", new File([it.buf], it.fitName, { type: "application/octet-stream" }));
   try {
     const r = await fetch(url, { method: "POST", headers: { Authorization: auth }, body: form });
     const txt = await r.text();
-    if (!r.ok) { log("intervals.icu upload: " + r.status + " " + txt.slice(0, 200)); throw new Error("error " + r.status); }
-    rideUploaded = true; box.style.color = "#3fc56b"; box.textContent = "Uploaded to intervals.icu.";
+    if (!r.ok && !(r.status === 409 || /duplicate|already/i.test(txt))) { log("intervals.icu upload: " + r.status + " " + txt.slice(0, 200)); throw new Error("error " + r.status); }
+    if (ui) rideUploaded = true; show("Uploaded to intervals.icu.", "#3fc56b"); return true;
   } catch (e) {
-    box.style.color = "var(--bad, #ff6b6b)";
-    box.textContent = "Upload failed (" + e.message + ") ";
-    const rb = document.createElement("button"); rb.textContent = "Retry upload"; rb.style.cssText = "margin-left:4px;padding:4px 10px;font-size:14px";
-    rb.onclick = uploadRide; rb.style.marginLeft = "6px"; box.appendChild(rb);
+    it.err = (it.err ? it.err + "; " : "") + "intervals.icu: " + (navigator.onLine === false ? "no connection" : e.message);
+    if (box) { show("Upload failed (" + (navigator.onLine === false ? "no connection" : e.message) + "). Saved on this phone; it will retry. ", "var(--bad, #ff6b6b)");
+      const rb = document.createElement("button"); rb.textContent = "Retry upload"; rb.style.cssText = "margin-left:6px;padding:4px 10px;font-size:14px";
+      rb.onclick = () => sendRide(it, true); box.appendChild(rb); }
+    return false;
   }
 }
 // Upload the ride to Strava through the helper, if connected. Refreshes the token when it is close to expiring.
@@ -1837,29 +1845,92 @@ async function stravaToken() {
   localStorage.setItem("kickrStrava", JSON.stringify({ access_token: j.access_token, refresh_token: j.refresh_token, expires_at: j.expires_at }));
   return j.access_token;
 }
-async function stravaUpload() {
-  const box = $("sumStrava"); box.style.color = ""; box.textContent = "";
-  let token; try { token = await stravaToken(); } catch (e) { box.textContent = "Not uploaded to Strava (" + e.message + ")."; box.style.color = "var(--bad, #ff6b6b)"; return; }
-  if (!token) return;                                        // not connected: say nothing
-  if (!fitBlob) return;
-  box.textContent = "Uploading to Strava\u2026";
-  const name = rideTitle(), ext = "kickr-" + W.startMs;
+async function stravaUpload(it, ui) {                     // returns true once Strava has the ride (a duplicate counts)
+  const box = ui ? $("sumStrava") : null, show = (t, col) => { if (box) { box.textContent = t; box.style.color = col || ""; } };
+  show("");
+  let token; try { token = await stravaToken(); } catch (e) { it.err = (it.err ? it.err + "; " : "") + "Strava: " + (navigator.onLine === false ? "no connection" : e.message); show("Not uploaded to Strava yet (" + (navigator.onLine === false ? "no connection" : e.message) + "). Saved on this phone; it will retry.", "var(--bad, #ff6b6b)"); return false; }
+  if (!token) return true;                                   // not connected (any more): nothing to send
+  show("Uploading to Strava\u2026");
   try {
-    const form = new FormData(); form.append("file", new File([fitBlob], fitName, { type: "application/octet-stream" }));
-    const r = await fetch(STRAVA_HELPER + "/upload?name=" + encodeURIComponent(name) + "&external_id=" + encodeURIComponent(ext), { method: "POST", headers: { "X-Strava-Token": token }, body: form });
+    const form = new FormData(); form.append("file", new File([it.buf], it.fitName, { type: "application/octet-stream" }));
+    const r = await fetch(STRAVA_HELPER + "/upload?name=" + encodeURIComponent(it.name) + "&external_id=" + encodeURIComponent(it.id), { method: "POST", headers: { "X-Strava-Token": token }, body: form });
     let u = await r.json();
+    if (u && u.error && /duplicate/i.test(u.error)) { show("Already on Strava.", "#3fc56b"); return true; }
     if (!r.ok || u.error) throw new Error(u.error || ("error " + r.status));
     for (let i = 0; i < 20 && !u.activity_id && !u.error; i++) {          // Strava processes the file in the background
       await new Promise(res => setTimeout(res, 1500));
       const q = await fetch(STRAVA_HELPER + "/upload-status?id=" + encodeURIComponent(u.id), { headers: { "X-Strava-Token": token } });
       u = await q.json();
     }
+    if (u.error && /duplicate/i.test(u.error)) { show("Already on Strava.", "#3fc56b"); return true; }
     if (u.error) throw new Error(u.error);
-    box.textContent = u.activity_id ? "Uploaded to Strava." : "Sent to Strava, still processing."; if (u.activity_id) box.style.color = "#3fc56b";
+    show(u.activity_id ? "Uploaded to Strava." : "Sent to Strava, still processing.", u.activity_id ? "#3fc56b" : ""); return true;
   } catch (e) {
-    box.style.color = "var(--bad, #ff6b6b)";
-    box.textContent = "Strava upload failed (" + e.message + ").";
+    it.err = (it.err ? it.err + "; " : "") + "Strava: " + (navigator.onLine === false ? "no connection" : e.message);
+    show("Strava upload failed (" + (navigator.onLine === false ? "no connection" : e.message) + "). Saved on this phone; it will retry.", "var(--bad, #ff6b6b)");
+    return false;
   }
+}
+/* ---------------- upload outbox ----------------
+   A saved ride's .fit goes into the phone's storage (IndexedDB) before anything is uploaded, with which services still need it.
+   It's removed only once intervals.icu and Strava both have it. Retries: when the app opens, when the connection comes back,
+   every 5 minutes while rides are waiting, and from the "Waiting to upload" card on the home screen (which can also save the .fit). */
+const OB = { db: null, busy: new Set(), cur: null };
+function obDb() {
+  if (!OB.db) OB.db = new Promise((res, rej) => { const r = indexedDB.open("ipOutbox", 1);
+    r.onupgradeneeded = () => r.result.createObjectStore("rides", { keyPath: "id" }); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); });
+  return OB.db;
+}
+async function obTx(mode, fn) {
+  const db = await obDb();
+  return new Promise((res, rej) => { const t = db.transaction("rides", mode), q = fn(t.objectStore("rides")); let out;
+    if (q) q.onsuccess = () => { out = q.result; }; t.oncomplete = () => res(out); t.onerror = t.onabort = () => rej(t.error || new Error("storage error")); });
+}
+const obPut = it => obTx("readwrite", s => s.put(it)), obDel = id => obTx("readwrite", s => s.delete(id)), obAll = () => obTx("readonly", s => s.getAll()).then(a => a || []);
+async function obSaveCurrent() {                            // the ride just saved: keep it, then upload
+  if (!fitBlob) { $("sumUp").textContent = "Not uploaded: no .fit file was made."; $("sumUp").style.color = "var(--bad, #ff6b6b)"; return; }
+  let strava = false; try { const t = JSON.parse(localStorage.getItem("kickrStrava") || "null"); strava = !!(t && t.access_token); } catch (e) {}
+  const it = { id: "kickr-" + W.startMs, name: rideTitle(), fitName, buf: await fitBlob.arrayBuffer(), at: W.startMs, icu: !!icuAuth(), strava, tries: 0 };
+  OB.cur = it;
+  if (!it.icu) { $("sumUp").textContent = "Not uploaded: not connected to intervals.icu."; $("sumUp").style.color = ""; }
+  if (it.icu || it.strava) {
+    try { await obPut(it); recClear(); }                    // safe on the phone: the crash copy can go
+    catch (e) { log("Outbox: couldn't keep a copy (" + e.message + ")"); toast("Couldn't keep a backup copy of this ride. Tap Save .fit before leaving.", true); }
+  } else recClear();
+  sendRide(it, true);
+}
+async function sendRide(it, ui) {
+  if (OB.busy.has(it.id)) return; OB.busy.add(it.id); it.err = "";
+  try {
+    if (it.icu && await uploadRide(it, ui)) it.icu = false;
+    if (it.strava && await stravaUpload(it, ui)) it.strava = false;
+    it.tries = (it.tries || 0) + 1; it.last = Date.now();
+    try { if (!it.icu && !it.strava) await obDel(it.id); else await obPut(it); } catch (e) { log("Outbox: " + e.message); }
+  } finally { OB.busy.delete(it.id); renderOutbox(); }
+}
+async function obFlush() {                                   // retry everything waiting (not mid-ride)
+  if ((typeof W !== "undefined" && W.running) || navigator.onLine === false) return;
+  let all = []; try { all = await obAll(); } catch (e) { return; }
+  for (const it of all) await sendRide(it, OB.cur && OB.cur.id === it.id && $("summary").classList.contains("show"));
+}
+async function renderOutbox() {
+  const card = $("obCard"); if (!card) return;
+  let all = []; try { all = await obAll(); } catch (e) {}
+  card.hidden = !all.length; if (!all.length) return;
+  $("obHead").textContent = all.length === 1 ? "1 ride waiting to upload" : all.length + " rides waiting to upload";
+  const list = $("obList"); list.textContent = "";
+  all.sort((a, b) => a.at - b.at).forEach(it => {
+    const row = document.createElement("div"); row.className = "obrow";
+    const t = document.createElement("div"); t.className = "obt";
+    const n = document.createElement("div"); n.className = "obn"; n.textContent = it.name.replace(/^Intervals - /, "");
+    const s = document.createElement("div"); s.className = "obs";
+    s.textContent = new Date(it.at).toLocaleString([], { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) + " \u00b7 for " +
+      [it.icu && "intervals.icu", it.strava && "Strava"].filter(Boolean).join(" and ") + (it.err ? " \u00b7 " + it.err : "");
+    t.append(n, s);
+    const sv = document.createElement("button"); sv.type = "button"; sv.className = "obbtn"; sv.textContent = "Save .fit";
+    sv.onclick = () => saveFit(new Blob([it.buf], { type: "application/octet-stream" }), it.fitName);
+    row.append(t, sv); list.appendChild(row);
+  });
 }
 function closeSummary() {                               // back to the start screen, everything cleared
   $("summary").classList.remove("show"); $("imgModal").style.display = "none"; $("log").textContent = "";
@@ -3917,6 +3988,10 @@ loadToday();
 loadNext7();
 loadFtp(true);
 setTimeout(recOffer, 300);                             // an unfinished ride from last time? offer Resume / Save / Discard
+$("obRetry").onclick = () => { if (navigator.onLine === false) toast("No connection right now."); obFlush(); };
+renderOutbox(); setTimeout(obFlush, 4000);                // rides still waiting from last time: try again
+window.addEventListener("online", () => setTimeout(obFlush, 2000));
+setInterval(() => { obAll().then(a => { if (a.length) obFlush(); }).catch(() => {}); }, 5 * 60 * 1000);
 </script>
 <script>
 // Shrink the sticky header after scrolling down; expand again near the top (two thresholds avoid flicker)
