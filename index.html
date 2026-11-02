@@ -263,7 +263,8 @@
   .biasrow { display:flex; align-items:center; gap:8px; margin:10px 0 0; } .biasrow span { flex:1; color:var(--fg); font-size:15px; }
   .biasrow button { width:40px; height:36px; margin:0; padding:0; font-size:20px; font-weight:700; background:#2b3340; color:var(--fg); border-radius:10px; }
   .biasrow b { min-width:64px; text-align:center; font-variant-numeric:tabular-nums; }
-  #btnStart.standing { background:#2b3340; color:var(--acc); box-shadow:inset 0 0 0 2px var(--acc); }
+  #btnStart.riding { background:#242a33; color:var(--fg); }                 /* during a ride it's Stand: grey while seated */
+  #btnStart.riding.standing { background:var(--acc); color:#000; }        /* standing: the scheme's button colour, reads Sit */
   .todaybtns { display:flex; gap:8px; margin:10px 0 0; }   /* a small refresh icon and a grey Free Ride with a green play mark, same height */
   .todaybtns button { height:48px; margin:0; border-radius:12px; }
   #btnToday { flex:none; width:56px; padding:0; font-size:24px; line-height:1; }
@@ -415,7 +416,7 @@
 
 <div id="landing">
   <div id="stickyTop">
-  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">b1.0.4</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+  <div class="top"><span style="font-weight:700;font-size:16px">Intervals Player</span><span class="ver">b1.0.5</span><button id="btnSettings" type="button" aria-label="Settings" title="Settings" style="background:none;padding:4px;line-height:0;color:var(--dim)"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
   <div id="devBar" style="display:none">
   <div class="ctrl">
     <button id="btnTrainer" class="primary">Connect trainer</button>
@@ -661,7 +662,7 @@ Cooldown
   <span id="stTrainer2" class="status">Trainer: not connected</span>
   <span id="stHR2" class="status">HR: not connected</span>
   <button id="btnDevices" class="redbtn" type="button" style="display:none">Connect devices</button>
-  <span class="ver">b1.0.4</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+  <span class="ver">b1.0.5</span><button id="btnRunSet" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
 </div>
 
 <div class="ctrl">
@@ -2697,7 +2698,7 @@ function drawProfileGraph(cv, o) {
   const cursor = X(W.t);
 
   // what is left of the plan (starting at the cursor), scaled by the current intensity adjustment
-  c.globalAlpha = 0.4;
+  c.globalAlpha = 0.6;
   let t0 = W.t;
   for (const r of tl.rem) {
     const x0 = X(t0), x1 = X(t0 + r.dur); c.fillStyle = zoneColor((r.a + r.b) / 2 * W.adj);
@@ -2761,7 +2762,7 @@ function refreshDevBtns() {                                  // red Connect butt
     const tOn = !!cp || pmOn, hOn = hrOn;
     $("stTrainer2").style.display = tOn ? "" : "none"; $("stHR2").style.display = hOn ? "" : "none";   // connected ones show their status
     $("btnDevices").style.display = tOn && hOn ? "none" : "";                                       // one red button while anything is missing
-    $("btnDevices").textContent = !tOn && !hOn ? "Connect devices" : !tOn ? "Connect trainer" : "Connect HR";
+    $("btnDevices").textContent = !tOn && !hOn ? "Connect devices" : !tOn ? "Connect trainer" : W.running || W.t > 0 ? "HR Not Connected" : "Connect HR";   // once the ride is under way it reads as a status; a tap still opens the connections screen
     const row = (k, on, busy, name) => { $("devRow" + k).classList.toggle("on", on); $("devRow" + k).classList.toggle("busy", !on && busy);
       $("devSt" + k).textContent = on ? "\u2713 " + (name || "Connected") : busy ? "Connecting\u2026" : "Not connected"; $("devAct" + k).textContent = on ? "Connected" : busy ? "\u2026" : "Connect"; };
     row("T", !!cp, trainerBusy, trainer && trainer.name); row("H", hOn, hrBusy, hrDev && hrDev.name); row("P", pmOn, pmBusy, pmDev && pmDev.name);
@@ -2796,7 +2797,7 @@ function refreshButtons() {
   if (W.freeRide) { $("btnSkip").disabled = true; }   // nothing to skip or hold; +1 min becomes Lap
   $("btnPlus1").textContent = W.freeRide ? "Lap" : "+1 min";
   $("btnErg").classList.toggle("on", W.running && W.erg && !W.freeRide && !(W.simMode && W.steps.some(s => s.conv)));
-  $("btnStart").textContent = W.running ? (W.stand ? "Sit" : "Stand") : "Start"; $("btnStart").classList.toggle("standing", !!(W.running && W.stand));
+  $("btnStart").textContent = W.running ? (W.stand ? "Sit" : "Stand") : "Start"; $("btnStart").classList.toggle("standing", !!(W.running && W.stand)); $("btnStart").classList.toggle("riding", !!W.running);
   $("btnEnd").style.display = (W.running && W.paused) ? "" : "none";     // End only appears while paused
   $("btnChange").style.display = (W.running && W.paused) ? "" : "none";  // Change workout also only while paused
   $("btnEdit").style.visibility = W.running ? "hidden" : "visible";       // back to the builder only while not riding
